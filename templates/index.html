@@ -1,0 +1,3249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git增量代码智能审查与测试用例生成系统</title>
+    
+    <!-- Element Plus CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/element-plus.css') }}">
+    <!-- Vue 3 -->
+    <script src="{{ url_for('static', filename='js/vue.global.js') }}"></script>
+    <!-- Element Plus -->
+    <script src="{{ url_for('static', filename='js/element-plus.js') }}"></script>
+    <!-- Axios -->
+    <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
+    <!-- Chart.js -->
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    
+    <style>
+        :root {
+            /* 主色调系统 */
+            --el-color-primary: #6366f1;
+            --el-color-success: #10b981;
+            --el-color-warning: #f59e0b;
+            --el-color-danger: #ef4444;
+            --el-color-info: #06b6d4;
+            
+            /* 中性色调 */
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-400: #9ca3af;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-800: #1f2937;
+            --color-gray-900: #111827;
+            
+            /* 尺寸系统 */
+            --card-radius: 12px;
+            --card-radius-sm: 8px;
+            --card-radius-lg: 16px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            
+            /* 阴影系统 */
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            --soft-shadow: 0 6px 20px rgba(0,0,0,0.05);
+            --hover-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            --focus-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            
+            /* 过渡动画 */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+        body {
+            margin: 0;
+            padding: var(--spacing-lg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(180deg, var(--color-gray-50) 0%, #f3f6ff 35%, #f9fbff 100%);
+            color: var(--color-gray-800);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            padding: var(--spacing-xl) var(--spacing-xl) calc(var(--spacing-xl) + var(--spacing-sm));
+            border: 1px solid var(--color-gray-200);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-sm);
+            position: relative;
+        }
+        
+        .header h1 {
+            color: var(--color-gray-800);
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--el-color-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            margin: var(--spacing-xs) 0 0;
+            color: var(--color-gray-600);
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .history-entry {
+            position: absolute;
+            top: 4px;
+            right: 0;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
+            transition: all 0.3s ease;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        
+        .history-entry * {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        
+        .history-entry .el-icon {
+            margin-right: 4px !important;
+        }
+        
+        .history-entry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+        }
+        
+        .selection-area {
+            background: #fff;
+            padding: var(--spacing-lg);
+            border-radius: var(--card-radius-sm);
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--color-gray-200);
+            box-shadow: var(--soft-shadow);
+            transition: var(--transition-normal);
+        }
+        
+        .selection-area:hover {
+            box-shadow: var(--hover-shadow);
+            border-color: var(--color-gray-300);
+        }
+        
+        .operation-area {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .result-area {
+            min-height: 400px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .issue-card {
+            margin-bottom: 12px;
+            border-left: 4px solid transparent;
+        }
+
+        .issue-card:hover {
+            transform: translateY(-1px);
+            transition: all .2s ease;
+            box-shadow: var(--soft-shadow);
+        }
+        
+        .severity-critical {
+            background-color: #fff5f5;
+            border-color: #f56c6c;
+            border-left-color: #f56c6c;
+        }
+        
+        .severity-high {
+            background-color: #fff8ed;
+            border-color: #e6a23c;
+            border-left-color: #e6a23c;
+        }
+        
+        .severity-medium {
+            background-color: #f5f9ff;
+            border-color: #409eff;
+            border-left-color: #409eff;
+        }
+        
+        .severity-low {
+            background-color: #f4fff7;
+            border-color: #67c23a;
+            border-left-color: #67c23a;
+        }
+        
+        .code-block {
+            background: #0b1021;
+            color: #e2e8f0;
+            border: 1px solid #0f172a;
+            border-radius: 8px;
+            padding: 14px 14px 12px;
+            margin: 12px 0 6px;
+            position: relative;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: .9;
+        }
+        
+        .scenario-card {
+            margin-bottom: 16px;
+        }
+
+        .task-card { margin-bottom: 12px; }
+        .task-meta { color: #909399; font-size: 12px; margin-top: 6px; }
+
+        .el-button--primary {
+            box-shadow: 0 6px 16px rgba(99,102,241,0.25);
+            border-radius: var(--card-radius-sm);
+            transition: var(--transition-normal);
+        }
+        
+        .el-button--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99,102,241,0.3);
+        }
+
+        .el-alert { 
+            border-radius: var(--card-radius-sm);
+            border: 1px solid var(--color-gray-200);
+        }
+        
+        .el-form-item__label {
+            color: var(--color-gray-700);
+            font-weight: 600;
+        }
+        
+        .el-form-item__content {
+            color: var(--color-gray-800);
+        }
+
+        /* 单元测试用例样式 */
+        .unit-test-card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .test-description {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #409eff;
+        }
+        
+        .test-description-content {
+            line-height: 1.4;
+            color: #5a6c7d;
+        }
+        
+        .test-description-content br {
+            line-height: 0.8;
+            margin: 2px 0;
+        }
+        
+        .test-step {
+            margin: 4px 0;
+            padding: 2px 0;
+            line-height: 1.3;
+        }
+        
+        .test-line {
+            margin: 2px 0;
+            padding: 1px 0;
+            line-height: 1.3;
+        }
+        
+        .test-keyword {
+            color: #409eff;
+            font-weight: 500;
+        }
+
+        .test-description h4 {
+            margin: 0 0 10px 0;
+            color: #409eff;
+            font-size: 16px;
+        }
+
+        .test-description p {
+            margin: 0;
+            line-height: 1.6;
+            color: #606266;
+        }
+
+        /* 场景测试用例模块样式 */
+        .module-group-card {
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .module-name {
+            color: #409eff;
+            flex: 1;
+        }
+
+        .scenario-card {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #e4e7ed;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 4px 20px 0 rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+        
+        /* 统计数据样式 */
+        .statistics-overview {
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            border-radius: var(--card-radius);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: var(--transition-normal);
+            box-shadow: var(--soft-shadow);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-card.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .stat-card.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .stat-card.info {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .quality-score {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: var(--card-radius);
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .quality-score .score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .quality-score .label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 20px;
+            box-shadow: var(--soft-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #374151;
+            text-align: center;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .chart-wrapper canvas {
+            max-height: 100% !important;
+        }
+        
+        .issue-severity-critical {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        
+        .issue-severity-high {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+        
+        .issue-severity-medium {
+            color: #06b6d4;
+            font-weight: 500;
+        }
+        
+        .issue-severity-low {
+            color: #10b981;
+            font-weight: 500;
+        }
+        
+        .language-tag {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #374151;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 4px;
+        }
+        
+        /* 紧凑统计卡片样式 */
+        .stat-card-compact {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            border: none;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card-compact .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .stat-card-compact .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .stat-card-compact.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .stat-card-compact.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .stat-card-compact.info { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .stat-card-compact.warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        
+        /* 紧凑图表容器样式 */
+        .chart-container-compact {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+        
+        .chart-title-compact {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        
+        .chart-wrapper-compact {
+            position: relative;
+            height: 120px;
+        }
+        
+        .chart-wrapper-compact canvas {
+            max-height: 100% !important;
+        }
+        
+        .language-compact {
+            text-align: center;
+            padding: 10px 5px;
+        }
+        
+        .language-tag-small {
+            display: inline-block;
+            background: #e5e7eb;
+            color: #374151;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin: 2px;
+        }
+        
+        .no-data-compact {
+            color: #9ca3af;
+            font-size: 0.8rem;
+            padding: 10px;
+        }
+        
+        /* 场景测试样式改进 */
+        .scenario-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .scenario-title-row .scenario-title {
+            flex: 1;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .scenario-details {
+            padding: 10px 0;
+        }
+        
+        .detail-row {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .detail-row strong {
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .detail-row span {
+            margin-left: 8px;
+            color: #6b7280;
+        }
+        
+        .steps-content {
+            margin-left: 8px;
+            color: #6b7280;
+            white-space: pre-wrap;
+        }
+        
+        /* Diff代码展示样式 */
+        .diff-card {
+            border: 1px solid #e4e7ed;
+            margin-bottom: 15px;
+        }
+        
+        .diff-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+        }
+        
+        .diff-block {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            overflow-x: auto;
+            max-height: 400px;
+            margin: 0;
+        }
+        
+        .diff-block pre {
+            margin: 0;
+            padding: 15px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: pre;
+            color: #2c3e50;
+        }
+        
+        /* 场景测试卡片美化样式 */
+        .scenario-card {
+            border-radius: 10px;
+            border: 1px solid #e4e7ed;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            border-color: #409eff;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-title-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
+        .scenario-tags {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .scenario-section {
+            margin-bottom: 15px;
+        }
+        
+        .scenario-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .section-content {
+            margin: 0;
+        }
+        
+        .section-content p {
+            margin: 0;
+            line-height: 1.6;
+            color: #5a6c7d;
+        }
+        
+        .content-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+        
+        .content-list li {
+            margin-bottom: 4px;
+        }
+        
+        .content-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .ordered-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        
+        .ordered-list li {
+            position: relative;
+            padding-left: 0;
+        }
+        
+        .ordered-list li::marker {
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        .progress-indicator {
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 8px;
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            transition: width 0.5s ease;
+        }
+        
+        /* 问题卡片美化样式 */
+        .issue-card {
+            margin-bottom: 16px;
+            border-left: 4px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .issue-card.severity-critical {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+        }
+        
+        .issue-card.severity-high {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+        }
+        
+        .issue-card.severity-medium {
+            border-left-color: #06b6d4;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+        }
+        
+        .issue-card.severity-low {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+        }
+        
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        
+        .issue-type-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .issue-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .issue-content {
+            padding: 0;
+        }
+        
+        .issue-description,
+        .issue-suggestion,
+        .issue-hint {
+            margin-bottom: 20px;
+        }
+        
+        .issue-description:last-child,
+        .issue-suggestion:last-child,
+        .issue-hint:last-child {
+            margin-bottom: 0;
+        }
+        
+        .content-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .content-text {
+            margin: 0;
+            line-height: 1.6;
+            color: #6b7280;
+            background: #f9fafb;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .issue-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scenario-title {
+            font-weight: bold;
+            color: #303133;
+            flex: 1;
+        }
+
+        .scenario-content {
+            padding: 5px 0;
+        }
+
+        .scenario-section {
+            margin-bottom: 15px;
+        }
+
+        .scenario-section h5 {
+            margin: 0 0 8px 0;
+            color: #409eff;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .scenario-section p {
+            margin: 0;
+            color: #606266;
+            line-height: 1.5;
+        }
+        
+        /* 多行文本显示样式 */
+        .content-text-multiline {
+            white-space: pre-line;
+            word-wrap: break-word;
+            line-height: 1.6;
+        }
+
+        .steps-content {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #67c23a;
+            white-space: pre-line;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .scenario-meta {
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        /* 历史任务抽屉样式 */
+        .history-drawer .el-drawer__body {
+            padding: 20px;
+        }
+        
+        .history-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e4e7ed;
+        }
+        
+        .history-content {
+            height: calc(100vh - 140px);
+        }
+        
+        .history-task-card {
+            margin-bottom: 12px;
+        }
+        
+        .task-card-enhanced {
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #e4e7ed;
+        }
+        
+        .task-card-enhanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #409eff;
+        }
+        
+        .task-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .task-info {
+            flex: 1;
+            margin-right: 16px;
+        }
+        
+        .task-id-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .task-id {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            color: #409eff;
+            font-weight: 600;
+            margin-right: 12px;
+            background: #f0f9ff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid #e1f5fe;
+        }
+        
+        .status-tag {
+            margin-left: auto;
+        }
+        
+        .task-details {
+            margin-bottom: 12px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .task-time {
+            margin-bottom: 8px;
+        }
+        
+        .time-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+            color: #606266;
+        }
+        
+        .detail-item .label,
+        .time-item .label {
+            font-weight: 500;
+            margin-right: 6px;
+            color: #606266;
+            min-width: 40px;
+        }
+        
+        .detail-item .value,
+        .time-item .value {
+            color: #303133;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+        
+        .task-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .task-actions .el-button {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        
+        .task-actions .el-button * {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        
+        .task-actions .el-button .el-icon {
+            margin-right: 4px !important;
+        }
+        
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        /* 任务信息卡片样式 */
+        .task-info-card {
+            border-radius: 12px;
+            border: 1px solid #e4e7ed;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        }
+        
+        .task-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .task-info-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #303133;
+            display: flex;
+            align-items: center;
+        }
+        
+        .task-info-content {
+            padding-top: 8px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            margin-right: 8px;
+            color: #606266;
+            min-width: 80px;
+        }
+        
+        .info-value {
+            color: #303133;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            background: #f5f7fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #e4e7ed;
+        }
+        
+        /* 任务进度条样式 */
+        .task-progress {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .progress-header {
+            margin-bottom: 12px;
+        }
+        
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #495057;
+            display: flex;
+            align-items: center;
+        }
+        
+        .progress-bar {
+            margin-top: 8px;
+        }
+        
+        .progress-text-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .progress-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #495057;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+                        .progress-percentage {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #409eff;
+                    min-width: 60px;
+                    text-align: right;
+                    padding: 4px 8px;
+                    background: rgba(64, 158, 255, 0.1);
+                    border-radius: 4px;
+                }
+                
+                .abort-button-container {
+                    text-align: center;
+                    margin-top: 16px;
+                    padding-top: 16px;
+                    border-top: 1px solid #f0f0f0;
+                }
+        
+        /* 系统选择容器样式 */
+        .system-selection-container {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .system-selector-input {
+            flex: 1;
+            border-radius: var(--card-radius-sm);
+        }
+        
+        .system-selector-input .el-input__wrapper {
+            border-radius: var(--card-radius-sm);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: var(--transition-normal);
+            border: 1px solid var(--color-gray-300);
+        }
+        
+        .system-selector-input .el-input__wrapper:hover {
+            box-shadow: var(--hover-shadow);
+            border-color: var(--el-color-primary);
+        }
+        
+        .system-selector-input .el-input__wrapper.is-focus {
+            border-color: var(--el-color-primary);
+            box-shadow: var(--focus-shadow);
+        }
+        
+        .refresh-button {
+            flex-shrink: 0;
+            height: 32px;
+            border-radius: var(--card-radius-sm);
+            border: 1px solid var(--color-gray-300);
+            background: var(--color-gray-50);
+            color: var(--color-gray-700);
+            transition: var(--transition-fast);
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            font-weight: 500;
+        }
+        
+        .refresh-button * {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        
+        .refresh-button .el-icon {
+            margin-right: var(--spacing-xs) !important;
+        }
+        
+        .refresh-button:hover {
+            background: var(--color-gray-100);
+            border-color: var(--color-gray-400);
+            transform: translateY(-1px);
+            box-shadow: var(--soft-shadow);
+            color: var(--color-gray-800);
+        }
+        
+        .refresh-button:active {
+            transform: translateY(0);
+        }
+        
+        /* 确保表单项宽度一致 */
+        .selection-area .el-form-item__content {
+            width: 100%;
+        }
+        
+        /* 优化系统选项样式 */
+        .system-option-simple {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            padding-right: 48px; /* 为右侧选中指示器留出空间 */
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            margin: 3px 0;
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        
+        .system-option-simple::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: #3b82f6;
+            transform: scaleY(0);
+            transition: all 0.2s ease;
+        }
+        
+        .system-option-simple:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            transform: translateX(1px);
+        }
+        
+        .system-option-simple:hover::before {
+            transform: scaleY(1);
+        }
+        
+        /* 悬停状态不显示选中指示器 */
+        .system-option-simple:hover::after {
+            display: none;
+        }
+        
+        .system-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            flex: 1;
+        }
+        
+        .system-name {
+            font-weight: 700;
+            color: var(--color-gray-800);
+            font-size: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .project-count {
+            color: var(--color-gray-600);
+            font-size: 0.8rem;
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+            padding: 3px var(--spacing-sm);
+            border-radius: var(--card-radius-sm);
+            font-weight: 500;
+            border: 1px solid var(--color-gray-300);
+            transition: var(--transition-fast);
+        }
+        
+        .project-count:hover {
+            background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+            transform: scale(1.05);
+        }
+        
+        .project-name {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 8px;
+            padding: 4px 8px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: all 0.2s ease;
+        }
+        
+        .project-name:hover {
+            background: #e5e7eb;
+            border-color: #3b82f6;
+        }
+        
+        .system-tags {
+            flex-shrink: 0;
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-right: var(--spacing-sm); /* 与选中指示器保持距离 */
+        }
+        
+        /* 自定义标签样式 */
+        .custom-tag {
+            border-radius: 6px !important;
+            font-weight: 600 !important;
+            font-size: 0.75rem !important;
+            padding: var(--spacing-xs) var(--spacing-sm) !important;
+            border: none !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+            transition: var(--transition-fast) !important;
+        }
+        
+        .custom-tag:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .dynamic-tag {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+            color: #166534 !important;
+        }
+        
+        .static-tag {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+            color: #475569 !important;
+        }
+        
+        .project-tag {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+            color: #92400e !important;
+        }
+        
+        /* 优化下拉框弹出层样式 */
+        .system-dropdown-popper {
+            min-width: 450px !important;
+            max-width: 650px !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid #e5e7eb !important;
+            background: #ffffff !important;
+            padding: 8px 0 !important;
+        }
+        
+        /* 自定义滚动条样式 */
+        .system-dropdown-popper .el-scrollbar__wrap {
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-gray-300) var(--color-gray-100);
+        }
+        
+        .system-dropdown-popper .el-scrollbar__wrap::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .system-dropdown-popper .el-scrollbar__wrap::-webkit-scrollbar-track {
+            background: var(--color-gray-100);
+            border-radius: 3px;
+        }
+        
+        .system-dropdown-popper .el-scrollbar__wrap::-webkit-scrollbar-thumb {
+            background: var(--color-gray-300);
+            border-radius: 3px;
+        }
+        
+        .system-dropdown-popper .el-scrollbar__wrap::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gray-400);
+        }
+        
+        .system-dropdown-popper .el-select-dropdown__item {
+            padding: 0 !important;
+            height: auto !important;
+            line-height: normal !important;
+            border-radius: 8px !important;
+            margin: 2px 12px !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .system-dropdown-popper .el-select-dropdown__item:hover {
+            transform: translateX(1px) !important;
+        }
+        
+        .system-dropdown-popper .el-select-dropdown__item.is-hovering {
+            background: transparent !important;
+        }
+        
+        .system-dropdown-popper .el-select-dropdown__item.is-selected {
+            background: transparent !important;
+        }
+        
+        .system-dropdown-popper .el-select-dropdown__item.is-selected .system-option-simple {
+            background: #3b82f6 !important;
+            border-color: #3b82f6 !important;
+            transform: translateX(1px) !important;
+        }
+        
+        .system-dropdown-popper .el-select-dropdown__item.is-selected .system-option-simple::before {
+            transform: scaleY(1) !important;
+        }
+        
+        /* 隐藏默认的选中对勾，避免与文字重叠 */
+        .system-dropdown-popper .el-select-dropdown__item.is-selected::after {
+            display: none !important;
+        }
+        
+        /* 为选中状态添加右侧选中指示器 */
+        .system-dropdown-popper .el-select-dropdown__item.is-selected .system-option-simple::after {
+            content: '✓';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            background: #3b82f6;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        
+
+        
+
+        
+        /* 系统选择器输入框样式 */
+        .system-selector-input {
+            width: 100%;
+        }
+        
+        .system-selector-input .el-select__tags {
+            padding: 4px 8px;
+        }
+        
+        .system-selector-input .el-select__tags .el-tag {
+            margin: 2px 4px;
+            border-radius: 6px;
+            background: #3b82f6;
+            border: 1px solid #3b82f6;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .system-selector-input .el-select__tags .el-tag .el-tag__close {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin-left: 4px;
+            transition: var(--transition-fast);
+        }
+        
+        .system-selector-input .el-select__tags .el-tag .el-tag__close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        /* 层级化下拉框样式 */
+        .system-dropdown-popper .el-select-group__wrap {
+            padding: 0 !important;
+        }
+        
+        .system-dropdown-popper .el-select-group__title {
+            padding: 12px 16px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #374151 !important;
+            background: #f9fafb !important;
+            border-bottom: 1px solid #e5e7eb !important;
+            margin: 0 !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .system-dropdown-popper .el-select-group__title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: #3b82f6;
+        }
+        
+        .system-dropdown-popper .el-select-group__title::before {
+            content: '📁';
+            margin-right: var(--spacing-sm);
+            font-size: 16px;
+        }
+        
+        .project-subgroup .el-select-group__title::before {
+            content: '📂';
+            margin-right: var(--spacing-sm);
+            font-size: 16px;
+        }
+        
+        .system-dropdown-popper .el-select-group__wrap .el-select-dropdown__item {
+            margin: 3px 10px !important;
+        }
+        
+        .system-dropdown-popper .el-select-group__wrap .el-select-dropdown__item:first-child {
+            margin-top: 6px !important;
+        }
+        
+        .system-dropdown-popper .el-select-group__wrap .el-select-dropdown__item:last-child {
+            margin-bottom: 6px !important;
+        }
+        
+        /* 项目级选项样式 */
+        .project-level-option {
+            border-left: 3px solid var(--color-gray-300) !important;
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%) !important;
+            transition: var(--transition-normal) !important;
+        }
+        
+        .project-level-option:hover {
+            background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%) !important;
+            border-left-color: var(--el-color-primary) !important;
+            transform: translateX(2px) !important;
+            box-shadow: var(--soft-shadow) !important;
+        }
+        
+        /* 系统级选项样式 */
+        .system-level-option {
+            border-left: 3px solid var(--el-color-primary) !important;
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%) !important;
+            transition: var(--transition-normal) !important;
+        }
+        
+        .system-level-option:hover {
+            background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%) !important;
+            transform: translateX(2px) !important;
+            box-shadow: var(--soft-shadow) !important;
+        }
+        
+        /* 项目级选项样式 */
+        .project-level-option {
+            border-left: 3px solid #d1d5db !important;
+            background: #ffffff !important;
+        }
+        
+        .project-level-option:hover {
+            background: #f3f4f6 !important;
+            border-left-color: #3b82f6 !important;
+        }
+        
+        /* 系统标签样式 */
+        .system-tag {
+            background: #3b82f6 !important;
+            border-color: #3b82f6 !important;
+            color: white !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .system-tag:hover {
+            background: #2563eb !important;
+            transform: translateY(-1px) !important;
+        }
+        
+        /* 响应式布局优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: var(--spacing-sm);
+            }
+            
+            .container {
+                padding: var(--spacing-md);
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .selection-area {
+                padding: var(--spacing-md);
+            }
+            
+            .scenario-card .el-col {
+                width: 100% !important;
+            }
+            
+            .history-drawer {
+                width: 90% !important;
+            }
+            
+            .task-card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .task-actions {
+                flex-direction: row;
+                margin-top: var(--spacing-sm);
+            }
+            
+            .system-selection-container {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+            
+            .system-selector-input {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .container {
+                padding: var(--spacing-sm);
+            }
+            
+            .selection-area {
+                padding: var(--spacing-sm);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="header">
+                <h1>🚀 Git增量代码智能审查与测试用例生成系统</h1>
+                <p>智能分析代码变更，自动生成测试用例</p>
+                <el-button class="history-entry" type="primary" size="small" @click="openHistory" icon="Clock">
+                    历史结果
+                </el-button>
+            </div>
+            
+            <div class="selection-area">
+                <el-form :model="form" label-width="120px">
+                    <el-form-item label="选择系统/项目：">
+                        <div class="system-selection-container">
+                            <!-- 系统选择器 -->
+                            <el-select 
+                                v-model="selectedSystems" 
+                                multiple 
+                                placeholder="请选择一个或多个系统或项目" 
+                                class="system-selector-input"
+                                :max-collapse-tags="2"
+                                collapse-tags
+                                collapse-tags-tooltip
+                                :loading="systemsLoading"
+                                clearable
+                                filterable
+                                size="default"
+                                popper-class="system-dropdown-popper"
+                                :popper-append-to-body="false">
+                                
+                                <!-- 项目选项组 -->
+                                <el-option-group 
+                                    v-for="system in groupedSystems" 
+                                    :key="system.id"
+                                    :label="`${system.name} (${system.project_count}个项目)`"
+                                    :disabled="system.disabled">
+                                    
+                                    <!-- 多项目系统的项目选项 -->
+                                    <el-option
+                                        v-if="system.projects && system.projects.length > 1"
+                                        v-for="project in system.projects"
+                                        :key="`project-${system.id}-${project}`"
+                                        :label="`${system.name} (${project})`"
+                                        :value="`${system.name}:${project}`"
+                                        :disabled="system.disabled">
+                                        <div class="system-option-simple project-level-option">
+                                            <div class="system-info">
+                                                <span class="system-name">{{ "{{ system.name }}" }}</span>
+                                                <span class="project-name">{{ "{{ project }}" }}</span>
+                                            </div>
+                                            <div class="system-tags">
+                                                <el-tag 
+                                                    size="small" 
+                                                    v-if="system.dynamic && !system.error" 
+                                                    type="success" 
+                                                    effect="light"
+                                                    class="custom-tag dynamic-tag">
+                                                    动态
+                                                </el-tag>
+                                                <el-tag 
+                                                    size="small" 
+                                                    v-else 
+                                                    type="info" 
+                                                    effect="light"
+                                                    class="custom-tag static-tag">
+                                                    静态
+                                                </el-tag>
+                                                <el-tag 
+                                                    size="small" 
+                                                    type="warning" 
+                                                    effect="light"
+                                                    class="custom-tag project-tag">
+                                                    项目
+                                                </el-tag>
+                                            </div>
+                                        </div>
+                                    </el-option>
+                                    
+                                    <!-- 单项目系统的项目选项 -->
+                                    <el-option
+                                        v-else-if="system.projects && system.projects.length === 1"
+                                        :key="`single-project-${system.id}`"
+                                        :label="`${system.name} (${system.projects[0]})`"
+                                        :value="`${system.name}:${system.projects[0]}`"
+                                        :disabled="system.disabled">
+                                        <div class="system-option-simple project-level-option">
+                                            <div class="system-info">
+                                                <span class="system-name">{{ "{{ system.name }}" }}</span>
+                                                <span class="project-name">{{ "{{ system.projects[0] }}" }}</span>
+                                            </div>
+                                            <div class="system-tags">
+                                                <el-tag 
+                                                    size="small" 
+                                                    v-if="system.dynamic && !system.error" 
+                                                    type="success" 
+                                                    effect="light"
+                                                    class="custom-tag dynamic-tag">
+                                                    动态
+                                                </el-tag>
+                                                <el-tag 
+                                                    size="small" 
+                                                    v-else 
+                                                    type="info" 
+                                                    effect="light"
+                                                    class="custom-tag static-tag">
+                                                    静态
+                                                </el-tag>
+                                                <el-tag 
+                                                    size="small" 
+                                                    type="warning" 
+                                                    effect="light"
+                                                    class="custom-tag project-tag">
+                                                    项目
+                                                </el-tag>
+                                            </div>
+                                        </div>
+                                    </el-option>
+                                </el-option-group>
+                            </el-select>
+                            <el-button 
+                                type="default" 
+                                @click="refreshSystems" 
+                                :loading="systemsLoading"
+                                icon="Refresh"
+                                title="刷新系统列表"
+                                class="refresh-button">
+                                刷新
+                            </el-button>
+                        </div>
+                        
+
+                        
+                        <!-- 系统获取状态提示 -->
+                        <div v-if="!systemsLoading" class="systems-status-info">
+                            <!-- 无系统可选时的提示 -->
+                            <el-alert 
+                                v-if="!systems.length"
+                                type="warning"
+                                title="暂无可用系统"
+                                description="请检查配置文件或网络连接，然后点击刷新按钮重试"
+                                size="small"
+                                show-icon
+                                :closable="false"
+                                style="margin-top: 8px;">
+                            </el-alert>
+                            
+
+                        </div>
+                        
+                        
+                    </el-form-item>
+                    
+                    <el-form-item label="分支名称：">
+                        <el-input v-model="branchName" placeholder="请输入分支名称，如：main、develop、feature/xxx"></el-input>
+                    </el-form-item>
+                    
+
+                </el-form>
+            </div>
+            
+            <div class="operation-area">
+                <el-button 
+                    type="primary" 
+                    size="large" 
+                    @click="startReview"
+                    :loading="loading"
+                    :disabled="!selectedSystems.length || !branchName">
+                    开始审查
+                </el-button>
+            </div>
+            
+            <div class="result-area" v-if="currentTask">
+                <!-- 任务信息卡片 -->
+                <el-card class="task-info-card" shadow="hover" style="margin-bottom: 20px;">
+                    <template #header>
+                        <div class="task-info-header">
+                            <span class="task-info-title">
+                                <el-icon style="margin-right: 8px; color: #409eff;"><Document /></el-icon>
+                                审查任务信息
+                            </span>
+                            <el-tag :type="getStatusTagType(currentTask.status)" size="small">
+                                {{ "{{ currentTask.status }}" }}
+                            </el-tag>
+                        </div>
+                    </template>
+                    
+                    <div class="task-info-content">
+                        <el-row :gutter="24">
+                            <el-col :span="12">
+                                <div class="info-item">
+                                    <el-icon style="margin-right: 6px; color: #909399;"><Key /></el-icon>
+                                    <span class="info-label">任务ID：</span>
+                                    <span class="info-value">{{ "{{ currentTask.id || currentTask.task_id }}" }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <el-icon style="margin-right: 6px; color: #67c23a;"><Monitor /></el-icon>
+                                    <span class="info-label">选择系统：</span>
+                                    <span class="info-value">
+                                        <span v-if="currentTask.system_names">{{ "{{ currentTask.system_names.join(', ') }}" }}</span>
+                                        <span v-else>{{ "{{ currentTask.system_name }}" }}</span>
+                                    </span>
+                                </div>
+                                <div class="info-item">
+                                    <el-icon style="margin-right: 6px; color: #e6a23c;"><BranchIcon /></el-icon>
+                                    <span class="info-label">分支：</span>
+                                    <span class="info-value">{{ "{{ currentTask.branch_name }}" }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="12">
+                                <div class="info-item">
+                                    <el-icon style="margin-right: 6px; color: #909399;"><Clock /></el-icon>
+                                    <span class="info-label">创建时间：</span>
+                                    <span class="info-value">{{ "{{ formatDateTime(currentTask.created_at) }}" }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <el-icon style="margin-right: 6px; color: #909399;"><EditPen /></el-icon>
+                                    <span class="info-label">更新时间：</span>
+                                    <span class="info-value">{{ "{{ formatDateTime(currentTask.updated_at) }}" }}</span>
+                                </div>
+                                <div class="info-item" v-if="currentTask.multi_system">
+                                    <el-icon style="margin-right: 6px; color: #f56c6c;"><Grid /></el-icon>
+                                    <span class="info-label">系统数量：</span>
+                                    <span class="info-value">{{ "{{ currentTask.total_systems || (currentTask.system_names && currentTask.system_names.length) || 1 }}" }} 个</span>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        
+                        <!-- 任务进度条 -->
+                        <div v-if="currentTask.status === 'processing' || currentTask.status === 'pending'" class="task-progress">
+                            <div class="progress-header">
+                                <span class="progress-title">
+                                    <el-icon style="margin-right: 6px;"><Loading /></el-icon>
+                                    任务执行进度
+                                </span>
+                            </div>
+                            <el-progress 
+                                :percentage="getTaskProgress(currentTask)" 
+                                :status="currentTask.status === 'processing' ? 'active' : (currentTask.status === 'completed' ? 'success' : (currentTask.status === 'aborted' ? 'warning' : 'exception'))"
+                                :stroke-width="12"
+                                striped
+                                striped-flow
+                                :show-text="false"
+                                class="progress-bar">
+                            </el-progress>
+                            <div class="progress-text-container">
+                                <span class="progress-text">{{ "{{ getTaskProgressText(currentTask) }}" }}</span>
+                                <span class="progress-percentage">{{ "{{ getTaskProgress(currentTask) }}" }}%</span>
+                            </div>
+                            
+                            <!-- 中止按钮 - 仅在任务执行中显示 -->
+                            <div v-if="currentTask && (currentTask.status === 'processing' || currentTask.status === 'pending')" class="abort-button-container">
+                                <el-button 
+                                    type="danger" 
+                                    size="small" 
+                                    icon="Close"
+                                    :loading="abortLoading"
+                                    @click="confirmAbortTask"
+                                    plain>
+                                    中止任务
+                                </el-button>
+
+                            </div>
+                        </div>
+                    </div>
+                </el-card>
+                
+                <div v-if="currentTask.status === 'failed'" style="margin-bottom:12px;">
+                    <el-alert type="error" show-icon :title="(currentTask.result && currentTask.result.error) || currentTask.error || '任务失败'"></el-alert>
+                </div>
+                
+                <!-- 统计信息面板 -->
+                <div v-if="currentTask.status === 'completed' && currentTask.result && currentTask.result.statistics" class="statistics-overview">
+                    <!-- 移除大标题和质量得分，使统计更紧凑 -->
+                    
+                    <!-- 统计卡片 -->
+                    <el-row :gutter="20" style="margin-bottom: 20px;">
+                        <el-col :span="6">
+                            <div class="stat-card danger">
+                                <div class="stat-number">{{ "{{ (currentTask.result && currentTask.result.statistics && currentTask.result.statistics.summary && currentTask.result.statistics.summary.total_issues_found) || 0 }}" }}</div>
+                                <div class="stat-label">发现问题</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="stat-card success">
+                                <div class="stat-number">{{ "{{ (currentTask.result && currentTask.result.statistics && currentTask.result.statistics.summary && currentTask.result.statistics.summary.total_unit_tests) || 0 }}" }}</div>
+                                <div class="stat-label">单元测试</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="stat-card info">
+                                <div class="stat-number">{{ "{{ (currentTask.result && currentTask.result.statistics && currentTask.result.statistics.summary && currentTask.result.statistics.summary.total_scenario_tests) || 0 }}" }}</div>
+                                <div class="stat-label">场景测试</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="stat-card warning">
+                                <div class="stat-number">{{ "{{ (currentTask.result && currentTask.result.statistics && currentTask.result.statistics.summary && currentTask.result.statistics.summary.total_files_reviewed) || 0 }}" }}</div>
+                                <div class="stat-label">审查文件</div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    
+                    <!-- 图表区域 -->
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <div class="chart-container">
+                                <div class="chart-title">问题严重程度分布</div>
+                                <div class="chart-wrapper">
+                                    <canvas :id="'severityChart-' + currentTask.id"></canvas>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="chart-container">
+                                <div class="chart-title">问题类型分析</div>
+                                <div class="chart-wrapper">
+                                    <canvas :id="'categoryChart-' + currentTask.id"></canvas>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    
+                    <!-- 语言和模块信息 -->
+                    <el-row :gutter="20" style="margin-top: 20px;">
+                        <el-col :span="12">
+                            <div class="chart-container">
+                                <div class="chart-title">检测到的编程语言</div>
+                                <div v-if="currentTask.result.statistics && currentTask.result.statistics.review_statistics && currentTask.result.statistics.review_statistics.languages_detected && currentTask.result.statistics.review_statistics.languages_detected.length">
+                                    <span 
+                                        v-for="language in currentTask.result.statistics.review_statistics.languages_detected" 
+                                        :key="language" 
+                                        class="language-tag">
+                                        {{ "{{ language }}" }}
+                                    </span>
+                                </div>
+                                <div v-else style="color: #909399; text-align: center; padding: 20px;">暂无语言信息</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="chart-container">
+                                <div class="chart-title">测试覆盖模块</div>
+                                <div v-if="currentTask.result.statistics && currentTask.result.statistics.scenario_test_statistics && currentTask.result.statistics.scenario_test_statistics.modules_covered && currentTask.result.statistics.scenario_test_statistics.modules_covered.length">
+                                    <span 
+                                        v-for="module in currentTask.result.statistics.scenario_test_statistics.modules_covered" 
+                                        :key="module" 
+                                        class="language-tag">
+                                        {{ "{{ module }}" }}
+                                    </span>
+                                </div>
+                                <div v-else style="color: #909399; text-align: center; padding: 20px;">暂无模块信息</div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+                
+                <el-tabs v-model="activeTab">
+                    <!-- 代码审查结果 -->
+                    <el-tab-pane label="代码审查结果" name="review">
+                        <div v-if="currentTask.status === 'completed' && currentTask.result && currentTask.result.report">
+                            <div v-for="(report, index) in currentTask.result.report" :key="index">
+                                <el-collapse>
+                                    <el-collapse-item 
+                                        :key="index"
+                                        :title="`${report.project_name} - ${report.filename}`"
+                                        :name="index">
+                                        
+                                        <!-- 文件Diff代码展示，默认收起 -->
+                                        <div v-if="report.diff_content" style="margin-bottom: 20px;">
+                                            <el-card class="diff-card" shadow="never">
+                                                <div slot="header" class="diff-header">
+                                                    <span style="font-weight: 600; color: #606266;">
+                                                        <i class="el-icon-document-copy"></i> 文件变更内容
+                                                    </span>
+                                                    <el-button 
+                                                        size="mini" 
+                                                        type="text" 
+                                                        icon="el-icon-copy-document"
+                                                        @click="copyCode(report.diff_content)">
+                                                        复制Diff
+                                                    </el-button>
+                                                </div>
+                                                <el-collapse style="border: none;">
+                                                    <el-collapse-item title="点击展开查看Diff代码" :name="`diff-${index}`">
+                                                        <div class="diff-block">
+                                                            <pre><code v-text="report.diff_content"></code></pre>
+                                                        </div>
+                                                    </el-collapse-item>
+                                                </el-collapse>
+                                            </el-card>
+                                        </div>
+                                        
+                                        <div v-if="report.issues && report.issues.length > 0">
+                                            <el-card 
+                                                v-for="(issue, issueIndex) in report.issues" 
+                                                :key="issueIndex"
+                                                class="issue-card"
+                                                :class="`severity-${issue.severity.toLowerCase()}`"
+                                                shadow="hover">
+                                                <div slot="header" class="issue-header">
+                                                    <div class="issue-type-section">
+                                                        <el-tag :type="getSeverityType(issue.severity)" size="medium" effect="dark">
+                                                            <i class="el-icon-warning-outline" v-if="issue.severity === 'Critical'"></i>
+                                                            <i class="el-icon-warning" v-else-if="issue.severity === 'High'"></i>
+                                                            <i class="el-icon-info" v-else-if="issue.severity === 'Medium'"></i>
+                                                            <i class="el-icon-success" v-else></i>
+                                                            <span style="margin-left: 5px;">{{ "{{ issue.type }}" }}</span>
+                                                    </el-tag>
+                                                        <el-tag 
+                                                            :class="`issue-severity-${issue.severity.toLowerCase()}`"
+                                                            size="small" 
+                                                            :type="getSeverityType(issue.severity)"
+                                                            effect="plain"
+                                                            style="margin-left: 8px;">
+                                                            {{ "{{ issue.severity }}" }}
+                                                        </el-tag>
+                                                </div>
+                                                    <div class="issue-actions">
+                                                        <el-button 
+                                                            size="mini" 
+                                                            type="text" 
+                                                            icon="el-icon-document-copy"
+                                                            @click="copyCode(issue.description + '\\n建议：' + issue.suggestion)">
+                                                            复制
+                                                        </el-button>
+                                                    </div>
+                                                </div>
+                                                <div class="issue-content">
+                                                    <div class="issue-description">
+                                                        <h4 class="content-title">
+                                                            <i class="el-icon-warning-outline" style="color: #f56c6c;"></i>
+                                                            问题描述
+                                                        </h4>
+                                                        <p class="content-text">{{ "{{ issue.description }}" }}</p>
+                                                    </div>
+                                                    <div class="issue-suggestion">
+                                                        <h4 class="content-title">
+                                                            <i class="el-icon-magic-stick" style="color: #67c23a;"></i>
+                                                            修改建议
+                                                        </h4>
+                                                        <p class="content-text">{{ "{{ issue.suggestion }}" }}</p>
+                                                    </div>
+                                                    <div v-if="issue.line_hint" class="issue-hint">
+                                                        <h4 class="content-title">
+                                                            <i class="el-icon-location-outline" style="color: #909399;"></i>
+                                                            代码位置
+                                                        </h4>
+                                                        <p class="content-text">{{ "{{ issue.line_hint }}" }}</p>
+                                                    </div>
+                                                </div>
+                                            </el-card>
+                                        </div>
+                                        <div v-else>
+                                            <el-empty description="未发现明显问题"></el-empty>
+                                        </div>
+                                    </el-collapse-item>
+                                </el-collapse>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <el-empty description="暂无审查结果"></el-empty>
+                        </div>
+                    </el-tab-pane>
+                    
+                    <!-- 单元测试用例 -->
+                    <el-tab-pane label="单元测试用例" name="unit">
+                        <div v-if="currentTask.status === 'completed' && currentTask.result && currentTask.result.unit_cases">
+                            <div v-for="(unitCase, index) in currentTask.result.unit_cases" :key="index">
+                                <el-card class="unit-test-card">
+                                    <div slot="header">
+                                        <span v-text="`${unitCase.project_name} - ${unitCase.filename}`"></span>
+                                        <el-button 
+                                            class="copy-button" 
+                                            size="small" 
+                                            @click="copyCode(unitCase.unit_test_code || unitCase.code)">
+                                            复制代码
+                                        </el-button>
+                                    </div>
+                                    
+                                    <!-- 自然语言描述 - 默认显示 -->
+                                    <div class="test-description">
+                                        <h4>测试描述：</h4>
+                                        <div class="test-description-content" v-html="formatTestDescription(unitCase.test_description || unitCase.description || '该单元测试用于验证文件中核心功能的正确性')"></div>
+                                    </div>
+                                    
+                                    <!-- 代码部分 - 默认收起 -->
+                                    <el-collapse style="margin-top: 15px;">
+                                        <el-collapse-item title="查看测试代码" :name="`code-${index}`">
+                                    <div class="code-block">
+                                                <pre><code v-text="unitCase.unit_test_code || unitCase.code || '暂无测试代码'"></code></pre>
+                                    </div>
+                                        </el-collapse-item>
+                                    </el-collapse>
+                                </el-card>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <el-empty description="暂无单元测试用例"></el-empty>
+                        </div>
+                    </el-tab-pane>
+                    
+                    <!-- 场景测试用例 -->
+                    <el-tab-pane label="场景测试用例" name="scenario">
+                        <div v-if="currentTask.status === 'completed' && currentTask.result && currentTask.result.scenario_cases">
+                            <!-- 按模块分组展示 -->
+                            <div v-for="(moduleGroup, moduleName) in groupedScenarioCases" :key="moduleName" style="margin-bottom: 20px;">
+                                <el-card class="module-group-card">
+                                    <div slot="header" class="module-header">
+                                        <i class="el-icon-folder-opened"></i>
+                                        <span class="module-name">{{ "{{ moduleName }}" }}</span>
+                                        <el-tag size="small" type="info">{{ "{{ moduleGroup.length }}" }} 个用例</el-tag>
+                                    </div>
+                                    
+                                    <!-- 场景测试卡片展示 -->
+                            <el-row :gutter="20">
+                                        <el-col :span="12" v-for="(scenario, index) in moduleGroup" :key="index">
+                                            <el-card class="scenario-card" shadow="hover" style="margin-bottom: 15px;">
+                                                <div slot="header" class="scenario-header">
+                                                    <div class="scenario-title-info">
+                                                        <span class="scenario-title" v-text="scenario.title"></span>
+                                                        <div class="scenario-tags">
+                                                            <el-tag size="mini" type="primary" v-text="scenario.case_id"></el-tag>
+                                                            <el-tag size="mini" type="success" v-text="scenario.filename"></el-tag>
+                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="scenario-content">
+                                                    <div class="scenario-section">
+                                                        <h5 class="section-title">
+                                                            <i class="el-icon-setting" style="color: #f39c12;"></i>
+                                                            前置条件
+                                                        </h5>
+                                                        <div class="section-content" v-if="Array.isArray(scenario.preconditions)">
+                                                            <ul class="content-list">
+                                                                <li v-for="(item, idx) in scenario.preconditions" :key="idx" v-text="item"></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="section-content" v-else>
+                                                            <p class="content-text-multiline" v-html="formatTextWithLineBreaks(scenario.preconditions)"></p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="scenario-section">
+                                                        <h5 class="section-title">
+                                                            <i class="el-icon-s-operation" style="color: #3498db;"></i>
+                                                            操作步骤
+                                                        </h5>
+                                                        <div class="section-content" v-if="Array.isArray(scenario.steps)">
+                                                            <ol class="content-list ordered-list">
+                                                                <li v-for="(step, idx) in scenario.steps" :key="idx">
+                                                                    {{ "{{ step.replace(/^\\d+\\.\\s*/, '') }}" }}
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                        <div class="section-content" v-else>
+                                                            <p class="content-text-multiline" v-html="formatTextWithLineBreaks(scenario.steps)"></p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="scenario-section">
+                                                        <h5 class="section-title">
+                                                            <i class="el-icon-success" style="color: #27ae60;"></i>
+                                                            预期结果
+                                                        </h5>
+                                                        <div class="section-content" v-if="Array.isArray(scenario.expected_result)">
+                                                            <ul class="content-list">
+                                                                <li v-for="(item, idx) in scenario.expected_result" :key="idx" v-text="item"></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="section-content" v-else>
+                                                            <p class="content-text-multiline" v-html="formatTextWithLineBreaks(scenario.expected_result)"></p>
+                                                        </div>
+                                                    </div>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-row>
+                                </el-card>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <el-empty description="暂无场景测试用例"></el-empty>
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </div>
+
+        <!-- 历史任务抽屉 -->
+        <el-drawer v-model="showHistory" title="📋 历史任务" size="45%" class="history-drawer">
+            <div class="history-header">
+                <el-button size="small" @click="loadTasks" :loading="historyLoading" type="primary" icon="Refresh">
+                    刷新
+                </el-button>
+                <el-input 
+                    size="small" 
+                    v-model="keyword" 
+                    placeholder="搜索任务ID、系统或分支"
+                    clearable
+                    style="flex: 1; margin-left: 12px;">
+                    <template #prefix>
+                        <el-icon><Search /></el-icon>
+                    </template>
+                </el-input>
+            </div>
+            
+            <div v-loading="historyLoading" element-loading-text="加载历史任务..." class="history-content">
+                <div v-if="filteredTasks.length === 0" class="empty-state">
+                    <el-empty description="暂无历史任务" :image-size="120"></el-empty>
+                </div>
+                <div v-else>
+                    <el-scrollbar height="calc(100vh - 200px)" class="task-list-scroll">
+                        <div v-for="task in filteredTasks" :key="task.id" class="history-task-card">
+                            <el-card shadow="hover" class="task-card-enhanced">
+                                <div class="task-card-header">
+                                    <div class="task-info">
+                                        <div class="task-id-row">
+                                            <el-icon style="margin-right: 6px; color: #409eff;"><Document /></el-icon>
+                                            <span class="task-id">{{ "{{ task.id }}" }}</span>
+                                            <el-tag :type="getStatusTagType(task.status)" size="small" class="status-tag">
+                                                {{ "{{ task.status }}" }}
+                                            </el-tag>
+                                        </div>
+                                        
+                                        <div class="task-details">
+                                            <div class="detail-item">
+                                                <el-icon style="margin-right: 4px; color: #67c23a;"><Monitor /></el-icon>
+                                                <span class="label">系统：</span>
+                                                <span class="value">{{ "{{ task.system_name }}" }}</span>
+                                        </div>
+                                            <div class="detail-item">
+                                                <el-icon style="margin-right: 4px; color: #e6a23c;"><BranchIcon /></el-icon>
+                                                <span class="label">分支：</span>
+                                                <span class="value">{{ "{{ task.branch_name }}" }}</span>
+                                        </div>
+                                    </div>
+                                        
+                                        <div class="task-time">
+                                            <div class="time-item">
+                                                <el-icon style="margin-right: 4px; color: #909399;"><Clock /></el-icon>
+                                                <span class="label">创建：</span>
+                                                <span class="value">{{ "{{ formatDateTime(task.created_at) }}" }}</span>
+                                            </div>
+                                            <div class="time-item">
+                                                <el-icon style="margin-right: 4px; color: #909399;"><EditPen /></el-icon>
+                                                <span class="label">更新：</span>
+                                                <span class="value">{{ "{{ formatDateTime(task.updated_at) }}" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="task-actions">
+                                        <el-button size="small" type="primary" @click="viewTask(task.id)" icon="View">
+                                            查看详情
+                                        </el-button>
+                                    </div>
+                                </div>
+                            </el-card>
+                        </div>
+                    </el-scrollbar>
+                </div>
+            </div>
+        </el-drawer>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted, computed } = Vue;
+        const { ElMessage, ElMessageBox } = ElementPlus;
+        
+        createApp({
+            setup() {
+                const systems = ref([]);
+                const selectedSystems = ref([]);
+                const branchName = ref('');
+                const systemsLoading = ref(false);
+
+                
+
+                
+
+
+                const loading = ref(false);
+                const abortLoading = ref(false);
+                const currentTask = ref(null);
+                const activeTab = ref('review');
+
+                
+                const form = ref({
+                    system: '',
+                    branch: ''
+                });
+
+                // 历史任务
+                const showHistory = ref(false);
+                const historyLoading = ref(false);
+                const tasks = ref([]);
+                const keyword = ref('');
+                const filteredTasks = computed(() => {
+                    if (!keyword.value) return tasks.value;
+                    const k = keyword.value.toLowerCase();
+                    return tasks.value.filter(t =>
+                        (t.system_name || '').toLowerCase().includes(k) ||
+                        (t.branch_name || '').toLowerCase().includes(k) ||
+                        (t.id || '').toLowerCase().includes(k)
+                    );
+                });
+                
+                // 按模块分组的场景测试用例
+                const groupedScenarioCases = computed(() => {
+                    if (!currentTask.value || !currentTask.value.result || !currentTask.value.result.scenario_cases) {
+                        return {};
+                    }
+                    
+                    const grouped = {};
+                    currentTask.value.result.scenario_cases.forEach(scenario => {
+                        const module = scenario.module || '未分类模块';
+                        if (!grouped[module]) {
+                            grouped[module] = [];
+                        }
+                        grouped[module].push(scenario);
+                    });
+                    
+                    return grouped;
+                });
+                
+                // 层级化的系统数据，用于下拉框显示
+                const groupedSystems = computed(() => {
+                    console.log('🔄 计算 groupedSystems, systems.value:', systems.value);
+                    if (!systems.value || systems.value.length === 0) {
+                        console.log('📭 没有系统数据，返回空数组');
+                        return [];
+                    }
+                    
+                    const result = systems.value.map(system => {
+                        // 处理系统数据，确保projects数组存在
+                        const projects = system.projects || [];
+                        const projectCount = projects.length;
+                        
+                        return {
+                            ...system,
+                            project_count: projectCount,
+                            disabled: system.error || false
+                        };
+                    });
+                    
+                    console.log('✅ groupedSystems 计算结果:', result.length, '个系统');
+                    return result;
+                });
+                const openHistory = async () => {
+                    showHistory.value = true;
+                    await loadTasks();
+                };
+                const loadTasks = async () => {
+                    historyLoading.value = true;
+                    try {
+                        const res = await axios.get('/api/tasks');
+                        tasks.value = (res.data && res.data.tasks) || [];
+                    } catch (e) {
+                        ElMessage.error('加载历史任务失败');
+                    } finally {
+                        historyLoading.value = false;
+                    }
+                };
+                const viewTask = async (taskId) => {
+                    try {
+                        const res = await axios.get(`/api/task/${taskId}`);
+                        currentTask.value = res.data;
+                        activeTab.value = 'review';
+                        showHistory.value = false;
+                    } catch (e) {
+                        ElMessage.error('获取任务详情失败');
+                    }
+                };
+                
+
+                
+                // 获取系统列表
+                const loadSystems = async (forceRefresh = false) => {
+                    console.log('🚀 开始加载系统列表...');
+                    systemsLoading.value = true;
+                    
+                    try {
+                        const params = forceRefresh ? { force_refresh: 'true' } : {};
+                        const response = await axios.get('/api/systems', { params });
+                        
+                        // 处理响应格式
+                        if (response.data.systems) {
+                            // 直接保存原始系统数据，用于层级化显示
+                            systems.value = response.data.systems;
+                            console.log('✅ 系统数据已加载:', systems.value.length, '个系统');
+                            
+                            // 分析系统状态
+                            const total = response.data.total;
+                            const dynamicCount = systems.value.filter(s => s.dynamic).length;
+                            const staticCount = systems.value.filter(s => !s.dynamic && !s.error).length;
+                            const errorCount = systems.value.filter(s => s.error).length;
+                            
+                            // 显示数据源信息
+                            if (response.data.source === 'dynamic') {
+                                console.log(`✅ 动态获取系统列表成功: ${total} 个系统, ${dynamicCount} 个来自API`);
+                                
+                                if (errorCount > 0) {
+                                    // 部分失败 - 显示toast警告
+                                    ElMessage.warning(`${errorCount} 个系统获取失败，已使用静态配置`);
+                                    if (forceRefresh) {
+                                        ElMessage.warning(`${errorCount} 个系统获取失败`);
+                                    }
+                                } else {
+                                    // 全部成功 - 显示成功toast
+                                    if (forceRefresh) {
+                                        ElMessage.success(`刷新成功！获取到 ${total} 个系统，已自动备份到systems.yaml`);
+                                    }
+                                }
+                            } else {
+                                // 静态配置
+                                console.log(`📋 使用静态配置: ${response.data.total} 个系统`);
+                                ElMessage.info(`使用静态配置，建议检查网络连接或 API Token`);
+                                if (forceRefresh) {
+                                    ElMessage.info(`使用静态配置: ${response.data.total} 个系统`);
+                                }
+                            }
+                        } else {
+                            // 兼容旧格式
+                            systems.value = response.data;
+                            console.log('✅ 兼容格式系统数据已加载:', systems.value.length, '个系统');
+                        }
+                        
+
+                    } catch (error) {
+                        console.error('❌ 加载系统列表失败:', error);
+                        ElMessage.error('加载系统列表失败');
+                    } finally {
+                        console.log('🏁 加载完成，设置 systemsLoading = false');
+                        systemsLoading.value = false;
+                    }
+                };
+                
+                // 刷新系统列表
+                const refreshSystems = async () => {
+                    await loadSystems(true);
+                };
+                
+
+                
+                // 开始审查
+                const startReview = async () => {
+                    if (!selectedSystems.value.length || !branchName.value) {
+                        ElMessage.warning('请选择系统和输入分支名称');
+                        return;
+                    }
+                    
+                    loading.value = true;
+                    try {
+                        // 解析选择的系统名称（处理项目级选择）
+                        const systemNames = selectedSystems.value.map(selected => {
+                            // 如果是项目级选择（格式：system_name (project_name)），取系统名称
+                            if (selected.includes('(') && selected.includes(')')) {
+                                const systemName = selected.split('(')[0].trim();
+                                return systemName;
+                            }
+                            // 如果是旧格式（格式：system_name:project_name），取系统名称
+                            if (selected.includes(':')) {
+                                return selected.split(':')[0];
+                            }
+                            // 否则直接返回
+                            return selected;
+                        });
+                        
+                        // 去重系统名称
+                        const uniqueSystemNames = [...new Set(systemNames)];
+                        
+                        // 如果选择了多个系统，显示确认信息
+                        if (uniqueSystemNames.length > 1) {
+                            ElMessage.info(`将并行处理 ${uniqueSystemNames.length} 个系统: ${uniqueSystemNames.join(', ')}`);
+                        }
+                        
+                        const response = await axios.post('/api/review-multi', {
+                            system_names: uniqueSystemNames,
+                            branch_name: branchName.value
+                        });
+                        
+                        currentTask.value = response.data;
+                        activeTab.value = 'review';
+                        
+                        // 处理任务已存在的情况
+                        if (currentTask.value.existing) {
+                            ElMessage.success(currentTask.value.message);
+                            activeTab.value = 'review';
+                        } else {
+                            // 轮询任务状态（支持多任务）
+                            if (response.data.task_ids) {
+                                // 多系统情况，轮询主任务ID
+                                pollTaskStatus(response.data.main_task_id || response.data.task_ids[0]);
+                            } else {
+                                // 单系统情况，使用API返回的task_id
+                                pollTaskStatus(response.data.task_id);
+                            }
+                            
+                            const successMsg = selectedSystems.value.length > 1 
+                                ? `${selectedSystems.value.length} 个系统的审查任务已启动`
+                                : '审查任务已启动';
+                            ElMessage.success(successMsg);
+                        }
+                    } catch (error) {
+                        console.error('开始审查失败:', error);
+                        ElMessage.error(error?.response?.data?.error || '开始审查失败');
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+                
+                // 确认中止任务
+                const confirmAbortTask = () => {
+                    if (!currentTask.value) {
+                        ElMessage.error('没有当前任务');
+                        return;
+                    }
+                    
+                    // 检查任务状态是否允许中止
+                    if (currentTask.value.status === 'completed') {
+                        ElMessage.info('任务已完成，无需中止');
+                        return;
+                    }
+                    
+                    if (currentTask.value.status === 'failed') {
+                        ElMessage.info('任务已失败，无需中止');
+                        return;
+                    }
+                    
+                    if (currentTask.value.status === 'aborted') {
+                        ElMessage.info('任务已中止');
+                        return;
+                    }
+                    
+                    // 兼容API响应格式(task_id)和任务详情格式(id)
+                    const taskId = currentTask.value.id || currentTask.value.task_id || currentTask.value.main_task_id;
+                    
+                    if (!taskId) {
+                        ElMessage.error('无法获取任务ID');
+                        return;
+                    }
+                    
+                    ElMessageBox.confirm(
+                        '确定要中止当前任务吗？此操作不可撤销。',
+                        '中止任务',
+                        {
+                            confirmButtonText: '确定中止',
+                            cancelButtonText: '取消',
+                            type: 'warning',
+                            confirmButtonClass: 'el-button--danger'
+                        }
+                    ).then(() => {
+                        directAbortTask();
+                    }).catch(() => {
+                        ElMessage.info('已取消中止操作');
+                    });
+                };
+                
+                // 中止任务
+                const abortTask = async () => {
+                    if (!currentTask.value) {
+                        ElMessage.error('没有当前任务');
+                        return;
+                    }
+                    
+                    // 兼容API响应格式(task_id)和任务详情格式(id)
+                    const taskId = currentTask.value.id || currentTask.value.task_id || currentTask.value.main_task_id;
+                    
+                    if (!taskId) {
+                        ElMessage.error('无法获取任务ID');
+                        return;
+                    }
+                    
+                    abortLoading.value = true;
+                    console.log('开始调用中止API，任务ID:', taskId);
+                    
+                    try {
+                        const response = await axios.post(`/api/task/${taskId}/abort`);
+                        console.log('中止API调用成功，响应:', response.data);
+                        
+                        ElMessage.success('任务已成功中止');
+                        
+                        // 立即更新任务状态
+                        console.log('更新前端任务状态为aborted');
+                        currentTask.value.status = 'aborted';
+                        currentTask.value.updated_at = new Date().toISOString();
+                        
+                        // 停止轮询
+                        if (pollTaskStatus.timer) {
+                            console.log('停止任务状态轮询');
+                            clearTimeout(pollTaskStatus.timer);
+                            pollTaskStatus.timer = null;
+                        }
+                        
+                    } catch (error) {
+                        console.error('中止任务失败:', error);
+                        console.log('详细错误信息:', {
+                            message: error.message,
+                            status: error.response?.status,
+                            statusText: error.response?.statusText,
+                            data: error.response?.data,
+                            url: error.config?.url,
+                            method: error.config?.method,
+                            taskId: taskId,
+                            currentTask: currentTask.value
+                        });
+                        
+                        // 显示更详细的错误信息
+                        if (error.response && error.response.data && error.response.data.error) {
+                            ElMessage.error(`中止任务失败: ${error.response.data.error}`);
+                            console.log('服务器返回错误:', error.response.data.error);
+                        } else if (error.response?.status === 404) {
+                            ElMessage.error('任务不存在或已完成');
+                            console.log('任务不存在，任务ID:', taskId);
+                        } else if (error.response?.status === 400) {
+                            ElMessage.error('任务当前状态不允许中止');
+                            console.log('任务状态不允许中止，当前状态:', currentTask.value?.status);
+                        } else if (error.code === 'NETWORK_ERROR' || !error.response) {
+                            ElMessage.error('网络连接失败，请检查服务器状态');
+                            console.log('网络错误，无法连接到服务器');
+                        } else {
+                            ElMessage.error(`中止任务失败: ${error.message || '未知错误'}`);
+                            console.log('未知错误类型:', error);
+                        }
+                    } finally {
+                        abortLoading.value = false;
+                    }
+                };
+                
+                // 直接中止任务（现在作为主要实现）
+                const directAbortTask = async () => {
+                    if (!currentTask.value) {
+                        ElMessage.error('没有当前任务');
+                        return;
+                    }
+                    
+                    const taskId = currentTask.value.id || currentTask.value.task_id || currentTask.value.main_task_id;
+                    
+                    if (!taskId) {
+                        ElMessage.error('无法获取任务ID');
+                        return;
+                    }
+                    
+                    try {
+                        abortLoading.value = true;
+                        
+                        const response = await axios.post(`/api/task/${taskId}/abort`);
+                        
+                        ElMessage.success('任务已成功中止');
+                        
+                        // 更新任务状态
+                        currentTask.value.status = 'aborted';
+                        currentTask.value.updated_at = new Date().toISOString();
+                        
+                        // 停止轮询
+                        if (pollTaskStatus.timer) {
+                            clearTimeout(pollTaskStatus.timer);
+                            pollTaskStatus.timer = null;
+                        }
+                        
+                    } catch (error) {
+                        console.error('中止任务失败:', error);
+                        
+                        if (error.response && error.response.data && error.response.data.error) {
+                            ElMessage.error(`中止任务失败: ${error.response.data.error}`);
+                        } else if (error.response?.status === 404) {
+                            ElMessage.error('任务不存在或已完成');
+                        } else if (error.response?.status === 400) {
+                            ElMessage.error('任务当前状态不允许中止');
+                        } else {
+                            ElMessage.error(`中止任务失败: ${error.message || '请稍后重试'}`);
+                        }
+                        
+                    } finally {
+                        abortLoading.value = false;
+                    }
+                };
+                
+                // 轮询任务状态
+                const pollTaskStatus = async (taskId) => {
+                    // 清除之前的轮询
+                    if (pollTaskStatus.timer) {
+                        clearTimeout(pollTaskStatus.timer);
+                        pollTaskStatus.timer = null;
+                    }
+                    
+                    const poll = async () => {
+                        try {
+                            const response = await axios.get(`/api/task/${taskId}`);
+                            currentTask.value = response.data;
+                            
+                            // 任务结束状态：失败、中止、完成时停止轮询
+                            if (currentTask.value.status === 'failed') {
+                                const errorMsg = (currentTask.value.result && currentTask.value.result.error) || currentTask.value.error || '任务失败';
+                                
+                                // 根据错误类型提供友好的提示信息
+                                let friendlyMsg = errorMsg;
+                                if (errorMsg.includes('网络连接失败') || errorMsg.includes('SSL错误')) {
+                                    friendlyMsg = '🌐 网络连接失败，请检查网络连接或配置代理后重试';
+                                } else if (errorMsg.includes('网络连接超时')) {
+                                    friendlyMsg = '⏰ 网络连接超时，请检查网络连接后重试';
+                                } else if (errorMsg.includes('分支或仓库不存在')) {
+                                    friendlyMsg = '🔍 分支或仓库不存在，请检查分支名称是否正确';
+                                } else if (errorMsg.includes('Git API调用失败')) {
+                                    friendlyMsg = '🔧 Git API调用失败，请稍后重试或联系管理员';
+                                }
+                                
+                                ElMessage({
+                                    message: friendlyMsg,
+                                    type: 'error',
+                                    duration: 5000,
+                                    showClose: true
+                                });
+                                return;
+                            }
+                            
+                            // 任务被中止时提示并停止轮询
+                            if (currentTask.value.status === 'aborted') {
+                                ElMessage({
+                                    message: '🛑 任务已被中止',
+                                    type: 'warning',
+                                    duration: 3000,
+                                    showClose: true
+                                });
+                                return;
+                            }
+                            
+                            // 任务完成时停止轮询
+                            if (currentTask.value.status === 'completed') {
+                                ElMessage({
+                                    message: '✅ 任务已完成',
+                                    type: 'success',
+                                    duration: 3000,
+                                    showClose: true
+                                });
+                                return;
+                            }
+
+                            if (currentTask.value.status === 'pending' || currentTask.value.status === 'processing') {
+                                pollTaskStatus.timer = setTimeout(poll, 2000);
+                            }
+                        } catch (error) {
+                            console.error('获取任务状态失败:', error);
+                            ElMessage.error('获取任务状态失败');
+                        }
+                    };
+                    
+                    poll();
+                };
+                
+                // 获取严重程度类型
+                const getSeverityType = (severity) => {
+                    const types = {
+                        'Critical': 'danger',
+                        'High': 'warning',
+                        'Medium': 'info',
+                        'Low': 'success'
+                    };
+                    return types[severity] || 'info';
+                };
+                const getStatusTagType = (status) => {
+                    const m = { 'completed': 'success', 'failed': 'danger', 'processing': 'warning', 'pending': 'info' };
+                    return m[status] || 'info';
+                };
+                
+                // 复制代码
+                const copyCode = (code) => {
+                    navigator.clipboard.writeText(code).then(() => {
+                        ElMessage.success('代码已复制到剪贴板');
+                    }).catch(() => {
+                        ElMessage.error('复制失败');
+                    });
+                };
+                
+                // 图表相关
+                const charts = ref({});
+                
+                const initializeCharts = () => {
+                    if (!currentTask.value?.result?.statistics) return;
+                    
+                    const taskId = currentTask.value.id;
+                    const stats = currentTask.value.result.statistics;
+                    
+                    // 销毁已存在的图表
+                    Object.values(charts.value).forEach(chart => {
+                        if (chart && typeof chart.destroy === 'function') {
+                            chart.destroy();
+                        }
+                    });
+                    charts.value = {};
+                    
+                    // 等待DOM更新
+                    Vue.nextTick(() => {
+                        try {
+                            // 严重程度分布饼图
+                            const severityCanvas = document.getElementById(`severityChart-${taskId}`);
+                            if (severityCanvas && stats.review_statistics?.severity_counts) {
+                                const severityCtx = severityCanvas.getContext('2d');
+                                const severityData = stats.review_statistics.severity_counts;
+                                
+                                charts.value.severity = new Chart(severityCtx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: Object.keys(severityData),
+                                        datasets: [{
+                                            data: Object.values(severityData),
+                                            backgroundColor: [
+                                                '#ef4444', // Critical - red
+                                                '#f59e0b', // High - amber
+                                                '#06b6d4', // Medium - cyan
+                                                '#10b981'  // Low - emerald
+                                            ],
+                                            borderWidth: 2,
+                                            borderColor: '#fff'
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: {
+                                            legend: {
+                                                position: 'bottom',
+                                                labels: {
+                                                    padding: 20,
+                                                    usePointStyle: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            
+                            // 问题类型柱状图
+                            const categoryCanvas = document.getElementById(`categoryChart-${taskId}`);
+                            if (categoryCanvas && stats.review_statistics?.category_counts) {
+                                const categoryCtx = categoryCanvas.getContext('2d');
+                                const categoryData = stats.review_statistics.category_counts;
+                                
+                                charts.value.category = new Chart(categoryCtx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: Object.keys(categoryData),
+                                        datasets: [{
+                                            label: '问题数量',
+                                            data: Object.values(categoryData),
+                                            backgroundColor: '#6366f1',
+                                            borderColor: '#4f46e5',
+                                            borderWidth: 1,
+                                            borderRadius: 4
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: {
+                                            legend: {
+                                                display: false
+                                            }
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    stepSize: 1
+                                                }
+                                            },
+                                            x: {
+                                                ticks: {
+                                                    maxTicksLimit: 6
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        } catch (error) {
+                            console.error('初始化图表失败:', error);
+                        }
+                    });
+                };
+                
+                // 监听currentTask变化，自动更新图表
+                const watchCurrentTask = Vue.watch(
+                    () => currentTask.value?.status === 'completed' && currentTask.value?.result?.statistics,
+                    (hasStats) => {
+                        if (hasStats) {
+                            setTimeout(initializeCharts, 500); // 延迟确保DOM已渲染
+                        }
+                    }
+                );
+                
+                // 监听系统选择变化，清除当前任务结果并加载分支
+                const watchSelectedSystems = Vue.watch(
+                    selectedSystems,
+                    (newSystems, oldSystems) => {
+                        // 如果系统选择发生变化，清除当前任务
+                        if (JSON.stringify(newSystems) !== JSON.stringify(oldSystems)) {
+                            currentTask.value = null;
+                        }
+                    }
+                );
+                
+                // 格式化日期时间为 年/月/日 时:分:秒
+                const formatDateTime = (dateTimeStr) => {
+                    if (!dateTimeStr) return '无';
+                    try {
+                        const date = new Date(dateTimeStr);
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        const seconds = String(date.getSeconds()).padStart(2, '0');
+                        return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+                    } catch (e) {
+                        return dateTimeStr;
+                    }
+                };
+
+                // 格式化带换行的文本
+                const formatTextWithLineBreaks = (text) => {
+                    if (!text) return '';
+                    
+                    // 处理各种换行符格式
+                    return text
+                        .replace(/\\n/g, '\n')          // 转换 \n 为真实换行
+                        .replace(/\r\n/g, '\n')         // 统一换行符
+                        .replace(/\r/g, '\n')           // 统一换行符
+                        .replace(/\n\n+/g, '\n\n')      // 合并多个连续换行为双换行
+                        .trim();                        // 去除首尾空白
+                };
+                
+                // 获取任务进度百分比
+                const getTaskProgress = (task) => {
+                    if (!task) return 0;
+                    
+                    if (task.status === 'completed') return 100;
+                    if (task.status === 'failed') return 100;
+                    if (task.status === 'aborted') return 100;
+                    if (task.status === 'pending') return 0;
+                    
+                    if (task.status === 'processing') {
+                        // 优先使用file_states计算精确进度
+                        const fileStates = task.file_states || {};
+                        const fileNames = Object.keys(fileStates);
+                        
+                        if (fileNames.length > 0) {
+                            let totalSubtasks = 0;
+                            let completedSubtasks = 0;
+                            
+                            // 统计每个文件的子任务状态
+                            fileNames.forEach(filename => {
+                                const fileState = fileStates[filename];
+                                
+                                // 每个文件有3个子任务：review, unit_test, scenario_test
+                                totalSubtasks += 3;
+                                
+                                if (fileState.review_status === 'completed') completedSubtasks++;
+                                if (fileState.unit_test_status === 'completed') completedSubtasks++;
+                                if (fileState.scenario_test_status === 'completed') completedSubtasks++;
+                            });
+                            
+                            if (totalSubtasks > 0) {
+                                const progress = (completedSubtasks / totalSubtasks) * 100;
+                                return Math.min(progress, 95); // 最大95%，留5%给最终整理
+                            }
+                        }
+                        
+                        // 降级：基于debug_log分析文件处理进度
+                        const debugLog = task.debug_log || [];
+                        
+                        // 查找文件数量信息
+                        let totalFiles = 0;
+                        let processedFiles = 0;
+                        
+                        // 从debug_log中提取文件数量信息
+                        debugLog.forEach(log => {
+                            if (typeof log === 'string') {
+                                // 查找 "转换后调用_process_project: dify, X个文件"
+                                const filesMatch = log.match(/转换后调用_process_project:.*?(\d+)个文件/);
+                                if (filesMatch) {
+                                    totalFiles = parseInt(filesMatch[1]);
+                                }
+                                
+                                // 查找 "发现 X 个文件变更" (备用模式)
+                                const altFilesMatch = log.match(/发现\s+(\d+)\s+个文件变更/);
+                                if (altFilesMatch) {
+                                    totalFiles = parseInt(altFilesMatch[1]);
+                                }
+                                
+                                // 查找各种文件处理完成的模式
+                                if (log.includes('文件处理完成') || 
+                                    log.includes('AsyncProcessor 文件处理完成') ||
+                                    log.includes('_process_file完成')) {
+                                    processedFiles++;
+                                }
+                            }
+                        });
+                        
+                        // 检查是否有结果数据来推断进度
+                        const result = task.result || {};
+                        const reportCount = (result.report && result.report.length) || 0;
+                        const reviewCount = (result.review_results && result.review_results.length) || 0;
+                        const unitCount = (result.unit_cases && result.unit_cases.length) || 0;
+                        const scenarioCount = (result.scenario_cases && result.scenario_cases.length) || 0;
+                        
+                        if (totalFiles > 0) {
+                            // 如果有文件数量信息，优先使用文件进度
+                            if (processedFiles > 0) {
+                                const fileProgress = (processedFiles / totalFiles) * 100;
+                                return Math.min(fileProgress, 95);
+                            }
+                            // 如果有结果数据但没有文件完成日志，基于结果推断
+                            else if (reportCount > 0 || reviewCount > 0 || unitCount > 0 || scenarioCount > 0) {
+                                // 有结果说明文件处理接近完成，返回高进度
+                                return 85;
+                            }
+                            else {
+                                // 有文件数量但还没有结果
+                                return 25;
+                            }
+                        } else {
+                            // 没有文件数量信息时，基于子任务完成情况计算进度
+                            let completedSubtasks = 0;
+                            let totalSubtasks = 3; // 审查、单元测试、场景测试
+                            
+                            if (reportCount > 0 || reviewCount > 0) completedSubtasks++;
+                            if (unitCount > 0) completedSubtasks++;
+                            if (scenarioCount > 0) completedSubtasks++;
+                            
+                            // 基于完成的子任务计算进度
+                            const subtaskProgress = (completedSubtasks / totalSubtasks) * 100;
+                            return Math.min(subtaskProgress, 95);
+                        }
+                    }
+                    return 0;
+                };
+                
+                // 文本截断函数
+                const truncateText = (text, maxLength) => {
+                    if (!text) return '';
+                    if (text.length <= maxLength) return text;
+                    return text.substring(0, maxLength - 3) + '...';
+                };
+
+                // 格式化系统标签
+                const formatSystemLabel = (system) => {
+                    if (!system) return '';
+                    
+                    // 系统级选项显示系统名称和项目数量
+                    if (system.project_count > 1) {
+                        return `${system.name} (${system.project_count}个项目)`;
+                    }
+                    
+                    return system.name;
+                };
+
+                // 获取任务进度文本
+                const getTaskProgressText = (task) => {
+                    if (!task) return '准备中...';
+                    
+                    switch (task.status) {
+                        case 'pending':
+                            return '📋 任务排队中，请稍候...';
+                        case 'processing':
+                            // 优先使用file_states显示精确的子任务进度
+                            const fileStates = task.file_states || {};
+                            const fileNames = Object.keys(fileStates);
+                            
+                            if (fileNames.length > 0) {
+                                let totalSubtasks = 0;
+                                let completedSubtasks = 0;
+                                let reviewCompleted = 0;
+                                let unitCompleted = 0;
+                                let scenarioCompleted = 0;
+                                
+                                // 统计每个文件的子任务状态
+                                fileNames.forEach(filename => {
+                                    const fileState = fileStates[filename];
+                                    totalSubtasks += 3;
+                                    
+                                    if (fileState.review_status === 'completed') {
+                                        completedSubtasks++;
+                                        reviewCompleted++;
+                                    }
+                                    if (fileState.unit_test_status === 'completed') {
+                                        completedSubtasks++;
+                                        unitCompleted++;
+                                    }
+                                    if (fileState.scenario_test_status === 'completed') {
+                                        completedSubtasks++;
+                                        scenarioCompleted++;
+                                    }
+                                });
+                                
+                                const progress = Math.round((completedSubtasks / totalSubtasks) * 100);
+                                
+                                // 根据完成的子任务类型显示详细进度
+                                const completedTypes = [];
+                                if (reviewCompleted > 0) completedTypes.push(`代码审查(${reviewCompleted}/${fileNames.length})`);
+                                if (unitCompleted > 0) completedTypes.push(`单元测试(${unitCompleted}/${fileNames.length})`);
+                                if (scenarioCompleted > 0) completedTypes.push(`场景测试(${scenarioCompleted}/${fileNames.length})`);
+                                
+                                if (completedTypes.length === 0) {
+                                    return `🔍 正在分析 ${fileNames.length} 个文件...`;
+                                } else if (progress >= 95) {
+                                    return `🎯 即将完成，正在整理结果... (${progress}%)`;
+                                } else {
+                                    return `📊 ${completedTypes.join('、')} | 总进度: ${progress}%`;
+                                }
+                            }
+                            
+                            // 降级：基于debug_log分析文件处理进度
+                            const debugLog = task.debug_log || [];
+                            
+                            let totalFiles = 0;
+                            let processedFiles = 0;
+                            
+                            // 从debug_log中提取文件处理信息
+                            debugLog.forEach(log => {
+                                if (typeof log === 'string') {
+                                    // 查找 "转换后调用_process_project: dify, X个文件"
+                                    const filesMatch = log.match(/转换后调用_process_project:.*?(\d+)个文件/);
+                                    if (filesMatch) {
+                                        totalFiles = parseInt(filesMatch[1]);
+                                    }
+                                    
+                                    // 查找 "发现 X 个文件变更" (备用模式)
+                                    const altFilesMatch = log.match(/发现\s+(\d+)\s+个文件变更/);
+                                    if (altFilesMatch) {
+                                        totalFiles = parseInt(altFilesMatch[1]);
+                                    }
+                                    
+                                    // 查找各种文件处理完成的模式
+                                    if (log.includes('文件处理完成') || 
+                                        log.includes('AsyncProcessor 文件处理完成') ||
+                                        log.includes('_process_file完成')) {
+                                        processedFiles++;
+                                    }
+                                }
+                            });
+                            
+                            if (totalFiles > 0) {
+                                const percentage = Math.round((processedFiles / totalFiles) * 100);
+                                return `🔄 正在处理文件 ${processedFiles}/${totalFiles} (${percentage}%)`;
+                            } else {
+                                // fallback到基于子任务结果的显示
+                                const result = task.result || {};
+                                const reportCount = (result.report && result.report.length) || 0;
+                                const reviewCount = (result.review_results && result.review_results.length) || 0;
+                                const unitCount = (result.unit_cases && result.unit_cases.length) || 0;
+                                const scenarioCount = (result.scenario_cases && result.scenario_cases.length) || 0;
+                                
+                                const completedTasks = [];
+                                if (reportCount > 0 || reviewCount > 0) completedTasks.push('代码审查');
+                                if (unitCount > 0) completedTasks.push('单元测试');
+                                if (scenarioCount > 0) completedTasks.push('场景测试');
+                                
+                                if (completedTasks.length === 0) {
+                                    return '🔍 正在获取代码差异...';
+                                } else if (completedTasks.length === 3) {
+                                    return '🎯 正在完成最终整理...';
+                                } else {
+                                    const remaining = ['代码审查', '单元测试', '场景测试']
+                                        .filter(task => !completedTasks.includes(task));
+                                    const progress = Math.round((completedTasks.length / 3) * 100);
+                                    return `🚀 已完成: ${completedTasks.join('、')} (${progress}%) | 进行中: ${remaining[0] || '完成'}`;
+                                }
+                            }
+                        case 'completed':
+                            return '✅ 任务完成';
+                        case 'failed':
+                            return '❌ 任务失败';
+                        case 'aborted':
+                            return '🛑 任务已中止';
+                        default:
+                            return '❓ 未知状态';
+                    }
+                };
+
+                // 格式化测试描述
+                const formatTestDescription = (description) => {
+                    if (!description) return '';
+                    
+                    // 将描述按行分割处理
+                    let formatted = description
+                        .replace(/\\n/g, '\n')  // 先统一换行符
+                        .split('\n')
+                        .map(line => line.trim())
+                        .filter(line => line.length > 0)
+                        .map(line => {
+                            // 处理编号行
+                            if (/^\d+\./.test(line)) {
+                                const match = line.match(/^(\d+)\.?\s*(.+)$/);
+                                if (match) {
+                                    return `<div class="test-step"><strong>${match[1]}.</strong> ${match[2]}</div>`;
+                                }
+                            }
+                            // 普通行
+                            return `<div class="test-line">${line}</div>`;
+                        })
+                        .join('');
+                    
+                    // 不再高亮关键词，保持原始描述
+                    return formatted;
+                };
+                
+
+                
+                onMounted(() => {
+                    console.log('🎯 组件已挂载，开始加载系统...');
+                    loadSystems();
+                });
+                
+                return {
+                    systems,
+                    selectedSystems,
+                    branchName,
+                    systemsLoading,
+                    loading,
+                    currentTask,
+                    activeTab,
+                    form,
+                    // 历史入口
+                    showHistory,
+                    historyLoading,
+                    tasks,
+                    keyword,
+                    filteredTasks,
+                    groupedScenarioCases,
+                    groupedSystems,
+                    openHistory,
+                    loadTasks,
+                    viewTask,
+                    refreshSystems,
+                    // 任务操作
+                    startReview,
+                    abortLoading,
+                    confirmAbortTask,
+                    abortTask,
+                    directAbortTask,
+
+
+                    // 其它
+                    getSeverityType,
+                    getStatusTagType,
+                    copyCode,
+                    formatTestDescription,
+                    formatTextWithLineBreaks,
+                    formatDateTime,
+                    getTaskProgress,
+                    getTaskProgressText,
+                    formatSystemLabel,
+                    truncateText,
+                    // 监听器
+                    watchSelectedSystems
+                };
+            }
+        }).use(ElementPlus).mount('#app');
+    </script>
+</body>
+</html>
