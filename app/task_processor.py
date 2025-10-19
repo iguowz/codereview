@@ -109,6 +109,7 @@ class TaskProcessor:
             
             debug(task_id, f"准备获取Git diff: {system_name}/{branch_name}")
             diff_results = self.git_client.get_diff(system_name, branch_name)
+            config_manager.backup_branches_to_yaml(self.git_client.dynamic_branches_cache, source='dynamic')
             
             # Git API调用完成后立即检查是否被中止
             self._check_task_abort(task_id)
@@ -222,6 +223,10 @@ class TaskProcessor:
                 error_report = ReviewReport(
                     project_name=project_name,
                     filename='N/A',
+                    filestatus={},
+                    summary='N/A',
+                    business_logic='N/A',
+                    language_detected='N/A',
                     issues=[CodeIssue(
                         type='系统错误',
                         description=f'项目处理失败: {error_msg}',
@@ -299,6 +304,10 @@ class TaskProcessor:
                 error_report = ReviewReport(
                     project_name=project_name,
                     filename='N/A',
+                    filestatus={},
+                    summary='N/A',
+                    business_logic='N/A',
+                    language_detected='N/A',
                     issues=[CodeIssue(
                         type='系统错误',
                         description=f'项目处理失败: {str(e)}',
@@ -313,11 +322,12 @@ class TaskProcessor:
         
         # 检查是否所有项目都失败了
         successful_projects = len([r for r in all_reports if not r.issues or not any(issue.type == '系统错误' for issue in r.issues)])
+        error_description = [r.issues[0].description for r in all_reports if r.issues and r.issues[0].type == '系统错误']
         total_projects = len(diff_results)
         
         if successful_projects == 0 and total_projects > 0:
             debug(task_id, f"所有项目都失败了，中止任务")
-            raise Exception("所有项目都处理失败，任务中止")
+            raise Exception("所有项目都处理失败，任务中止", ''.join(error_description))
         
         return ProcessingResult(
             reports=all_reports,
@@ -391,10 +401,17 @@ class TaskProcessor:
         for file_info in diff_data['files']:
             filename = file_info.get('filename', '')
             patch = file_info.get('patch', '')
+            filestatus = {
+                'status': file_info.get('status', ''),
+                'additions': file_info.get('additions', 0),
+                'deletions': file_info.get('deletions', 0),
+                'changes': file_info.get('changes', 0)
+            }
             
             if filename and patch:
                 files.append({
                     'filename': filename,
+                    'filestatus': filestatus,
                     'diff_content': patch
                 })
         
@@ -489,6 +506,7 @@ class TaskProcessor:
             for file_data in project_result.get('files', []):
                 files_data.append({
                     'filename': file_data.get('filename', ''),
+                    'filestatus': file_data.get('filestatus', {}),
                     'diff_content': file_data.get('diff_content', ''),
                     'project_name': project_name
                 })
@@ -537,6 +555,11 @@ class TaskProcessor:
                     report = ReviewReport(
                         project_name=review_result['project_name'],
                         filename=review_result['filename'],
+                        summary=review_result['summary'],
+                        filestatus=review_result['filestatus'],
+                        business_logic=review_result['business_logic'],
+                        language_detected=review_result['language_detected'],
+                        diff_content=review_result['diff_content'],
                         issues=issues
                     )
                     reports.append(report)
@@ -589,6 +612,10 @@ class TaskProcessor:
             error_report = ReviewReport(
                 project_name=project_name,
                 filename='N/A',
+                filestatus={},
+                summary='N/A',
+                business_logic='N/A',
+                language_detected='N/A',
                 issues=[CodeIssue(
                     type='Git API错误',
                     description=project_result['error'],
@@ -661,6 +688,10 @@ class TaskProcessor:
                 error_report = ReviewReport(
                     project_name=project_name,
                     filename=filename,
+                    filestatus={},
+                    summary='N/A',
+                    business_logic='N/A',
+                    language_detected='N/A',
                     issues=[CodeIssue(
                         type='文件处理错误',
                         description=f'文件处理异常: {str(e)}',
@@ -727,6 +758,10 @@ class TaskProcessor:
                     report = ReviewReport(
                         project_name=project_name,
                         filename=filename,
+                        filestatus={},
+                        summary='N/A',
+                        business_logic='N/A',
+                        language_detected='N/A',
                         issues=issues,
                         diff_content=patch  # 添加diff内容
                     )
@@ -742,6 +777,10 @@ class TaskProcessor:
                 error_report = ReviewReport(
                     project_name=project_name,
                     filename=filename,
+                    filestatus={},
+                    summary='N/A',
+                    business_logic='N/A',
+                    language_detected='N/A',
                     issues=[CodeIssue(
                         type='超时错误',
                         description=f'代码审查超时: {str(e)}',
@@ -757,6 +796,10 @@ class TaskProcessor:
                 error_report = ReviewReport(
                     project_name=project_name,
                     filename=filename,
+                    filestatus={},
+                    summary='N/A',
+                    business_logic='N/A',
+                    language_detected='N/A',
                     issues=[CodeIssue(
                         type='系统错误',
                         description=f'代码审查失败: {str(e)}',
@@ -876,6 +919,10 @@ class TaskProcessor:
                 error_report = ReviewReport(
                     project_name=project_name,
                     filename=filename,
+                    filestatus={},
+                    summary='N/A',
+                    business_logic='N/A',
+                    language_detected='N/A',
                     issues=[CodeIssue(
                         type='超时错误',
                         description=f'文件处理超时: {filename}',
@@ -894,6 +941,10 @@ class TaskProcessor:
                 {
                     'project_name': report.project_name,
                     'filename': report.filename,
+                    'summary': report.summary,
+                    'filestatus': report.filestatus,
+                    'business_logic': report.business_logic,
+                    'language_detected': report.language_detected,
                     'diff_content': report.diff_content,
                     'issues': [
                         {

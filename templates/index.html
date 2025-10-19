@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git增量代码智能审查与测试用例生成系统</title>
-    
+
     <!-- Element Plus CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/element-plus.css') }}">
     <!-- Vue 3 -->
@@ -15,6 +15,9 @@
     <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
     <!-- Chart.js -->
     <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <!-- ElementPlus 图标库 index.iife.min.js -->
+    <script src="{{ url_for('static', filename='js/index.iife.min.js') }}"></script>
+
     
     <style>
         :root {
@@ -257,8 +260,8 @@
 
         .test-description {
             background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 0 4px 4px 0;
             border-left: 4px solid #409eff;
         }
         
@@ -290,7 +293,7 @@
         }
 
         .test-description h4 {
-            margin: 0 0 10px 0;
+            margin: 0 0 5px 0;
             color: #409eff;
             font-size: 16px;
         }
@@ -886,6 +889,18 @@
             justify-content: space-between;
             align-items: flex-start;
         }
+
+        .task-id-link {
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .task-id-link:hover {
+            transform: translateY(-1px);
+            text-shadow: 0 2px 4px rgba(64, 158, 255, 0.3);
+        }
         
         .task-info {
             flex: 1;
@@ -927,6 +942,7 @@
         
         .task-time {
             margin-bottom: 8px;
+            width: 100%;
         }
         
         .time-item {
@@ -1522,6 +1538,38 @@
             background: #2563eb !important;
             transform: translateY(-1px) !important;
         }
+
+        .stats-bar {
+            height: 6px;
+            background: #f5f7fa;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0 12px;
+        }
+
+        .stats-bar-inner {
+            height: 100%;
+            display: flex;
+        }
+
+        .stats-bar-additions {
+            background-color: #67c23a;
+        }
+
+        .stats-bar-deletions {
+            background-color: #f56c6c;
+        }
+
+        .stats-bar-changes {
+            background-color: #e6a23c;
+        }
+
+        .stats-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #909399;
+        }
         
         /* 响应式布局优化 */
         @media (max-width: 768px) {
@@ -1582,170 +1630,241 @@
                 padding: var(--spacing-sm);
             }
         }
+
+        /* 通知配置对话框样式 */
+        .notification-section {
+            margin-bottom: 16px;
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .notification-header span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-switch {
+            margin-left: auto;
+        }
+
+        .config-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #606266;
+        }
+
+        .recipients-input,
+        .mentions-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .recipients-list,
+        .mentions-list {
+            margin-top: 10px;
+            min-height: 40px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px dashed #d0d7de;
+        }
+
+        .no-recipients,
+        .no-mentions {
+            text-align: center;
+            color: #909399;
+            font-size: 14px;
+        }
+
+        .email-recipients,
+        .wechat-mentions {
+            margin-top: 15px;
+        }
+
+        .dialog-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* 虚拟滚动样式 */
+        .virtual-scroll-container {
+            position: relative;
+            border-radius: var(--card-radius-sm);
+            border: 1px solid var(--color-gray-200);
+            background: #fff;
+        }
+        
+        .virtual-placeholder {
+            position: relative;
+            width: 100%;
+        }
+        
+        .virtual-items {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+        }
+        
+        .virtual-item {
+            padding: 8px 16px;
+            box-sizing: border-box;
+            border-bottom: 1px solid var(--color-gray-100);
+        }
+        
+        .virtual-item:last-child {
+            border-bottom: none;
+        }
+        
+        .virtual-scroll-info {
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-top: 1px solid var(--color-gray-200);
+            text-align: center;
+            font-size: 12px;
+            color: var(--color-gray-500);
+        }
+        
+        /* 优化虚拟滚动中的任务卡片 */
+        .virtual-item .task-card-enhanced {
+            margin-bottom: 0;
+            height: calc(100% - 16px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .virtual-item .task-card-enhanced .el-card__body {
+            flex: 1;
+            padding: 16px;
+            overflow: hidden;
+        }
+        
+        /* 虚拟滚动滚动条样式 */
+        .virtual-scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .virtual-scroll-container::-webkit-scrollbar-track {
+            background: var(--color-gray-100);
+            border-radius: 4px;
+        }
+        
+        .virtual-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--color-gray-300);
+            border-radius: 4px;
+            transition: background var(--transition-fast);
+        }
+        
+        .virtual-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gray-400);
+        }
+        
     </style>
 </head>
 <body>
     <div id="app">
         <div class="container">
             <div class="header">
-                <h1>🚀 Git增量代码智能审查与测试用例生成系统</h1>
+                <h1 v-if="!reportId">🚀 Git增量代码智能审查与测试用例生成系统</h1>
+                <h1 v-else>🚀 Git增量代码智能审查报告</h1>
                 <p>智能分析代码变更，自动生成测试用例</p>
-                <el-button class="history-entry" type="primary" size="small" @click="openHistory" icon="Clock">
-                    历史结果
-                </el-button>
+                <div v-if="!reportId" style="display: flex; gap: 10px; justify-content: center;">
+                    <el-button class="history-entry" type="success" size="small" @click="openRepoDialog" icon="Plus" style="margin-top: -10px;">
+                        添加仓库
+                    </el-button>
+                    <el-button class="history-entry" type="info" size="small" @click="openNotificationConfig" icon="Message" style="margin-top: 20px;">
+                        通知配置
+                    </el-button>
+                    <el-button class="history-entry" type="primary" size="small" @click="openHistory" icon="Clock" style="margin-top: 50px;">
+                        历史结果
+                    </el-button>
+                </div>
             </div>
             
-            <div class="selection-area">
+            <div  v-if="!reportId" class="selection-area">
                 <el-form :model="form" label-width="120px">
                     <el-form-item label="选择系统/项目：">
-                        <div class="system-selection-container">
-                            <!-- 系统选择器 -->
-                            <el-select 
-                                v-model="selectedSystems" 
-                                multiple 
-                                placeholder="请选择一个或多个系统或项目" 
-                                class="system-selector-input"
-                                :max-collapse-tags="2"
-                                collapse-tags
-                                collapse-tags-tooltip
-                                :loading="systemsLoading"
-                                clearable
-                                filterable
-                                size="default"
-                                popper-class="system-dropdown-popper"
-                                :popper-append-to-body="false">
-                                
-                                <!-- 项目选项组 -->
-                                <el-option-group 
-                                    v-for="system in groupedSystems" 
-                                    :key="system.id"
-                                    :label="`${system.name} (${system.project_count}个项目)`"
-                                    :disabled="system.disabled">
-                                    
-                                    <!-- 多项目系统的项目选项 -->
-                                    <el-option
-                                        v-if="system.projects && system.projects.length > 1"
-                                        v-for="project in system.projects"
-                                        :key="`project-${system.id}-${project}`"
-                                        :label="`${system.name} (${project})`"
-                                        :value="`${system.name}:${project}`"
-                                        :disabled="system.disabled">
-                                        <div class="system-option-simple project-level-option">
-                                            <div class="system-info">
-                                                <span class="system-name">{{ "{{ system.name }}" }}</span>
-                                                <span class="project-name">{{ "{{ project }}" }}</span>
-                                            </div>
-                                            <div class="system-tags">
-                                                <el-tag 
-                                                    size="small" 
-                                                    v-if="system.dynamic && !system.error" 
-                                                    type="success" 
-                                                    effect="light"
-                                                    class="custom-tag dynamic-tag">
-                                                    动态
-                                                </el-tag>
-                                                <el-tag 
-                                                    size="small" 
-                                                    v-else 
-                                                    type="info" 
-                                                    effect="light"
-                                                    class="custom-tag static-tag">
-                                                    静态
-                                                </el-tag>
-                                                <el-tag 
-                                                    size="small" 
-                                                    type="warning" 
-                                                    effect="light"
-                                                    class="custom-tag project-tag">
-                                                    项目
-                                                </el-tag>
-                                            </div>
-                                        </div>
-                                    </el-option>
-                                    
-                                    <!-- 单项目系统的项目选项 -->
-                                    <el-option
-                                        v-else-if="system.projects && system.projects.length === 1"
-                                        :key="`single-project-${system.id}`"
-                                        :label="`${system.name} (${system.projects[0]})`"
-                                        :value="`${system.name}:${system.projects[0]}`"
-                                        :disabled="system.disabled">
-                                        <div class="system-option-simple project-level-option">
-                                            <div class="system-info">
-                                                <span class="system-name">{{ "{{ system.name }}" }}</span>
-                                                <span class="project-name">{{ "{{ system.projects[0] }}" }}</span>
-                                            </div>
-                                            <div class="system-tags">
-                                                <el-tag 
-                                                    size="small" 
-                                                    v-if="system.dynamic && !system.error" 
-                                                    type="success" 
-                                                    effect="light"
-                                                    class="custom-tag dynamic-tag">
-                                                    动态
-                                                </el-tag>
-                                                <el-tag 
-                                                    size="small" 
-                                                    v-else 
-                                                    type="info" 
-                                                    effect="light"
-                                                    class="custom-tag static-tag">
-                                                    静态
-                                                </el-tag>
-                                                <el-tag 
-                                                    size="small" 
-                                                    type="warning" 
-                                                    effect="light"
-                                                    class="custom-tag project-tag">
-                                                    项目
-                                                </el-tag>
-                                            </div>
-                                        </div>
-                                    </el-option>
-                                </el-option-group>
-                            </el-select>
-                            <el-button 
-                                type="default" 
-                                @click="refreshSystems" 
-                                :loading="systemsLoading"
-                                icon="Refresh"
-                                title="刷新系统列表"
-                                class="refresh-button">
-                                刷新
-                            </el-button>
-                        </div>
-                        
-
-                        
-                        <!-- 系统获取状态提示 -->
-                        <div v-if="!systemsLoading" class="systems-status-info">
-                            <!-- 无系统可选时的提示 -->
-                            <el-alert 
-                                v-if="!systems.length"
-                                type="warning"
-                                title="暂无可用系统"
-                                description="请检查配置文件或网络连接，然后点击刷新按钮重试"
-                                size="small"
-                                show-icon
-                                :closable="false"
-                                style="margin-top: 8px;">
-                            </el-alert>
-                            
-
-                        </div>
-                        
-                        
+                      <div class="system-selection-container">
+                        <!-- 用 el-tree-select 实现多级项目 -->
+                        <el-tree-select
+                          v-model="selectedSystems"
+                          :data="treeData"
+                          :render-after-expand="false"
+                          :show-checkbox="true"
+                          :check-strictly="false"
+                          :check-on-click-node="true"
+                          :expand-on-click-node="false"
+                          :multiple="true"
+                          :collapse-tags="true"
+                          :collapse-tags-tooltip="true"
+                          :max-collapse-tags="2"
+                          placeholder="请选择一个或多个系统或项目"
+                          clearable
+                          filterable
+                          style="flex:1"
+                        >
+                        </el-tree-select>
+                        <el-button
+                          type="default"
+                          @click="refreshSystems"
+                          :loading="systemsLoading"
+                          icon="Refresh"
+                          title="刷新系统列表"
+                          class="refresh-button"
+                        >
+                          刷新
+                        </el-button>
+                      </div>
+                      <!-- 无数据提示 -->
+                      <div v-if="!systemsLoading && !systems.length" class="systems-status-info">
+                        <el-alert
+                          type="warning"
+                          title="暂无可用系统,请检查配置文件或网络连接，然后点击刷新按钮重试"
+                          :description="rateLimitDescription"
+                          size="small"
+                          :auto-close="5000"
+                          show-icon
+                          :closable="false"
+                          style="margin-top:5px;width:100%"
+                        >
+                        </el-alert>
+                      </div>
                     </el-form-item>
                     
                     <el-form-item label="分支名称：">
-                        <el-input v-model="branchName" placeholder="请输入分支名称，如：main、develop、feature/xxx"></el-input>
+                        <el-select v-if="branchesOptions.length > 1 && switchBranch" v-model="branchName" filterable placeholder="请选择分支名称" style="flex:1;margin-right:32px">
+                            <el-option
+                              v-for="item in branchesOptions"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value" >
+                            </el-option>
+                        </el-select>
+                        <el-input v-else v-model="branchName" placeholder="请输入分支名称，如：main、develop、feature/xxx" style="flex:1;margin-right:32px"></el-input>
+                        <el-switch
+                            v-model="switchBranch"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            style="margin-right: 20px">
+                        </el-switch>
                     </el-form-item>
-                    
-
                 </el-form>
             </div>
             
-            <div class="operation-area">
+            <div  v-if="!reportId" class="operation-area">
                 <el-button 
                     type="primary" 
                     size="large" 
@@ -1788,7 +1907,7 @@
                                     </span>
                                 </div>
                                 <div class="info-item">
-                                    <el-icon style="margin-right: 6px; color: #e6a23c;"><BranchIcon /></el-icon>
+                                    <el-icon style="margin-right: 6px; color: #e6a23c;"><Guide /></el-icon>
                                     <span class="info-label">分支：</span>
                                     <span class="info-value">{{ "{{ currentTask.branch_name }}" }}</span>
                                 </div>
@@ -1800,7 +1919,7 @@
                                     <span class="info-value">{{ "{{ formatDateTime(currentTask.created_at) }}" }}</span>
                                 </div>
                                 <div class="info-item">
-                                    <el-icon style="margin-right: 6px; color: #909399;"><EditPen /></el-icon>
+                                    <el-icon style="margin-right: 2px; color: #909399;"><Edit /></el-icon>
                                     <span class="info-label">更新时间：</span>
                                     <span class="info-value">{{ "{{ formatDateTime(currentTask.updated_at) }}" }}</span>
                                 </div>
@@ -1816,7 +1935,7 @@
                         <div v-if="currentTask.status === 'processing' || currentTask.status === 'pending'" class="task-progress">
                             <div class="progress-header">
                                 <span class="progress-title">
-                                    <el-icon style="margin-right: 6px;"><Loading /></el-icon>
+                                    <el-icon class="is-loading" style="margin-right: 6px;"><Loading /></el-icon>
                                     任务执行进度
                                 </span>
                             </div>
@@ -1945,102 +2064,155 @@
                     <el-tab-pane label="代码审查结果" name="review">
                         <div v-if="currentTask.status === 'completed' && currentTask.result && currentTask.result.report">
                             <div v-for="(report, index) in currentTask.result.report" :key="index">
-                                <el-collapse>
-                                    <el-collapse-item 
-                                        :key="index"
-                                        :title="`${report.project_name} - ${report.filename}`"
-                                        :name="index">
-                                        
-                                        <!-- 文件Diff代码展示，默认收起 -->
-                                        <div v-if="report.diff_content" style="margin-bottom: 20px;">
-                                            <el-card class="diff-card" shadow="never">
-                                                <div slot="header" class="diff-header">
-                                                    <span style="font-weight: 600; color: #606266;">
-                                                        <i class="el-icon-document-copy"></i> 文件变更内容
-                                                    </span>
-                                                    <el-button 
-                                                        size="mini" 
-                                                        type="text" 
-                                                        icon="el-icon-copy-document"
-                                                        @click="copyCode(report.diff_content)">
-                                                        复制Diff
-                                                    </el-button>
+                                <el-card class="unit-test-card">
+                                    <div slot="header" style="margin-bottom: 10px;">
+                                        <el-row align="middle" justify="space-between" style="flex-wrap: nowrap;">
+                                            <el-col :span="12" style="display: flex; white-space: nowrap;overflow: hidden;">
+                                                <span v-text="`${report.project_name} - `" style="flex-shrink: 0;"></span>
+                                                <el-tooltip
+                                                    :content="report.filename"
+                                                    placement="top"
+                                                    effect="dark"
+                                                    :disabled="isTooltipDisabled"
+                                                >
+                                                    <span v-text="report.filename" @mouseenter="isTooltipDisabled = $event.target.scrollWidth < $event.target.clientWidth" style="flex: 1 1 0%;direction: rtl;unicode-bidi: plaintext;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"></span>
+                                                </el-tooltip>
+                                            </el-col>
+                                            <el-col  v-if="report.filestatus" :span="12" style="text-align: right; white-space: nowrap;">
+                                                <el-tag size="small" v-if="report.filestatus" :type="report.filestatus.status === 'removed' ? 'danger' : (report.filestatus.status === 'modified' ? 'warning' : 'success')" effect="Light" style="margin-left: 8px;" v-html="formatTestDescription(report.filestatus.status || '')"></el-tag>
+                                                <div class="stats-bar">
+                                                    <div class="stats-bar-inner">
+                                                        <div class="stats-bar-additions" :style="{ width: getPercentage(report.filestatus.additions,report.filestatus) + '%' }"></div>
+                                                        <div class="stats-bar-changes" :style="{ width: getPercentage(report.filestatus.changes,report.filestatus) + '%' }"></div>
+                                                        <div class="stats-bar-deletions" :style="{ width: getPercentage(report.filestatus.deletions,report.filestatus) + '%' }"></div>
+                                                    </div>
                                                 </div>
-                                                <el-collapse style="border: none;">
-                                                    <el-collapse-item title="点击展开查看Diff代码" :name="`diff-${index}`">
-                                                        <div class="diff-block">
-                                                            <pre><code v-text="report.diff_content"></code></pre>
-                                                        </div>
-                                                    </el-collapse-item>
-                                                </el-collapse>
-                                            </el-card>
-                                        </div>
-                                        
-                                        <div v-if="report.issues && report.issues.length > 0">
-                                            <el-card 
-                                                v-for="(issue, issueIndex) in report.issues" 
-                                                :key="issueIndex"
-                                                class="issue-card"
-                                                :class="`severity-${issue.severity.toLowerCase()}`"
-                                                shadow="hover">
-                                                <div slot="header" class="issue-header">
-                                                    <div class="issue-type-section">
-                                                        <el-tag :type="getSeverityType(issue.severity)" size="medium" effect="dark">
-                                                            <i class="el-icon-warning-outline" v-if="issue.severity === 'Critical'"></i>
-                                                            <i class="el-icon-warning" v-else-if="issue.severity === 'High'"></i>
-                                                            <i class="el-icon-info" v-else-if="issue.severity === 'Medium'"></i>
-                                                            <i class="el-icon-success" v-else></i>
-                                                            <span style="margin-left: 5px;">{{ "{{ issue.type }}" }}</span>
-                                                    </el-tag>
-                                                        <el-tag 
-                                                            :class="`issue-severity-${issue.severity.toLowerCase()}`"
-                                                            size="small" 
-                                                            :type="getSeverityType(issue.severity)"
-                                                            effect="plain"
-                                                            style="margin-left: 8px;">
-                                                            {{ "{{ issue.severity }}" }}
-                                                        </el-tag>
+                                                <div class="stats-details">
+                                                    <span v-if="report.filestatus.additions>0" v-text="`新增: ` + `${report.filestatus.additions}` + ` 行`"></span>
+                                                    <span v-if="report.filestatus.changes>0" v-text="`变更: ` + `${report.filestatus.changes}` + ` 行`"></span>
+                                                    <span v-if="report.filestatus.deletions>0" v-text="`删除: ` + `${report.filestatus.deletions}` + ` 行`"></span>
                                                 </div>
-                                                    <div class="issue-actions">
-                                                        <el-button 
-                                                            size="mini" 
-                                                            type="text" 
-                                                            icon="el-icon-document-copy"
-                                                            @click="copyCode(issue.description + '\\n建议：' + issue.suggestion)">
-                                                            复制
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+                                    <el-divider style="margin-top: 10px; margin-bottom: 10px;"></el-divider>
+                                    <!-- 自然语言描述 - 默认显示 -->
+                                    <div v-if="report.business_logic" class="test-description">
+                                        <div class="test-description-content" v-html="formatTestDescription(report.business_logic || '')"></div>
+                                    </div>
+
+                                    <!-- 文件Diff代码展示，默认收起 -->
+                                    <div v-if="report.diff_content" style="margin-bottom: 20px;">
+                                        <el-card class="diff-card" shadow="never">
+                                            <div slot="header" class="diff-header">
+                                                <span style="font-weight: 600; color: #606266;">
+                                                    <i class="el-icon-document-copy" v-if="report.summary" v-html="formatTestDescription(report.summary || '')"></i>
+                                                    <i class="el-icon-document-copy" v-else>文件变更内容</i>
+                                                </span>
+                                            </div>
+                                            <el-collapse style="border: none;">
+                                                <el-collapse-item title="点击展开查看Diff代码" :name="`diff-${index}`">
+                                                    <template #icon="{ isActive }">
+                                                       <el-button
+                                                            size="mini"
+                                                            type="text"
+                                                            icon="el-icon-copy-document"
+                                                            @click.stop="copyCode(report.diff_content)">
+                                                            复制Diff
                                                         </el-button>
+                                                    </template>
+
+                                                    <div class="diff-block">
+                                                        <pre><code v-text="report.diff_content"></code></pre>
                                                     </div>
-                                                </div>
-                                                <div class="issue-content">
-                                                    <div class="issue-description">
-                                                        <h4 class="content-title">
-                                                            <i class="el-icon-warning-outline" style="color: #f56c6c;"></i>
-                                                            问题描述
-                                                        </h4>
-                                                        <p class="content-text">{{ "{{ issue.description }}" }}</p>
+                                                </el-collapse-item>
+                                            </el-collapse>
+                                        </el-card>
+                                    </div>
+
+                                    <el-collapse>
+                                        <el-collapse-item
+                                            :key="index"
+                                            :name="index">
+
+                                            <template #title="{ isActive }">
+                                              <div style="white-space: nowrap;overflow-x: auto;padding-bottom: 4px;">
+                                                <el-tag
+                                                    v-for="(issue, issueIndex) in report.issues"
+                                                    :color="getSeverityType(issue.severity)"
+                                                    size="medium"
+                                                    effect="dark"
+                                                    style="margin-right: 8px;"
+                                                    v-text="issue.type">
+                                                </el-tag>
+                                              </div>
+                                            </template>
+
+                                            <template #icon="{ isActive }">
+                                              <span class="icon-ele" v-text="isActive ? '收起' : '查看详细信息'"></span>
+                                            </template>
+
+                                            <div v-if="report.issues && report.issues.length > 0">
+                                                <el-card
+                                                    v-for="(issue, issueIndex) in report.issues"
+                                                    :key="issueIndex"
+                                                    class="issue-card"
+                                                    :class="`severity-${issue.severity.toLowerCase()}`"
+                                                    shadow="hover">
+                                                    <div slot="header" class="issue-header">
+                                                        <div class="issue-type-section">
+                                                            <el-tag :color="getSeverityType(issue.severity)" size="medium" effect="dark">
+                                                                <span style="margin-left: 5px;" v-text="issue.type"></span>
+                                                            </el-tag>
+                                                            <el-tag
+                                                                :class="`issue-severity-${issue.severity.toLowerCase()}`"
+                                                                size="small"
+                                                                effect="plain"
+                                                                style="margin-left: 8px;">
+                                                                <span v-text="issue.severity"></span>
+                                                            </el-tag>
                                                     </div>
-                                                    <div class="issue-suggestion">
-                                                        <h4 class="content-title">
-                                                            <i class="el-icon-magic-stick" style="color: #67c23a;"></i>
-                                                            修改建议
-                                                        </h4>
-                                                        <p class="content-text">{{ "{{ issue.suggestion }}" }}</p>
+                                                        <div class="issue-actions">
+                                                            <el-button
+                                                                size="mini"
+                                                                type="text"
+                                                                icon="el-icon-document-copy"
+                                                                @click="copyCode(issue.description + '\\n建议：' + issue.suggestion)">
+                                                                复制
+                                                            </el-button>
+                                                        </div>
                                                     </div>
-                                                    <div v-if="issue.line_hint" class="issue-hint">
-                                                        <h4 class="content-title">
-                                                            <i class="el-icon-location-outline" style="color: #909399;"></i>
-                                                            代码位置
-                                                        </h4>
-                                                        <p class="content-text">{{ "{{ issue.line_hint }}" }}</p>
+                                                    <div class="issue-content">
+                                                        <div class="issue-description">
+                                                            <h4 class="content-title">
+                                                                <i class="el-icon-warning-outline" style="color: #f56c6c;"></i>
+                                                                问题描述
+                                                            </h4>
+                                                            <p class="content-text">{{ "{{ issue.description }}" }}</p>
+                                                        </div>
+                                                        <div class="issue-suggestion">
+                                                            <h4 class="content-title">
+                                                                <i class="el-icon-magic-stick" style="color: #67c23a;"></i>
+                                                                修改建议
+                                                            </h4>
+                                                            <p class="content-text">{{ "{{ issue.suggestion }}" }}</p>
+                                                        </div>
+                                                        <div v-if="issue.line_hint" class="issue-hint">
+                                                            <h4 class="content-title">
+                                                                <i class="el-icon-location-outline" style="color: #909399;"></i>
+                                                                代码位置
+                                                            </h4>
+                                                            <p class="content-text">{{ "{{ issue.line_hint }}" }}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </el-card>
-                                        </div>
-                                        <div v-else>
-                                            <el-empty description="未发现明显问题"></el-empty>
-                                        </div>
-                                    </el-collapse-item>
-                                </el-collapse>
+                                                </el-card>
+                                            </div>
+                                            <div v-else>
+                                                <el-empty description="未发现明显问题"></el-empty>
+                                            </div>
+                                        </el-collapse-item>
+                                    </el-collapse>
+                                </el-card>
                             </div>
                         </div>
                         <div v-else>
@@ -2053,14 +2225,16 @@
                         <div v-if="currentTask.status === 'completed' && currentTask.result && currentTask.result.unit_cases">
                             <div v-for="(unitCase, index) in currentTask.result.unit_cases" :key="index">
                                 <el-card class="unit-test-card">
-                                    <div slot="header">
-                                        <span v-text="`${unitCase.project_name} - ${unitCase.filename}`"></span>
-                                        <el-button 
-                                            class="copy-button" 
-                                            size="small" 
-                                            @click="copyCode(unitCase.unit_test_code || unitCase.code)">
-                                            复制代码
-                                        </el-button>
+                                    <div slot="header" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: left;">
+                                        <span v-text="`${unitCase.project_name} - `"></span>
+                                        <el-tooltip
+                                            :content="unitCase.filename"
+                                            placement="top"
+                                            effect="dark"
+                                            :disabled="isTooltipDisabled"
+                                        >
+                                            <span v-text="unitCase.filename" @mouseenter="isTooltipDisabled = $event.target.scrollWidth < $event.target.clientWidth" style="flex: 1 1 0%;direction: rtl;unicode-bidi: plaintext;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"></span>
+                                        </el-tooltip>
                                     </div>
                                     
                                     <!-- 自然语言描述 - 默认显示 -->
@@ -2072,9 +2246,18 @@
                                     <!-- 代码部分 - 默认收起 -->
                                     <el-collapse style="margin-top: 15px;">
                                         <el-collapse-item title="查看测试代码" :name="`code-${index}`">
-                                    <div class="code-block">
-                                                <pre><code v-text="unitCase.unit_test_code || unitCase.code || '暂无测试代码'"></code></pre>
-                                    </div>
+                                            <template #icon="{ isActive }">
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-copy-document"
+                                                    @click.stop="copyCode(unitCase.unit_test_code || unitCase.code)">
+                                                    复制代码
+                                                </el-button>
+                                            </template>
+                                            <div class="code-block">
+                                                 <pre><code v-text="unitCase.unit_test_code || unitCase.code || '暂无测试代码'"></code></pre>
+                                            </div>
                                         </el-collapse-item>
                                     </el-collapse>
                                 </el-card>
@@ -2093,21 +2276,28 @@
                                 <el-card class="module-group-card">
                                     <div slot="header" class="module-header">
                                         <i class="el-icon-folder-opened"></i>
-                                        <span class="module-name">{{ "{{ moduleName }}" }}</span>
-                                        <el-tag size="small" type="info">{{ "{{ moduleGroup.length }}" }} 个用例</el-tag>
+                                        <span class="module-name" v-text="moduleName"></span>
+                                        <el-tag size="small" type="info" v-text="moduleGroup.length +'个用例'" style="margin-left: 8px;"></el-tag>
                                     </div>
                                     
                                     <!-- 场景测试卡片展示 -->
-                            <el-row :gutter="20">
+                                    <el-row :gutter="20">
                                         <el-col :span="12" v-for="(scenario, index) in moduleGroup" :key="index">
                                             <el-card class="scenario-card" shadow="hover" style="margin-bottom: 15px;">
                                                 <div slot="header" class="scenario-header">
-                                                    <div class="scenario-title-info">
+                                                    <div class="scenario-title-info" style="display: flex;white-space: nowrap;overflow: hidden;">
                                                         <span class="scenario-title" v-text="scenario.title"></span>
-                                                        <div class="scenario-tags">
+                                                        <div class="scenario-tags" style="display: flex;white-space: nowrap;overflow: hidden;">
                                                             <el-tag size="mini" type="primary" v-text="scenario.case_id"></el-tag>
-                                                            <el-tag size="mini" type="success" v-text="scenario.filename"></el-tag>
-                                        </div>
+                                                            <el-tooltip
+                                                                :content="scenario.filename"
+                                                                placement="top"
+                                                                effect="dark"
+                                                                :disabled="isTooltipDisabled"
+                                                            >
+                                                                <el-tag size="mini" type="success" v-text="scenario.filename" @mouseenter="isTooltipDisabled = $event.target.scrollWidth < $event.target.clientWidth" style="flex: 1 1 0%;text-align: left;overflow: hidden;justify-content: left;text-overflow: ellipsis;white-space: nowrap;"></el-tag>
+                                                            </el-tooltip>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 
@@ -2158,10 +2348,10 @@
                                                             <p class="content-text-multiline" v-html="formatTextWithLineBreaks(scenario.expected_result)"></p>
                                                         </div>
                                                     </div>
-                                        </div>
-                                    </el-card>
-                                </el-col>
-                            </el-row>
+                                                </div>
+                                            </el-card>
+                                        </el-col>
+                                    </el-row>
                                 </el-card>
                             </div>
                         </div>
@@ -2174,6 +2364,240 @@
         </div>
 
         <!-- 历史任务抽屉 -->
+        <!-- 仓库地址录入对话框 -->
+        <el-drawer v-model="repoDialogVisible" title="添加Git仓库" :close-on-click-modal="false" size="45%" class="history-drawer">
+            <el-form :model="repoForm" label-width="100px" v-loading="repoFormLoading">
+                <el-form-item label="仓库地址" required>
+                    <el-input 
+                        v-model="repoForm.repoUrl" 
+                        placeholder="请输入Git仓库地址，如：https://github.com/user/repo"
+                        clearable
+                    ></el-input>
+                    <div style="margin-top: 5px; font-size: 12px; color: #909399;">
+                        支持GitHub、GitLab等Git托管平台
+                    </div>
+                </el-form-item>
+                
+                <el-form-item label="系统名称" required>
+                    <el-input 
+                        v-model="repoForm.systemName" 
+                        placeholder="请输入系统名称，如：用户管理系统"
+                        clearable
+                    ></el-input>
+                </el-form-item>
+                
+                <el-form-item label="描述信息">
+                    <el-input 
+                        v-model="repoForm.description" 
+                        type="textarea" 
+                        :rows="3"
+                        placeholder="请输入项目描述（可选）"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+            
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="repoDialogVisible = false">取消</el-button>
+                    <el-button 
+                        type="primary" 
+                        @click="addRepository" 
+                        :loading="repoFormLoading"
+                        :disabled="!repoForm.repoUrl || !repoForm.systemName"
+                    >
+                        添加仓库
+                    </el-button>
+                </div>
+            </template>
+            <el-table
+                v-if="repoList.length > 0"
+                :data="repoList"
+                style="margin-top: 20px;"
+                :border="true"
+                :cell-style="cellStyle"
+                :header-cell-style="headerCellStyle"
+                stripe border max-height="calc(100vh - 220px)"
+            >
+                <template #empty>
+                    <div class="custom-empty-text">
+                        暂无数据
+                    </div>
+                </template>
+                <el-table-column label="系统名称" prop="name">
+                    <template #default="scope">
+                        <span v-text="scope.row.name" ></span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="仓库地址" prop="git_provider_url">
+                    <template #default="scope">
+                        <el-tooltip
+                            :content="scope.row.git_provider_url"
+                            placement="top"
+                            effect="dark"
+                            :disabled="isTooltipDisabled"
+                        >
+                            <span v-text="scope.row.git_provider_url" @mouseenter="isTooltipDisabled = $event.target.scrollWidth < $event.target.clientWidth" style="flex: 1 1 0%;direction: rtl;unicode-bidi: plaintext;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"></span>
+                        </el-tooltip>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="60px">
+                    <template #default="scope">
+                        <el-button type="text" @click="deleteRepository(scope.row.name)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-drawer>
+
+        <!-- 通知配置对话框 -->
+        <el-drawer v-model="notificationDialogVisible" title="通知配置" :close-on-click-modal="false"  size="45%" class="history-drawer">
+            <div v-loading="notificationLoading">
+                <!-- 邮件通知配置 -->
+                <el-card class="notification-section" shadow="hover">
+                    <template #header>
+                        <div class="notification-header">
+                            <el-icon><i class="el-icon-message"></i></el-icon>
+                            <span>邮件通知</span>
+                            <el-switch 
+                                v-model="notificationConfig.email.enabled" 
+                                class="notification-switch"
+                                active-text="启用"
+                                inactive-text="禁用"
+                            ></el-switch>
+                        </div>
+                    </template>
+                    
+                    <div v-if="notificationConfig.email.enabled">
+                        <!-- SMTP配置状态 -->
+                        <el-alert 
+                            v-if="!notificationConfig.email.smtp_configured"
+                            title="SMTP服务器未配置" 
+                            type="warning" 
+                            :closable="false"
+                            show-icon
+                            style="margin-bottom: 15px;"
+                        >
+                            请在环境变量中配置 NOTIFICATION_EMAIL_SMTP_SERVER 等参数
+                        </el-alert>
+                        
+                        <!-- 收件人管理 -->
+                        <div class="email-recipients">
+                            <label class="config-label">收件人邮箱：</label>
+                            <div class="recipients-input">
+                                <el-input
+                                    v-model="newEmailRecipient"
+                                    placeholder="输入邮箱地址"
+                                    @keyup.enter="addEmailRecipient"
+                                    style="flex: 1; margin-right: 10px;"
+                                ></el-input>
+                                <el-button type="primary" @click="addEmailRecipient" :disabled="!isValidEmail(newEmailRecipient)">
+                                    添加
+                                </el-button>
+                            </div>
+                            
+                            <!-- 收件人列表 -->
+                            <div class="recipients-list" v-if="notificationConfig.email.recipients.length > 0">
+                                <el-tag
+                                    v-for="(email, index) in notificationConfig.email.recipients"
+                                    :key="index"
+                                    :type="isValidEmail(email) ? 'primary' : 'danger'"
+                                    closable
+                                    @close="removeEmailRecipient(index)"
+                                    style="margin: 5px 5px 0 0;"
+                                    v-text="email"
+                                >
+                                </el-tag>
+                            </div>
+                            
+                            <div v-else class="no-recipients">
+                                <el-text type="info">暂无收件人</el-text>
+                            </div>
+                        </div>
+                    </div>
+                </el-card>
+                
+                <!-- 企业微信通知配置 -->
+                <el-card class="notification-section" shadow="hover" style="margin-top: 20px;">
+                    <template #header>
+                        <div class="notification-header">
+                            <el-icon><i class="el-icon-chat-dot-round"></i></el-icon>
+                            <span>企业微信通知</span>
+                            <el-switch 
+                                v-model="notificationConfig.wechat_work.enabled" 
+                                class="notification-switch"
+                                active-text="启用"
+                                inactive-text="禁用"
+                            ></el-switch>
+                        </div>
+                    </template>
+                    
+                    <div v-if="notificationConfig.wechat_work.enabled">
+                        <!-- Webhook配置状态 -->
+                        <el-alert 
+                            v-if="!notificationConfig.wechat_work.webhook_configured"
+                            title="Webhook URL未配置" 
+                            type="warning" 
+                            :closable="false"
+                            show-icon
+                            style="margin-bottom: 15px;"
+                        >
+                            请在环境变量中配置 NOTIFICATION_WECHAT_WEBHOOK_URL
+                        </el-alert>
+                        
+                        <!-- @提醒用户 -->
+                        <div class="wechat-mentions">
+                            <label class="config-label">@提醒用户：</label>
+                            <div class="mentions-input">
+                                <el-input
+                                    v-model="newWechatMention"
+                                    placeholder="输入用户ID"
+                                    @keyup.enter="addWechatMention"
+                                    style="flex: 1; margin-right: 10px;"
+                                ></el-input>
+                                <el-button type="primary" @click="addWechatMention" :disabled="!newWechatMention.trim()">
+                                    添加
+                                </el-button>
+                            </div>
+                            
+                            <!-- 提醒用户列表 -->
+                            <div class="mentions-list" v-if="notificationConfig.wechat_work.mentioned_list.length > 0">
+                                <el-tag
+                                    v-for="(user, index) in notificationConfig.wechat_work.mentioned_list"
+                                    :key="index"
+                                    type="success"
+                                    closable
+                                    @close="removeWechatMention(index)"
+                                    style="margin: 5px 5px 0 0;"
+                                >
+                                    @{{ user }}
+                                </el-tag>
+                            </div>
+                            
+                            <div v-else class="no-mentions">
+                                <el-text type="info">暂无@提醒用户</el-text>
+                            </div>
+                        </div>
+                    </div>
+                </el-card>
+            </div>
+            
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="notificationDialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="saveNotificationConfig" :loading="savingConfig">
+                        保存配置
+                    </el-button>
+                    <el-button 
+                        type="success" 
+                        @click="testNotification" 
+                        :disabled="!canTestNotification"
+                        :loading="testingNotification"
+                    >
+                        测试通知
+                    </el-button>
+                </div>
+            </template>
+        </el-drawer>
+
         <el-drawer v-model="showHistory" title="📋 历史任务" size="45%" class="history-drawer">
             <div class="history-header">
                 <el-button size="small" @click="loadTasks" :loading="historyLoading" type="primary" icon="Refresh">
@@ -2181,7 +2605,8 @@
                 </el-button>
                 <el-input 
                     size="small" 
-                    v-model="keyword" 
+                    v-model="keyword"
+                    @input="debouncedSearch" 
                     placeholder="搜索任务ID、系统或分支"
                     clearable
                     style="flex: 1; margin-left: 12px;">
@@ -2196,55 +2621,134 @@
                     <el-empty description="暂无历史任务" :image-size="120"></el-empty>
                 </div>
                 <div v-else>
-                    <el-scrollbar height="calc(100vh - 200px)" class="task-list-scroll">
-                        <div v-for="task in filteredTasks" :key="task.id" class="history-task-card">
-                            <el-card shadow="hover" class="task-card-enhanced">
-                                <div class="task-card-header">
-                                    <div class="task-info">
-                                        <div class="task-id-row">
-                                            <el-icon style="margin-right: 6px; color: #409eff;"><Document /></el-icon>
-                                            <span class="task-id">{{ "{{ task.id }}" }}</span>
-                                            <el-tag :type="getStatusTagType(task.status)" size="small" class="status-tag">
-                                                {{ "{{ task.status }}" }}
-                                            </el-tag>
-                                        </div>
-                                        
-                                        <div class="task-details">
-                                            <div class="detail-item">
-                                                <el-icon style="margin-right: 4px; color: #67c23a;"><Monitor /></el-icon>
-                                                <span class="label">系统：</span>
-                                                <span class="value">{{ "{{ task.system_name }}" }}</span>
-                                        </div>
-                                            <div class="detail-item">
-                                                <el-icon style="margin-right: 4px; color: #e6a23c;"><BranchIcon /></el-icon>
-                                                <span class="label">分支：</span>
-                                                <span class="value">{{ "{{ task.branch_name }}" }}</span>
-                                        </div>
-                                    </div>
-                                        
-                                        <div class="task-time">
-                                            <div class="time-item">
-                                                <el-icon style="margin-right: 4px; color: #909399;"><Clock /></el-icon>
-                                                <span class="label">创建：</span>
-                                                <span class="value">{{ "{{ formatDateTime(task.created_at) }}" }}</span>
+
+                    <!-- 虚拟滚动容器 -->
+                    <div class="virtual-scroll-container" 
+                         :style="{ height: 'calc(100vh - 200px)', overflow: 'auto' }"
+                         @scroll="handleVirtualScroll">
+                        
+                        <!-- 虚拟滚动占位容器 -->
+                        <div class="virtual-placeholder" :style="{ height: virtualContainerHeight + 'px', position: 'relative' }">
+                            
+                            <!-- 可见任务列表 -->
+                            <div class="virtual-items" 
+                                 :style="{ transform: `translateY(${virtualOffsetY}px)` }">
+                                
+                                <div v-for="(task, index) in visibleTasks" 
+                                     :key="task.id" 
+                                     class="history-task-card virtual-item"
+                                     :style="{ height: virtualListConfig.itemHeight + 'px' }">
+                                    <el-card shadow="hover" class="task-card-enhanced">
+                                        <div class="task-card-header">
+                                            <div class="task-info">
+                                                <div class="task-id-row">
+                                                    <el-icon style="margin-right: 6px; color: #409eff;"><Document /></el-icon>
+                                                    <el-link 
+                                                        :href="getTaskReportUrl(task.id)" 
+                                                        target="_blank"
+                                                        type="primary"
+                                                        class="task-id-link"
+                                                        :title="'点击查看任务 ' + task.id + ' 的详细报告'"
+                                                        style="font-size: 13px;" >
+                                                        {{ "{{ task.id }}" }}
+                                                    </el-link>
+                                                    <el-tag :type="getStatusTagType(task.status)" size="small" class="status-tag" style="margin-left: 12px;">
+                                                        {{ "{{ task.status }}" }}
+                                                    </el-tag>
+                                                </div>
+
+                                                <div class="task-details">
+                                                    <div class="detail-item">
+                                                        <el-icon style="margin-right: 4px; color: #67c23a;"><Monitor /></el-icon>
+                                                        <span class="label">系统：</span>
+                                                        <span class="value">{{ "{{ task.system_name }}" }}</span>
+                                                    </div>
+                                                    <div class="detail-item">
+                                                        <el-icon style="margin-right: 4px; color: #e6a23c;"><Guide /></el-icon>
+                                                        <span class="label">分支：</span>
+                                                        <el-tooltip
+                                                            :content="task.branch_name"
+                                                            placement="top"
+                                                            effect="dark"
+                                                            :disabled="isTooltipDisabled"
+                                                        >
+                                                            <span class="value" @mouseenter="isTooltipDisabled = $event.target.scrollWidth < $event.target.clientWidth" style="max-width: 100%; unicode-bidi: plaintext; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ "{{ task.branch_name }}" }}</span>
+                                                        </el-tooltip>
+                                                    </div>
+                                                    <div class="detail-item" v-if="task.summary && task.summary.total_issues_found">
+                                                        <el-icon style="margin-right: 4px; color: #f56c6c;"><Warning /></el-icon>
+                                                        <span class="label">问题：</span>
+                                                        <span class="value">{{ "{{ task.summary.total_issues_found || 0 }}" }} 个</span>
+                                                    </div>
+                                                    <div class="detail-item" v-if="task.summary && task.summary.total_scenario_tests">
+                                                        <el-icon style="margin-right: 4px; color: #67c23a;"><Check /></el-icon>
+                                                        <span class="label">测试用例：</span>
+                                                        <span class="value">{{ "{{ task.summary.total_scenario_tests || 0 }}" }} 个</span>
+                                                    </div>
+                                                </div>
+                                                <div v-if="task.summary && task.summary.total_issues_found && task.summary.total_issues_found" class="task-time" style="margin: -60px auto  auto 167px;">
+                                                    <div class="time-item">
+                                                        <el-icon style="margin-right: 4px; color: #909399;"><Clock /></el-icon>
+                                                        <span class="label">创建：</span>
+                                                        <span class="value">{{ "{{ formatDateTime(task.created_at) }}" }}</span>
+                                                    </div>
+                                                    <div class="time-item">
+                                                        <el-icon style="margin-right: 4px; color: #909399;"><Edit /></el-icon>
+                                                        <span class="label">更新：</span>
+                                                        <span class="value">{{ "{{ formatDateTime(task.updated_at) }}" }}</span>
+                                                    </div>
+                                                    <div class="time-item" v-if="task.result && task.result.execution_time">
+                                                        <el-icon style="margin-right: 4px; color: #409eff;"><Timer /></el-icon>
+                                                        <span class="label">耗时：</span>
+                                                        <span class="value">{{ "{{ task.result.execution_time }}" }}s</span>
+                                                    </div>
+                                                </div>
+                                                <div v-else>
+                                                    <div class="time-item">
+                                                        <el-icon style="margin-right: 4px; color: #909399;"><Clock /></el-icon>
+                                                        <span class="label">创建：</span>
+                                                        <span class="value">{{ "{{ formatDateTime(task.created_at) }}" }}</span>
+                                                    </div>
+                                                    <div class="time-item">
+                                                        <el-icon style="margin-right: 4px; color: #909399;"><Edit /></el-icon>
+                                                        <span class="label">更新：</span>
+                                                        <span class="value">{{ "{{ formatDateTime(task.updated_at) }}" }}</span>
+                                                    </div>
+                                                    <div class="time-item" v-if="task.result && task.result.execution_time">
+                                                        <el-icon style="margin-right: 4px; color: #409eff;"><Timer /></el-icon>
+                                                        <span class="label">耗时：</span>
+                                                        <span class="value">{{ "{{ task.result.execution_time }}" }}s</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="time-item">
-                                                <el-icon style="margin-right: 4px; color: #909399;"><EditPen /></el-icon>
-                                                <span class="label">更新：</span>
-                                                <span class="value">{{ "{{ formatDateTime(task.updated_at) }}" }}</span>
+
+                                            <div class="task-actions">
+                                                <el-button size="small" type="primary" @click="viewTask(task.id)" icon="View" style="margin-left: 12px;">
+                                                    查看详情
+                                                </el-button>
+                                                <el-button 
+                                                    size="small" 
+                                                    type="success" 
+                                                    @click="copyTaskReportUrl(task.id)" 
+                                                    icon="Link"
+                                                    title="复制报告链接">
+                                                    复制链接
+                                                </el-button>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="task-actions">
-                                        <el-button size="small" type="primary" @click="viewTask(task.id)" icon="View">
-                                            查看详情
-                                        </el-button>
-                                    </div>
+                                    </el-card>
                                 </div>
-                            </el-card>
+                            </div>
                         </div>
-                    </el-scrollbar>
+                        
+                        <!-- 滚动统计信息 -->
+                        <div v-if="filteredTasks.length > virtualListConfig.visibleCount" 
+                             class="virtual-scroll-info">
+                            <el-text size="small" type="info">
+                                显示 {{ "{{ visibleTasksRange.start + 1 }}" }}-{{ "{{ Math.min(visibleTasksRange.end, filteredTasks.length) }}" }} / {{ "{{ filteredTasks.length }}" }} 项任务
+                            </el-text>
+                        </div>
+                    </div>
                 </div>
             </div>
         </el-drawer>
@@ -2253,44 +2757,98 @@
     <script>
         const { createApp, ref, onMounted, computed } = Vue;
         const { ElMessage, ElMessageBox } = ElementPlus;
+        const { Refresh, Plus, Clock, Message, View, Close, Search, Grid, Link, Loading, Warning, Check, Document, CirclePlusFilled, RemoveFilled, Edit, Key, Monitor, Guide } = ElementPlusIconsVue;
         
-        createApp({
+        const app = createApp({
             setup() {
                 const systems = ref([]);
                 const selectedSystems = ref([]);
+                const branchesOptionsList = ref([]);
+                const branchesOptions = ref([]);
+                const switchBranch = ref(true);
                 const branchName = ref('');
                 const systemsLoading = ref(false);
-
-                
-
-                
-
-
+                const rateLimitDescription = ref('');
                 const loading = ref(false);
                 const abortLoading = ref(false);
                 const currentTask = ref(null);
                 const activeTab = ref('review');
-
-                
                 const form = ref({
                     system: '',
                     branch: ''
                 });
+                reportId= ref(null);
 
                 // 历史任务
                 const showHistory = ref(false);
                 const historyLoading = ref(false);
                 const tasks = ref([]);
                 const keyword = ref('');
+
+                // 通知配置
+                const notificationDialogVisible = ref(false);
+                const notificationLoading = ref(false);
+                const savingConfig = ref(false);
+                const testingNotification = ref(false);
+                const newEmailRecipient = ref('');
+                const newWechatMention = ref('');
+
+                // 错误处理状态
+                const errorState = ref({
+                    hasError: false,
+                    errorMessage: '',
+                    errorStack: '',
+                    errorTime: null,
+                    retryCount: 0
+                });
+                const maxRetries = 3;
+                const retryDelay = 1000; // 1秒
+                const notificationConfig = ref({
+                    email: {
+                        enabled: false,
+                        recipients: [],
+                        smtp_configured: false,
+                        auth_configured: false
+                    },
+                    wechat_work: {
+                        enabled: false,
+                        mentioned_list: [],
+                        mentioned_mobile_list: [],
+                        webhook_configured: false
+                    }
+                });
+
+                // 仓库地址录入
+                const repoDialogVisible = ref(false);
+                const repoFormLoading = ref(false);
+                const repoForm = ref({
+                    repoUrl: '',
+                    systemName: '',
+                    provider: 'github',
+                    description: ''
+                });
+                const repoList = ref([]);
+                // 防抖搜索关键字
+                const debouncedKeyword = ref('');
+                let searchTimer = null;
+                
                 const filteredTasks = computed(() => {
-                    if (!keyword.value) return tasks.value;
-                    const k = keyword.value.toLowerCase();
+                    if (!debouncedKeyword.value) return tasks.value;
+                    const k = debouncedKeyword.value.toLowerCase();
                     return tasks.value.filter(t =>
                         (t.system_name || '').toLowerCase().includes(k) ||
                         (t.branch_name || '').toLowerCase().includes(k) ||
                         (t.id || '').toLowerCase().includes(k)
                     );
                 });
+
+                // 防抖搜索函数
+                const debouncedSearch = (value) => {
+                    if (searchTimer) clearTimeout(searchTimer);
+                    searchTimer = setTimeout(() => {
+                        debouncedKeyword.value = value;
+                    }, 300);
+                };
                 
                 // 按模块分组的场景测试用例
                 const groupedScenarioCases = computed(() => {
@@ -2309,30 +2867,525 @@
                     
                     return grouped;
                 });
-                
-                // 层级化的系统数据，用于下拉框显示
-                const groupedSystems = computed(() => {
-                    console.log('🔄 计算 groupedSystems, systems.value:', systems.value);
-                    if (!systems.value || systems.value.length === 0) {
-                        console.log('📭 没有系统数据，返回空数组');
-                        return [];
+
+                // 通知配置计算属性
+                const canTestNotification = computed(() => {
+                    const email = notificationConfig.value.email;
+                    const wechat = notificationConfig.value.wechat_work;
+                    
+                    return (email.enabled && email.recipients.length > 0 && email.smtp_configured) ||
+                           (wechat.enabled && wechat.webhook_configured);
+                });
+
+                // 性能优化计算属性
+                const hasValidSystems = computed(() => {
+                    return systems.value && systems.value.length > 0;
+                });
+
+                const selectedSystemsCount = computed(() => {
+                    return selectedSystems.value.length;
+                });
+
+                const isTaskRunning = computed(() => {
+                    return currentTask.value && ['pending', 'processing'].includes(currentTask.value.status);
+                });
+
+                const taskProgressPercent = computed(() => {
+                    if (!currentTask.value || !currentTask.value.file_states) return 0;
+                    const states = Object.values(currentTask.value.file_states);
+                    if (states.length === 0) return 0;
+                    const completed = states.filter(state => state.status === 'completed').length;
+                    return Math.round((completed / states.length) * 100);
+                });
+
+                // 虚拟滚动配置
+                const virtualListConfig = ref({
+                    itemHeight: 220,
+                    visibleCount: 10,
+                    bufferSize: 5,
+                    scrollTop: 0
+                });
+
+                // 虚拟滚动可见范围
+                const visibleTasksRange = computed(() => {
+                    const total = filteredTasks.value.length;
+                    if (total <= virtualListConfig.value.visibleCount) {
+                        return { start: 0, end: total, total };
                     }
                     
-                    const result = systems.value.map(system => {
-                        // 处理系统数据，确保projects数组存在
-                        const projects = system.projects || [];
-                        const projectCount = projects.length;
-                        
-                        return {
-                            ...system,
-                            project_count: projectCount,
-                            disabled: system.error || false
-                        };
-                    });
+                    const scrollIndex = Math.floor(virtualListConfig.value.scrollTop / virtualListConfig.value.itemHeight);
+                    const start = Math.max(0, scrollIndex - virtualListConfig.value.bufferSize);
+                    const end = Math.min(total, scrollIndex + virtualListConfig.value.visibleCount + virtualListConfig.value.bufferSize);
                     
-                    console.log('✅ groupedSystems 计算结果:', result.length, '个系统');
-                    return result;
+                    return { start, end, total };
                 });
+
+                // 虚拟滚动显示的任务
+                const visibleTasks = computed(() => {
+                    const range = visibleTasksRange.value;
+                    return filteredTasks.value.slice(range.start, range.end);
+                });
+
+                // 虚拟滚动容器高度
+                const virtualContainerHeight = computed(() => {
+                    return filteredTasks.value.length * virtualListConfig.value.itemHeight + 70;
+                });
+
+                // 虚拟滚动偏移量
+                const virtualOffsetY = computed(() => {
+                    return visibleTasksRange.value.start * virtualListConfig.value.itemHeight;
+                });
+
+                // 处理虚拟滚动事件
+                const handleVirtualScroll = (event) => {
+                    virtualListConfig.value.scrollTop = event.target.scrollTop;
+                };
+
+                // 错误处理函数
+                const handleError = (error, context = '', showMessage = true) => {
+                    console.error(`[${context}] 错误:`, error);
+                    
+                    errorState.value = {
+                        hasError: true,
+                        errorMessage: error.message || String(error),
+                        errorStack: error.stack || '',
+                        errorTime: new Date().toISOString(),
+                        retryCount: errorState.value.retryCount + 1
+                    };
+                    
+                    if (showMessage) {
+                        ElMessage.error({
+                            message: `${context ? context + ': ' : ''}${error.message || error}`,
+                            duration: 5000,
+                            showClose: true
+                        });
+                    }
+                };
+
+                // 清除错误状态
+                const clearError = () => {
+                    errorState.value = {
+                        hasError: false,
+                        errorMessage: '',
+                        errorStack: '',
+                        errorTime: null,
+                        retryCount: 0
+                    };
+                };
+
+                // 带重试的异步请求包装器
+                const withRetry = async (asyncFunction, context = '', maxRetries = 3) => {
+                    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                        try {
+                            return await asyncFunction();
+                        } catch (error) {
+                            console.warn(`[${context}] 第 ${attempt} 次尝试失败:`, error);
+                            
+                            if (attempt === maxRetries) {
+                                handleError(error, context);
+                                throw error;
+                            }
+                            
+                            // 等待后重试
+                            await new Promise(resolve => setTimeout(resolve, retryDelay * attempt));
+                        }
+                    }
+                };
+
+                // 安全的 API 调用包装器
+                const safeApiCall = async (apiFunction, context = '', fallbackValue = null) => {
+                    try {
+                        return await withRetry(apiFunction, context);
+                    } catch (error) {
+                        console.error(`[${context}] API 调用最终失败:`, error);
+                        return fallbackValue;
+                    }
+                };
+
+                // 内存管理功能
+                const memoryUsage = ref({
+                    usedJSHeapSize: 0,
+                    totalJSHeapSize: 0,
+                    jsHeapSizeLimit: 0,
+                    lastCleanup: null
+                });
+
+                // 更新内存使用情况
+                const updateMemoryUsage = () => {
+                    if (performance.memory) {
+                        memoryUsage.value = {
+                            usedJSHeapSize: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024), // MB
+                            totalJSHeapSize: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024), // MB
+                            jsHeapSizeLimit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024), // MB
+                            lastCleanup: memoryUsage.value.lastCleanup
+                        };
+                    }
+                };
+
+                // 内存清理函数
+                const cleanupMemory = () => {
+                    try {
+                        // 清理大数组和对象
+                        if (tasks.value.length > 1000) {
+                            // 只保留最近的 500 个任务
+                            tasks.value = tasks.value.slice(-500);
+                            console.log('🧹 清理了历史任务数据');
+                        }
+
+                        // 清理未使用的系统数据
+                        if (systems.value.length > 0) {
+                            systems.value.forEach(system => {
+                                if (system.projects && system.projects.length > 100) {
+                                    system.projects = system.projects.slice(0, 100);
+                                }
+                            });
+                        }
+
+                        // 强制垃圾回收（仅在开发环境）
+                        if (window.gc && typeof window.gc === 'function') {
+                            window.gc();
+                            console.log('🧹 执行了垃圾回收');
+                        }
+
+                        memoryUsage.value.lastCleanup = new Date().toISOString();
+                        updateMemoryUsage();
+                        
+                        ElMessage.success('内存清理完成');
+                    } catch (error) {
+                        handleError(error, '内存清理');
+                    }
+                };
+
+                // 自动内存监控
+                const memoryMonitorInterval = ref(null);
+                const startMemoryMonitoring = () => {
+                    memoryMonitorInterval.value = setInterval(() => {
+                        updateMemoryUsage();
+                        
+                        // 当内存使用超过阈值时自动清理
+                        const usedMemoryMB = memoryUsage.value.usedJSHeapSize;
+                        const memoryLimit = memoryUsage.value.jsHeapSizeLimit;
+                        
+                        if (usedMemoryMB > memoryLimit * 0.8) { // 使用超过 80% 时清理
+                            console.warn('⚠️ 内存使用过高，开始自动清理');
+                            cleanupMemory();
+                        }
+                    }, 30000); // 每 30 秒检查一次
+                };
+
+                const stopMemoryMonitoring = () => {
+                    if (memoryMonitorInterval.value) {
+                        clearInterval(memoryMonitorInterval.value);
+                        memoryMonitorInterval.value = null;
+                    }
+                };
+
+                // 性能优化的 debounce 函数
+                const createDebounce = (func, delay) => {
+                    let timeoutId;
+                    return (...args) => {
+                        clearTimeout(timeoutId);
+                        timeoutId = setTimeout(() => func.apply(this, args), delay);
+                    };
+                };
+
+                // 防抖的搜索和数据更新
+                const debouncedSystemsUpdate = createDebounce(() => {
+                    console.log('🔄 系统数据更新');
+                }, 500);
+
+                /* 新增一个 treeData */
+                const treeData = computed(() => {
+                  if (!systems.value.length) return [];
+
+                  return systems.value.map(sys => ({
+                    value: sys.name,               // 系统级节点值
+                    label: `${sys.name}（${sys.projects?.length || 0}个项目）`,
+                    disabled: false,
+                    // 递归处理 projects（支持无限级）
+                    children: buildProjectNodes(sys.projects, sys.name)
+                  }));
+                });
+
+                /* 递归构建项目树（兼容字符串 / 对象） */
+                function buildProjectNodes(list, prefix) {
+                  if (!Array.isArray(list) || !list.length) return [];
+
+                  return list.map(item => {
+                    // 1. 如果是字符串，直接当成项目名称
+                    if (typeof item === 'string') {
+                      return {
+                        value: `${item}`,
+                        label: `${item}`
+                      };
+                    }
+
+                    // 2. 如果是对象（以后端扩展了 children 字段）
+                    const node = {
+                      value: `${prefix}:${item.name}`,
+                      label: `${prefix}（${item.name}）`
+                    };
+                    if (item.children?.length) {
+                      node.children = buildProjectNodes(item.children, node.value);
+                    }
+                    return node;
+                  });
+                }
+
+                // 通知配置相关方法
+                const openNotificationConfig = async () => {
+                    notificationDialogVisible.value = true;
+                    await loadNotificationConfig();
+                };
+
+                const loadNotificationConfig = async () => {
+                    try {
+                        notificationLoading.value = true;
+                        const response = await fetch('/api/notifications/config');
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            notificationConfig.value = data.config;
+                        } else {
+                            ElMessage.error('加载通知配置失败: ' + data.error);
+                        }
+                    } catch (error) {
+                        console.error('加载通知配置失败:', error);
+                        ElMessage.error('加载通知配置失败');
+                    } finally {
+                        notificationLoading.value = false;
+                    }
+                };
+
+                const saveNotificationConfig = async () => {
+                    try {
+                        savingConfig.value = true;
+                        
+                        const response = await fetch('/api/notifications/config', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(notificationConfig.value)
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            ElMessage.success('通知配置保存成功');
+                            notificationDialogVisible.value = false;
+                        } else {
+                            ElMessage.error('保存失败: ' + data.error);
+                        }
+                    } catch (error) {
+                        console.error('保存通知配置失败:', error);
+                        ElMessage.error('保存通知配置失败');
+                    } finally {
+                        savingConfig.value = false;
+                    }
+                };
+
+                const testNotification = async () => {
+                    try {
+                        testingNotification.value = true;
+                        
+                        const providers = [];
+                        const recipients = [];
+                        console.log(notificationConfig.value);
+                        if (notificationConfig.value.email.enabled && notificationConfig.value.email.recipients.length > 0) {
+                            providers.push('email');
+                            recipients.push(...notificationConfig.value.email.recipients);
+                        }
+                        console.log(recipients);
+                        if (notificationConfig.value.wechat_work.enabled) {
+                            providers.push('wechat_work');
+                            recipients.push('test'); // 企业微信不需要具体收件人
+                        }
+
+                        if (providers.length === 0) {
+                            ElMessage.warning('请先启用至少一个通知渠道并填写收件人');
+                            return;
+                        }
+                        
+                        const results = [];
+                        for (const p of providers) {
+                            const res = await fetch('/api/notifications/test', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    provider: p,
+                                    recipients: p === 'email' ? notificationConfig.value.email.recipients : ['test'],
+                                    message: '这是一条测试消息，用于验证通知配置是否正确。'
+                                })
+                            });
+                            const data = await res.json();
+                            results.push({ provider: p, success: data.success, error: data.error });
+                        }
+
+                        const failed = results.filter(r => !r.success);
+                        if (failed.length) {
+                            ElMessage.error(`部分测试失败：${failed.map(f => f.provider).join(', ')}`);
+                        } else {
+                            ElMessage.success('所有通知渠道测试成功');
+                        }
+
+                    } catch (error) {
+                        console.error('测试通知发送失败:', error);
+                        ElMessage.error('测试通知发送失败');
+                    } finally {
+                        testingNotification.value = false;
+                    }
+                };
+
+                const isValidEmail = (email) => {
+                    if (!email || typeof email !== 'string') return false;
+                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    return emailRegex.test(email.trim());
+                };
+
+                const addEmailRecipient = () => {
+                    const email = newEmailRecipient.value.trim();
+                    if (!email) return;
+                    
+                    if (!isValidEmail(email)) {
+                        ElMessage.error('请输入有效的邮箱地址');
+                        return;
+                    }
+                    
+                    if (notificationConfig.value.email.recipients.includes(email)) {
+                        ElMessage.warning('该邮箱已存在');
+                        return;
+                    }
+                    
+                    notificationConfig.value.email.recipients.push(email);
+                    newEmailRecipient.value = '';
+                };
+
+                const removeEmailRecipient = (index) => {
+                    notificationConfig.value.email.recipients.splice(index, 1);
+                };
+
+                const addWechatMention = () => {
+                    const mention = newWechatMention.value.trim();
+                    if (!mention) return;
+                    
+                    if (notificationConfig.value.wechat_work.mentioned_list.includes(mention)) {
+                        ElMessage.warning('该用户已存在');
+                        return;
+                    }
+                    
+                    notificationConfig.value.wechat_work.mentioned_list.push(mention);
+                    newWechatMention.value = '';
+                };
+
+                const removeWechatMention = (index) => {
+                    notificationConfig.value.wechat_work.mentioned_list.splice(index, 1);
+                };
+
+                // 仓库录入相关方法
+                const openRepoDialog = () => {
+                    repoDialogVisible.value = true;
+                    // 重置表单
+                    repoForm.value = {
+                        repoUrl: '',
+                        systemName: '',
+                        provider: 'github',
+                        description: ''
+                    };
+                };
+
+                const parseGitUrl = (url) => {
+                    // 解析Git URL，提取git_provider和git_provider_url信息
+                    try {
+                        const urlObj = new URL(url);
+                        let provider = 'other';
+                        if (urlObj.hostname.includes('github.com')) {
+                            provider = 'github';
+                        } else if (urlObj.hostname.includes('gitlab.com')) {
+                            provider = 'gitlab';
+                        } else if (urlObj.hostname.includes('gitee.com')) {
+                            provider = 'gitee';
+                        }
+
+                        return { provider, valid: true };
+                    } catch (e) {
+                        console.error('解析Git URL失败:', e);
+                    }
+                    return { valid: false };
+                };
+
+                const addRepository = async () => {
+                    try {
+                        repoFormLoading.value = true;
+                        
+                        // 解析仓库URL
+                        const urlInfo = parseGitUrl(repoForm.value.repoUrl);
+                        if (!urlInfo.valid) {
+                            ElMessage.error('请输入有效的Git仓库地址');
+                            return;
+                        }
+                        
+                        // 构造系统配置
+                        const systemConfig = {
+                            id: repoForm.value.systemName.toLowerCase().replace(/\s+/g, '-'),
+                            name: repoForm.value.systemName,
+                            git_provider: urlInfo.provider,
+                            git_provider_url: repoForm.value.repoUrl,
+                            description: repoForm.value.description
+                        };
+                        
+                        // 调用后端API保存仓库配置
+                        const response = await fetch('/api/repositories', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(systemConfig)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            ElMessage.success('仓库添加成功！');
+                            repoDialogVisible.value = false;
+                            
+                            // 刷新系统列表
+                            await refreshSystems();
+                        } else {
+                            ElMessage.error('添加仓库失败: ' + result.error);
+                        }
+                        
+                    } catch (error) {
+                        console.error('添加仓库失败:', error);
+                        ElMessage.error('添加仓库失败: ' + error.message);
+                    } finally {
+                        repoFormLoading.value = false;
+                    }
+                };
+                // 删除仓库
+                const deleteRepository = async (id) => {
+                    try {
+                        const response = await fetch(`/api/repositories/${id}`, {
+                            method: 'DELETE'
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            ElMessage.success('仓库删除成功！');
+                            repoList.value = repoList.value.filter(item => item.id !== id);
+                            // 刷新系统列表
+                            await refreshSystems();
+                        } else {
+                            ElMessage.error('删除仓库失败: ' + result.error);
+                        }
+
+                    } catch (error) {
+                        console.error('删除仓库失败:', error);
+                        ElMessage.error('删除仓库失败: ' + error.message);
+                    }
+                };
+
                 const openHistory = async () => {
                     showHistory.value = true;
                     await loadTasks();
@@ -2358,32 +3411,100 @@
                         ElMessage.error('获取任务详情失败');
                     }
                 };
-                
 
-                
+                // 生成任务报告URL
+                const getTaskReportUrl = (taskId) => {
+                    return `${window.location.origin}/report/${taskId}`;
+                };
+
+                // 复制任务报告链接
+                const copyTaskReportUrl = async (taskId) => {
+                    try {
+                        const url = getTaskReportUrl(taskId);
+                        
+                        if (navigator.clipboard && window.isSecureContext) {
+                            await navigator.clipboard.writeText(url);
+                        } else {
+                            // 降级到传统方式
+                            const textArea = document.createElement('textarea');
+                            textArea.value = url;
+                            textArea.style.position = 'fixed';
+                            textArea.style.left = '-999999px';
+                            textArea.style.top = '-999999px';
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            document.execCommand('copy');
+                            textArea.remove();
+                        }
+                        
+                        ElMessage.success(`报告链接已复制到剪贴板`);
+                    } catch (error) {
+                        console.error('复制链接失败:', error);
+                        ElMessage.error('复制链接失败，请手动复制');
+                        
+                        // 显示链接让用户手动复制
+                        const url = getTaskReportUrl(taskId);
+                        ElMessageBox.alert(url, '任务报告链接', {
+                            confirmButtonText: '确定',
+                            callback: () => {}
+                        });
+                    }
+                };
+
                 // 获取系统列表
                 const loadSystems = async (forceRefresh = false) => {
                     console.log('🚀 开始加载系统列表...');
                     systemsLoading.value = true;
+                    clearError(); // 清除之前的错误
                     
-                    try {
+                    const result = await safeApiCall(async () => {
                         const params = forceRefresh ? { force_refresh: 'true' } : {};
-                        const response = await axios.get('/api/systems', { params });
-                        
-                        // 处理响应格式
-                        if (response.data.systems) {
-                            // 直接保存原始系统数据，用于层级化显示
-                            systems.value = response.data.systems;
-                            console.log('✅ 系统数据已加载:', systems.value.length, '个系统');
-                            
-                            // 分析系统状态
-                            const total = response.data.total;
-                            const dynamicCount = systems.value.filter(s => s.dynamic).length;
-                            const staticCount = systems.value.filter(s => !s.dynamic && !s.error).length;
-                            const errorCount = systems.value.filter(s => s.error).length;
-                            
-                            // 显示数据源信息
-                            if (response.data.source === 'dynamic') {
+                        return await axios.get('/api/systems', { params });
+                    }, '加载系统列表');
+                    
+                    if (result) {
+                        try {
+                            // 处理响应格式
+                            if (result.data.systems) {
+                                // 直接保存原始系统数据，用于层级化显示
+                                systems.value = result.data.systems;
+                                console.log('✅ 系统数据已加载:', systems.value.length, '个系统');
+
+                                // 处理分支选项
+                                const branches = result.data.branches || [];
+                            branchesOptionsList.value = branches.flatMap(item =>
+                                Object.values(item)[0].map(b => {
+                                    return { label: Object.keys(item)[0] + '/' + b.name, value: b.name }
+                                })
+                            );
+                            console.log('✅ 分支选项已加载:', branchesOptionsList.value.length, '个分支');
+
+                                // 处理仓库数据
+                                repoList.value = result.data.repositories || [];
+                            // 处理次数限制
+                            function formatUnix(ts) {
+                              const d = new Date(ts * 1000);                // 秒→毫秒
+                              const pad = n => n.toString().padStart(2, '0');
+                              return `${d.getFullYear()}-${
+                                      pad(d.getMonth() + 1)}-${
+                                      pad(d.getDate())} ${
+                                      pad(d.getHours())}:${
+                                      pad(d.getMinutes())}:${
+                                      pad(d.getSeconds())}`;
+                            }
+                                if (result.data.rate_limit && result.data.rate_limit.reset) {
+                                    rateLimitDescription.value = `访问次数限制: ${result.data.rate_limit.limit}/h, 剩余次数: ${result.data.rate_limit.remaining}/h, 重置时间: ${formatUnix(result.data.rate_limit.reset)}`;
+                                }
+                                
+                                // 分析系统状态
+                                const total = result.data.total;
+                                const dynamicCount = systems.value.filter(s => s.dynamic).length;
+                                const staticCount = systems.value.filter(s => !s.dynamic && !s.error).length;
+                                const errorCount = systems.value.filter(s => s.error).length;
+                                
+                                // 显示数据源信息
+                                if (result.data.source === 'dynamic') {
                                 console.log(`✅ 动态获取系统列表成功: ${total} 个系统, ${dynamicCount} 个来自API`);
                                 
                                 if (errorCount > 0) {
@@ -2398,71 +3519,86 @@
                                         ElMessage.success(`刷新成功！获取到 ${total} 个系统，已自动备份到systems.yaml`);
                                     }
                                 }
-                            } else {
-                                // 静态配置
-                                console.log(`📋 使用静态配置: ${response.data.total} 个系统`);
-                                ElMessage.info(`使用静态配置，建议检查网络连接或 API Token`);
-                                if (forceRefresh) {
-                                    ElMessage.info(`使用静态配置: ${response.data.total} 个系统`);
+                                } else if (result.data.source === 'static_mode') {
+                                    // 静态配置
+                                    console.log(`📋 使用静态配置: ${result.data.total} 个系统`);
+                                    ElMessage.info(`使用静态配置`);
+                                } else {
+                                    // 静态配置
+                                    console.log(`📋 使用静态配置: ${result.data.total} 个系统`);
+                                    ElMessage.info(`使用静态配置，建议检查网络连接或 API Token`);
+                                    if (forceRefresh) {
+                                        ElMessage.info(`使用静态配置: ${result.data.total} 个系统`);
+                                    }
                                 }
+                            } else {
+                                // 兼容旧格式
+                                systems.value = result.data || [];
+                                console.log('✅ 兼容格式系统数据已加载:', systems.value.length, '个系统');
                             }
-                        } else {
-                            // 兼容旧格式
-                            systems.value = response.data;
-                            console.log('✅ 兼容格式系统数据已加载:', systems.value.length, '个系统');
+                        } catch (error) {
+                            handleError(error, '处理系统数据');
+                            systems.value = [];
                         }
-                        
-
-                    } catch (error) {
-                        console.error('❌ 加载系统列表失败:', error);
-                        ElMessage.error('加载系统列表失败');
-                    } finally {
-                        console.log('🏁 加载完成，设置 systemsLoading = false');
-                        systemsLoading.value = false;
+                    } else {
+                        // 如果 API 调用失败，使用空数组作为降级
+                        systems.value = [];
+                        console.log('⚠️ 使用降级数据');
                     }
+                    
+                    systemsLoading.value = false;
                 };
+
+                const systemNames = computed(()  =>  {
+                    const selectedSystemNames = selectedSystems.value.map(selected => {
+                        // 如果是项目级选择（格式：system_name (project_name)），取系统名称
+                        if (selected.includes('(') && selected.includes(')')) {
+                            const systemName = selected.split('(')[1].trim();
+                            return systemName;
+                        }
+                        // 如果是旧格式（格式：system_name:project_name），取系统名称
+                        if (selected.includes(':')) {
+                            return selected.split(':')[1];
+                        }
+                        // 否则去重并返回
+                        return selected;
+                    });
+                    return [...new Set(selectedSystemNames)];
+                });
+
+                Vue.watch(systemNames, () => {
+                    // 过滤出当前选择的系统的分支选项
+                    const systemBranches = branchesOptionsList.value.filter(item => {
+                        const lastSlash = item.label.lastIndexOf('/');
+                        const systemName = lastSlash === -1 ? item.label : item.label.slice(0, lastSlash);
+                        return systemNames.value.includes(systemName);
+                    });
+
+                    // 更新分支选项
+                    branchesOptions.value = systemBranches;
+                }, { deep: true });
                 
                 // 刷新系统列表
                 const refreshSystems = async () => {
                     await loadSystems(true);
                 };
-                
 
-                
                 // 开始审查
                 const startReview = async () => {
-                    if (!selectedSystems.value.length || !branchName.value) {
+                    if (!systemNames.value.length || !branchName.value) {
                         ElMessage.warning('请选择系统和输入分支名称');
                         return;
                     }
                     
                     loading.value = true;
                     try {
-                        // 解析选择的系统名称（处理项目级选择）
-                        const systemNames = selectedSystems.value.map(selected => {
-                            // 如果是项目级选择（格式：system_name (project_name)），取系统名称
-                            if (selected.includes('(') && selected.includes(')')) {
-                                const systemName = selected.split('(')[0].trim();
-                                return systemName;
-                            }
-                            // 如果是旧格式（格式：system_name:project_name），取系统名称
-                            if (selected.includes(':')) {
-                                return selected.split(':')[0];
-                            }
-                            // 否则直接返回
-                            return selected;
-                        });
-                        
-                        // 去重系统名称
-                        const uniqueSystemNames = [...new Set(systemNames)];
-                        
                         // 如果选择了多个系统，显示确认信息
-                        if (uniqueSystemNames.length > 1) {
-                            ElMessage.info(`将并行处理 ${uniqueSystemNames.length} 个系统: ${uniqueSystemNames.join(', ')}`);
+                        if (systemNames.value.length > 1) {
+                            ElMessage.info(`将并行处理 ${systemNames.value.length} 个系统: ${systemNames.value.join(', ')}`);
                         }
-                        
+
                         const response = await axios.post('/api/review-multi', {
-                            system_names: uniqueSystemNames,
+                            system_names: systemNames.value,
                             branch_name: branchName.value
                         });
                         
@@ -2483,8 +3619,8 @@
                                 pollTaskStatus(response.data.task_id);
                             }
                             
-                            const successMsg = selectedSystems.value.length > 1 
-                                ? `${selectedSystems.value.length} 个系统的审查任务已启动`
+                            const successMsg = systemNames.value.length > 1
+                                ? `${systemNames.value.length} 个系统的审查任务已启动`
                                 : '审查任务已启动';
                             ElMessage.success(successMsg);
                         }
@@ -2738,12 +3874,12 @@
                 // 获取严重程度类型
                 const getSeverityType = (severity) => {
                     const types = {
-                        'Critical': 'danger',
-                        'High': 'warning',
-                        'Medium': 'info',
-                        'Low': 'success'
+                        'Critical': '#ef4444',
+                        'High': '#f59e0b',
+                        'Medium': '#06b6d4',
+                        'Low': '#10b981'
                     };
-                    return types[severity] || 'info';
+                    return types[severity] || '#06b6d4';
                 };
                 const getStatusTagType = (status) => {
                     const m = { 'completed': 'success', 'failed': 'danger', 'processing': 'warning', 'pending': 'info' };
@@ -2784,19 +3920,24 @@
                             if (severityCanvas && stats.review_statistics?.severity_counts) {
                                 const severityCtx = severityCanvas.getContext('2d');
                                 const severityData = stats.review_statistics.severity_counts;
+
+                                const colorMap = {
+                                  Critical: '#ef4444',
+                                  High:     '#f59e0b',
+                                  Medium:   '#06b6d4',
+                                  Low:      '#10b981'
+                                };
+                                const labels = ['Critical', 'High', 'Medium', 'Low'].filter(k => severityData[k]);
+                                const data   = labels.map(k => severityData[k]);
+                                const backgroundColor = labels.map(k => colorMap[k]);
                                 
                                 charts.value.severity = new Chart(severityCtx, {
                                     type: 'doughnut',
                                     data: {
-                                        labels: Object.keys(severityData),
+                                        labels,
                                         datasets: [{
-                                            data: Object.values(severityData),
-                                            backgroundColor: [
-                                                '#ef4444', // Critical - red
-                                                '#f59e0b', // High - amber
-                                                '#06b6d4', // Medium - cyan
-                                                '#10b981'  // Low - emerald
-                                            ],
+                                            data,
+                                            backgroundColor,
                                             borderWidth: 2,
                                             borderColor: '#fff'
                                         }]
@@ -2815,6 +3956,7 @@
                                         }
                                     }
                                 });
+                                //console.log('charts.value.severity:', charts.value.severity);
                             }
                             
                             // 问题类型柱状图
@@ -3191,19 +4333,51 @@
                     // 不再高亮关键词，保持原始描述
                     return formatted;
                 };
-                
 
-                
+                function getPercentage(val,filestatus){
+                    console.log(val,filestatus);
+                    return (val / (filestatus.additions + filestatus.deletions + filestatus.changes)) * 100;
+                };
+
                 onMounted(() => {
-                    console.log('🎯 组件已挂载，开始加载系统...');
-                    loadSystems();
+                    console.log('🎯 组件已挂载，开始初始化...');
+
+                    // 获取链接report/taskId的任务ID参数http://localhost:5002/report/e37f9f66-10ca-4337-a017-91f58903b1c3
+                    reportId.value = location.href.split('/').pop();
+                    
+                    // 启动内存监控
+                    startMemoryMonitoring();
+                    updateMemoryUsage();
+                    
+                    // 设置全局错误处理
+                    window.addEventListener('error', (event) => {
+                        handleError(event.error, '全局错误', false);
+                    });
+                    
+                    window.addEventListener('unhandledrejection', (event) => {
+                        handleError(event.reason, '未处理的Promise拒绝', false);
+                    });
+
+                    if (reportId.value) {
+                        document.title = `任务报告 - ${reportId.value}`;
+                        viewTask(reportId.value)
+                        console.log('🔍 发现任务ID参数，尝试加载任务...');
+                    } else {
+                        console.log('🔍 未发现任务ID参数，正在加载系统列表...');
+                        loadSystems();
+                    }
+                    
+                    console.log('✅ 初始化完成');
                 });
                 
                 return {
                     systems,
                     selectedSystems,
+                    branchesOptions,
+                    switchBranch,
                     branchName,
                     systemsLoading,
+                    rateLimitDescription,
                     loading,
                     currentTask,
                     activeTab,
@@ -3213,13 +4387,64 @@
                     historyLoading,
                     tasks,
                     keyword,
+                    debouncedKeyword,
+                    debouncedSearch,
                     filteredTasks,
                     groupedScenarioCases,
-                    groupedSystems,
+                    // 性能优化
+                    hasValidSystems,
+                    selectedSystemsCount,
+                    isTaskRunning,
+                    taskProgressPercent,
+                    treeData,
+                    // 虚拟滚动
+                    virtualListConfig,
+                    visibleTasksRange,
+                    visibleTasks,
+                    virtualContainerHeight,
+                    virtualOffsetY,
+                    handleVirtualScroll,
+                    // 错误处理
+                    errorState,
+                    handleError,
+                    clearError,
+                    // 内存管理
+                    memoryUsage,
+                    updateMemoryUsage,
+                    cleanupMemory,
                     openHistory,
                     loadTasks,
                     viewTask,
+                    getTaskReportUrl,
+                    copyTaskReportUrl,
+                    // 通知配置
+                    notificationDialogVisible,
+                    notificationLoading,
+                    savingConfig,
+                    testingNotification,
+                    newEmailRecipient,
+                    newWechatMention,
+                    notificationConfig,
+                    canTestNotification,
+                    openNotificationConfig,
+                    loadNotificationConfig,
+                    saveNotificationConfig,
+                    testNotification,
+                    isValidEmail,
+                    addEmailRecipient,
+                    removeEmailRecipient,
+                    addWechatMention,
+                    removeWechatMention,
+                    // 仓库录入
+                    repoDialogVisible,
+                    repoFormLoading,
+                    repoForm,
+                    openRepoDialog,
+                    parseGitUrl,
+                    addRepository,
+                    deleteRepository,
                     refreshSystems,
+                    repoList,
                     // 任务操作
                     startReview,
                     abortLoading,
@@ -3239,11 +4464,34 @@
                     getTaskProgressText,
                     formatSystemLabel,
                     truncateText,
+                    getPercentage,
+                    reportId,
                     // 监听器
                     watchSelectedSystems
                 };
             }
-        }).use(ElementPlus).mount('#app');
+        });
+        // 注册成全局组件
+        app.component('Refresh', Refresh);
+        app.component('Clock', Clock);
+        app.component('Plus', Plus);
+        app.component('Message', Message);
+        app.component('View', View);
+        app.component('Close', Close);
+        app.component('Warning', Warning);
+        app.component('Check', Check);
+        app.component('Search', Search);
+        app.component('Edit', Edit);
+        app.component('Guide', Guide);
+        app.component('Key', Key);
+        app.component('Monitor', Monitor);
+        app.component('Grid', Grid);
+        app.component('Link', Link);
+        app.component('Loading', Loading);
+        app.component('Document', Document);
+        app.component('CirclePlusFilled', CirclePlusFilled);
+        app.component('RemoveFilled', RemoveFilled);
+        app.use(ElementPlus).mount('#app');
     </script>
 </body>
 </html>

@@ -11,13 +11,13 @@ import requests
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
+from app.utils.git_api import GitAPIClient
+git_client = GitAPIClient()
+
 @bp.route('/branches/<system_name>', methods=['GET'])
 def get_branches(system_name):
     """获取指定系统的可用分支列表"""
     try:
-        from app.utils.git_api import GitAPIClient
-        git_client = GitAPIClient()
-        
         # 获取系统配置
         system_config = None
         for system in config_manager.get_all_systems():
@@ -78,13 +78,41 @@ def get_branches(system_name):
 @bp.route('/systems', methods=['GET'])
 def get_systems():
     """获取所有系统列表"""
+    from app.utils.cache_manager import global_cache
+    
+    # 缓存键
+    cache_key = 'systems_list'
+    force_refresh = request.args.get('force_refresh', 'false').lower() == 'true'
+    
+    # 如果不是强制刷新，先尝试从缓存获取
+    if not force_refresh:
+        cached_result = global_cache.get(cache_key)
+        if cached_result:
+            info("从缓存返回系统列表")
+            return jsonify(cached_result)
+
+    #合并systems_user.yaml和systems
+    def merge_systems(systems):
+        res = []
+        for system in config_manager.get_user_systems():
+            res.append(system)
+        for system in systems:
+            res.append(system)
+        return res
+
+    # 优先尝试动态获取
+    rate_limit = {}
+
     try:
         # 检查是否启用静态模式
         if config_manager.is_static_mode_enabled():
             info("静态模式已启用，跳过动态获取，直接使用静态配置")
             all_systems = config_manager.get_all_systems()
+            all_branches = config_manager.get_all_branches()
+            rate_limit = git_client.dynamic_rate_limit_cache
             
             systems = []
+            repositories = []
             for system in all_systems:
                 systems.append({
                     'id': system['id'],
@@ -96,27 +124,40 @@ def get_systems():
                     'dynamic': False,  # 标识为静态配置
                     'static_mode': True  # 标识为静态模式
                 })
-            
-            return jsonify({
+                repositories.append({
+                    'id': system['id'],
+                    'name': system['name'],
+                    'git_provider': system.get('git_provider'),
+                    'git_provider_url': system.get('git_provider_url'),
+                    'project_count': len(system.get('projects', [])),
+                    'public_repos': system.get('public_repos', 0),
+                    'avatar_url': system.get('avatar_url', ''),
+                    'description': system.get('description', '')
+                })
+            systems = merge_systems(systems)
+            result = {
                 'systems': systems,
+                'branches': all_branches,
+                'repositories': repositories,
+                'rate_limit': rate_limit,
                 'source': 'static_mode',
                 'total': len(systems),
                 'static_mode_enabled': True
-            })
-        
-        # 优先尝试动态获取
-        from app.utils.git_api import GitAPIClient
-        git_client = GitAPIClient()
+            }
+            # 缓存结果，TTL为5分钟
+            global_cache.set(cache_key, result, ttl=300)
+            return jsonify(result)
         
         # 检查是否请求强制刷新
         force_refresh = request.args.get('force_refresh', 'false').lower() == 'true'
-        
+        systems = []
+        repositories = []
         try:
             # 尝试动态获取系统列表
             dynamic_systems = git_client.get_dynamic_systems(force_refresh=force_refresh)
-            
+            rate_limit = git_client.dynamic_rate_limit_cache
+            print(f"动态获取系统列表成功，共{len(dynamic_systems)}个系统")
             if dynamic_systems:
-                systems = []
                 for system in dynamic_systems:
                     systems.append({
                         'id': system['id'],
@@ -131,45 +172,78 @@ def get_systems():
                         'dynamic': True,  # 标识为动态获取
                         'error': system.get('error')  # 如果有错误
                     })
-                
+                    repositories.append({
+                        'id': system['id'],
+                        'name': system['name'],
+                        'git_provider': system.get('git_provider'),
+                        'git_provider_url': system.get('git_provider_url'),
+                        'project_count': len(system.get('projects', [])),
+                        'public_repos': system.get('public_repos', 0),
+                        'avatar_url': system.get('avatar_url', ''),
+                        'description': system.get('description', '')
+                    })
+
                 # 自动备份到systems.yaml
                 try:
                     config_manager.backup_systems_to_yaml(dynamic_systems, 'dynamic')
-                    info(f"系统配置已自动备份到systems.yaml，共{len(systems)}个系统")
+                    info(f"自动备份系统配置成功, 共{len(dynamic_systems)}个系统")
+                    config_manager.backup_branches_to_yaml(git_client.dynamic_branches_cache, 'dynamic')
+                    info(f"自动备份分支配置成功, 共{len(git_client.dynamic_branches_cache)}个分支")
                 except Exception as backup_error:
                     warning(f"自动备份系统配置失败: {backup_error}")
-                
-                return jsonify({
+
+                systems = merge_systems(systems)
+                result = {
                     'systems': systems,
+                    'branches': git_client.dynamic_branches_cache,
+                    'repositories': repositories,
+                    'rate_limit': rate_limit,
                     'source': 'dynamic',
                     'total': len(systems)
-                })
+                }
+                # 缓存结果，TTL为3分钟
+                global_cache.set(cache_key, result, ttl=180)
+                return jsonify(result)
         
         except Exception as dynamic_error:
             info(f"动态获取系统列表失败，降级到静态配置: {dynamic_error}")
-            # 降级到静态配置
-            pass
-        
-        # 降级：使用静态配置
+            # 降级：使用静态配置
+
         all_systems = config_manager.get_all_systems()
-        
-        systems = []
+        all_branches = config_manager.get_all_branches()
+        rate_limit = git_client.dynamic_rate_limit_cache
         for system in all_systems:
             systems.append({
                 'id': system['id'],
                 'name': system['name'],
-                'projects': [p['name'] for p in system.get('projects', [])],
+                'projects': [p['name'] for p in system.get('projects', []) if p],
                 'git_provider': system.get('git_provider'),
                 'git_provider_url': system.get('git_provider_url'),
                 'project_count': len(system.get('projects', [])),
                 'dynamic': False  # 标识为静态配置
             })
-        
-        return jsonify({
+            repositories.append({
+                'id': system['id'],
+                'name': system['name'],
+                'git_provider': system.get('git_provider'),
+                'git_provider_url': system.get('git_provider_url'),
+                'project_count': len(system.get('projects', [])),
+                'public_repos': system.get('public_repos', 0),
+                'avatar_url': system.get('avatar_url', ''),
+                'description': system.get('description', '')
+            })
+        systems = merge_systems(systems)
+        result = {
             'systems': systems,
+            'branches': all_branches,
+            'repositories': repositories,
+            'rate_limit': rate_limit,
             'source': 'static',
             'total': len(systems)
-        })
+        }
+        # 缓存结果，TTL为10分钟
+        global_cache.set(cache_key, result, ttl=600)
+        return jsonify(result)
         
     except Exception as e:
         error(f"获取系统列表失败: {e}")
@@ -181,7 +255,6 @@ def get_config_status():
     try:
         status = {
             'static_mode': config_manager.get_static_mode_config(),
-            'redis_enabled': config_manager.is_redis_enabled(),
             'server_config': {
                 'host': config_manager.get_server_host(),
                 'port': config_manager.get_server_port()
@@ -489,7 +562,9 @@ def list_tasks():
                             'branch_name': task_data.get('branch_name'),
                             'status': task_data.get('status'),
                             'created_at': task_data.get('created_at'),
-                            'updated_at': task_data.get('updated_at')
+                            'updated_at': task_data.get('updated_at'),
+                            'summary': task_data.get('result', {}).get('statistics', {}).get('summary', {}),
+
                         })
         
         # 按创建时间倒序排列，处理None值
@@ -558,3 +633,289 @@ def _find_failed_task(system_name: str, branch_name: str):
     except Exception as e:
         error(f"查找失败任务失败: {e}")
         return None
+
+
+# ============ 通知管理相关路由 ============
+
+@bp.route('/notifications/config', methods=['GET'])
+def get_notification_config():
+    """获取通知公开配置"""
+    try:
+        from app.utils.cache_manager import global_cache
+        
+        # 尝试从缓存获取
+        cache_key = 'notification_config'
+        cached_config = global_cache.get(cache_key)
+        if cached_config:
+            return jsonify({
+                'success': True,
+                'config': cached_config
+            })
+        
+        config = config_manager.get_notification_public_config()
+        
+        # 缓存配置，TTL为5分钟
+        global_cache.set(cache_key, config, ttl=300)
+        
+        return jsonify({
+            'success': True,
+            'config': config
+        })
+        
+    except Exception as e:
+        error(f"获取通知配置失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@bp.route('/notifications/config', methods=['POST'])
+def update_notification_config():
+    """更新通知公开配置"""
+    try:
+        new_config = request.get_json()
+        
+        if not new_config:
+            return jsonify({'success': False, 'error': '无效的配置数据'}), 400
+        
+        # 验证配置格式
+        valid_providers = ['email', 'wechat_work']
+        for provider in new_config:
+            if provider not in valid_providers:
+                return jsonify({
+                    'success': False, 
+                    'error': f'不支持的通知提供者: {provider}'
+                }), 400
+        
+        # 验证邮箱地址格式
+        if 'email' in new_config and 'recipients' in new_config['email']:
+            import re
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            for email in new_config['email']['recipients']:
+                if not re.match(email_pattern, email):
+                    return jsonify({
+                        'success': False, 
+                        'error': f'无效的邮箱地址: {email}'
+                    }), 400
+        
+        # 保存公开配置
+        success = config_manager.save_notification_public_config(new_config)
+        
+        if success:
+            # 清除缓存
+            from app.utils.cache_manager import global_cache
+            global_cache.delete('notification_config')
+            
+            # 重新加载通知管理器
+            from .utils.notification_manager import notification_manager
+            notification_manager.reload_providers()
+            
+            info("通知配置已更新")
+            return jsonify({'success': True, 'message': '通知配置已更新'})
+        else:
+            return jsonify({'success': False, 'error': '保存配置失败'}), 500
+            
+    except Exception as e:
+        error(f"更新通知配置失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@bp.route('/notifications/test', methods=['POST'])
+def test_notification():
+    """测试通知发送"""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': '无效的请求数据'}), 400
+        
+        provider = data.get('provider')
+        recipients = data.get('recipients', [])
+        test_message = data.get('message', '这是一条测试消息')
+        
+        if not provider:
+            return jsonify({'success': False, 'error': '未指定通知提供者'}), 400
+        
+        if not recipients:
+            return jsonify({'success': False, 'error': '未指定收件人'}), 400
+        
+        # 导入通知管理器
+        from .utils.notification_manager import notification_manager, NotificationMessage, NotificationLevel
+        
+        # 创建测试消息
+        message = NotificationMessage(
+            title="代码审查系统测试通知",
+            content=f"测试消息内容：{test_message}\n\n发送时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            level=NotificationLevel.INFO
+        )
+        
+        # 发送测试通知
+        results = notification_manager.send_notification_sync(provider, recipients, message)
+        
+        # 处理结果
+        success_count = sum(1 for result in results if result.success)
+        total_count = len(results)
+        
+        response_data = {
+            'success': success_count > 0,
+            'message': f'发送完成：{success_count}/{total_count} 成功',
+            'results': [
+                {
+                    'provider': result.provider,
+                    'success': result.success,
+                    'message': result.message,
+                    'timestamp': result.timestamp
+                }
+                for result in results
+            ]
+        }
+        
+        return jsonify(response_data)
+        
+    except Exception as e:
+        error(f"测试通知发送失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@bp.route('/notifications/providers', methods=['GET'])
+def get_notification_providers():
+    """获取可用的通知提供者"""
+    try:
+        from .utils.notification_manager import notification_manager
+        
+        providers = notification_manager.get_available_providers()
+        
+        return jsonify({
+            'success': True,
+            'providers': providers,
+            'total': len(providers)
+        })
+        
+    except Exception as e:
+        error(f"获取通知提供者失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@bp.route('/notifications/send', methods=['POST'])
+def send_custom_notification():
+    """发送自定义通知"""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': '无效的请求数据'}), 400
+        
+        providers = data.get('providers', [])
+        recipients = data.get('recipients', [])
+        title = data.get('title', '')
+        content = data.get('content', '')
+        level = data.get('level', 'info')
+        
+        if not providers:
+            return jsonify({'success': False, 'error': '未指定通知提供者'}), 400
+        
+        if not recipients:
+            return jsonify({'success': False, 'error': '未指定收件人'}), 400
+        
+        if not title or not content:
+            return jsonify({'success': False, 'error': '标题和内容不能为空'}), 400
+        
+        # 导入通知管理器
+        from .utils.notification_manager import notification_manager, NotificationMessage, NotificationLevel
+        
+        # 转换通知级别
+        level_map = {
+            'info': NotificationLevel.INFO,
+            'success': NotificationLevel.SUCCESS,
+            'warning': NotificationLevel.WARNING,
+            'error': NotificationLevel.ERROR
+        }
+        notification_level = level_map.get(level, NotificationLevel.INFO)
+        
+        # 创建通知消息
+        message = NotificationMessage(
+            title=title,
+            content=content,
+            level=notification_level
+        )
+        
+        # 发送通知
+        results = notification_manager.send_notification_sync(providers, recipients, message)
+        
+        # 处理结果
+        success_count = sum(1 for result in results if result.success)
+        total_count = len(results)
+        
+        response_data = {
+            'success': success_count > 0,
+            'message': f'发送完成：{success_count}/{total_count} 成功',
+            'results': [
+                {
+                    'provider': result.provider,
+                    'success': result.success,
+                    'message': result.message,
+                    'timestamp': result.timestamp
+                }
+                for result in results
+            ]
+        }
+        
+        return jsonify(response_data)
+        
+    except Exception as e:
+        error(f"发送自定义通知失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# ============ 仓库管理相关路由 ============
+
+@bp.route('/repositories', methods=['POST'])
+def add_repository():
+    """添加用户自定义仓库"""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': '无效的请求数据'}), 400
+        
+        # 验证必需字段
+        required_fields = ['id', 'name', 'git_provider']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'success': False, 'error': f'缺少必需字段: {field}'}), 400
+        
+        # 保存到用户配置文件
+        success = config_manager.add_user_system(data)
+        
+        if success:
+            # 清除系统列表缓存
+            from app.utils.cache_manager import global_cache
+            global_cache.delete('systems_list')
+            
+            info(f"用户添加了新系统: {data.get('name')}")
+            return jsonify({'success': True, 'message': '仓库添加成功'})
+        else:
+            return jsonify({'success': False, 'error': '保存仓库配置失败'}), 500
+            
+    except Exception as e:
+        error(f"添加仓库失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@bp.route('/repositories/<repo_id>', methods=['DELETE'])
+def delete_repository(repo_id):
+    """删除用户自定义仓库"""
+    try:
+        success = config_manager.remove_user_system(repo_id)
+        
+        if success:
+            # 清除系统列表缓存
+            from app.utils.cache_manager import global_cache
+            global_cache.delete('systems_list')
+            
+            info(f"用户删除了系统: {repo_id}")
+            return jsonify({'success': True, 'message': '仓库删除成功'})
+        else:
+            return jsonify({'success': False, 'error': '删除仓库失败'}), 500
+            
+    except Exception as e:
+        error(f"删除仓库失败: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500

@@ -35,6 +35,10 @@ class ReviewReport:
     """审查报告"""
     project_name: str
     filename: str
+    filestatus: Dict[str, Any]
+    summary: str
+    business_logic: str
+    language_detected: str
     issues: List[CodeIssue]
     diff_content: Optional[str] = None
 

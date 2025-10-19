@@ -2,7 +2,7 @@
 Flask>=2.3.0
 flask-cors>=4.0.0
 
-# 任务队列（可选，支持MockCelery模式）
+# 任务队列（使用MockCelery模式）
 celery>=5.3.0
 
 # AI/LLM相关
@@ -20,5 +20,10 @@ python-dotenv>=1.0.0
 # 加密和安全
 cryptography>=41.0.0
 
-# Redis（可选，仅在USE_REDIS=true时需要）
-redis>=5.0.0
+# 网络和连接优化
+urllib3>=2.0.0
+
+# 性能优化（可选）
+cachetools>=5.3.0
+aiofiles>=0.8.0
+

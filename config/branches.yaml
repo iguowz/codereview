@@ -1,0 +1,1226 @@
+backup_info:
+  backup_type: auto_backup
+  source: dynamic
+  timestamp: '2025-10-19T21:05:41.585461'
+  total_systems: 28
+branches:
+- dify:
+  - commit_sha: 9ad5e8999e12b98b8644f29d4e10d82c6de0295c
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/9ad5e8999e12b98b8644f29d4e10d82c6de0295c
+    name: 0.15.1-admin-apis
+    protected: false
+  - commit_sha: fe61815b7b53049bf004c8fa866ae301bc5c6d85
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/fe61815b7b53049bf004c8fa866ae301bc5c6d85
+    name: 1.0.0-fix
+    protected: false
+  - commit_sha: c37b5f73a05f66edf9b3de721019c469eba12115
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/c37b5f73a05f66edf9b3de721019c469eba12115
+    name: 13604-when-using-redis-cluster-for-caching-add-global_prefix-to-all-keys-cached-by-redis
+    protected: false
+  - commit_sha: dddd72ec8313aa8df6113153200e0f5743c4d92c
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/dddd72ec8313aa8df6113153200e0f5743c4d92c
+    name: alert-autofix-89
+    protected: false
+  - commit_sha: 2bfcd227e84b2aa9764a866e23c16646d45fe280
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/2bfcd227e84b2aa9764a866e23c16646d45fe280
+    name: bai
+    protected: false
+  - commit_sha: 41dfdf1ac0f4067bd8efc5dc73f4cfeb579e3d61
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/41dfdf1ac0f4067bd8efc5dc73f4cfeb579e3d61
+    name: bug1
+    protected: false
+  - commit_sha: c5b07b999c2acaaa2230a46ce6813c38013c0ad8
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/c5b07b999c2acaaa2230a46ce6813c38013c0ad8
+    name: build/add-dependabot
+    protected: false
+  - commit_sha: bdfb31f332c850f6428d5a236af5b09f9b1baf85
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/bdfb31f332c850f6428d5a236af5b09f9b1baf85
+    name: build/boolean-type
+    protected: false
+  - commit_sha: 2fe28279c87e1805bd30a74b22d113879ad9388c
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/2fe28279c87e1805bd30a74b22d113879ad9388c
+    name: build/eslint-react-refresh-plugin
+    protected: false
+  - commit_sha: d2a0e498ea1488e2430daa79999b1b726a9b1c81
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/d2a0e498ea1488e2430daa79999b1b726a9b1c81
+    name: build/oauth
+    protected: false
+  - commit_sha: a0c0d0fcd544c00638b41e41ae7272e0c5ffecfe
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/a0c0d0fcd544c00638b41e41ae7272e0c5ffecfe
+    name: build/plugin-auto-upgrade
+    protected: false
+  - commit_sha: 5f93e28d758428dff9c30f48fa06e85462ec0f5e
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/5f93e28d758428dff9c30f48fa06e85462ec0f5e
+    name: build/switch-to-pnpm
+    protected: false
+  - commit_sha: 337ad751148623e13bb6b8bf30a967686c4c1f9d
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/337ad751148623e13bb6b8bf30a967686c4c1f9d
+    name: build/0.7.2-fix.1
+    protected: false
+  - commit_sha: 91f9ab7ad39e971f82ddcdbc57a87954dd919555
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/91f9ab7ad39e971f82ddcdbc57a87954dd919555
+    name: build/1.7.2-fix.2
+    protected: false
+  - commit_sha: a65d255a32d9f1c5f2a30075936f4d96482594e4
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/a65d255a32d9f1c5f2a30075936f4d96482594e4
+    name: chore/auto-dify
+    protected: false
+  - commit_sha: 5009036a26647c23cf5166979670ef2b1a9f13f9
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/5009036a26647c23cf5166979670ef2b1a9f13f9
+    name: chore/enterprise-license-status
+    protected: false
+  - commit_sha: 76a5f663345ec5d43cabc51852ee3b2f795ff6c9
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/76a5f663345ec5d43cabc51852ee3b2f795ff6c9
+    name: chore/infrastructure-upgrade
+    protected: false
+  - commit_sha: 719edb37079c32e18281794ec01d5c2b389e1c5c
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/719edb37079c32e18281794ec01d5c2b389e1c5c
+    name: chore/merge-graph-engine
+    protected: false
+  - commit_sha: 7b88f09ee7134a8f015f3948a66d70e5e9b346d7
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/7b88f09ee7134a8f015f3948a66d70e5e9b346d7
+    name: chore/offline-the-sys-files
+    protected: false
+  - commit_sha: dc23d9e693a187dd1dc9a463c5f3fca66fae6575
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/dc23d9e693a187dd1dc9a463c5f3fca66fae6575
+    name: chore/optimize-app-workflow-deletion-slow-sql
+    protected: false
+  - commit_sha: ed6ac978547fcbb9371fa07fe64d7374a0a9e61b
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/ed6ac978547fcbb9371fa07fe64d7374a0a9e61b
+    name: chore/ssrf-config
+    protected: false
+  - commit_sha: 333aae67957232e6bb191bdc4792e5d2332d6d97
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/333aae67957232e6bb191bdc4792e5d2332d6d97
+    name: chore/upgrade-next
+    protected: false
+  - commit_sha: 3835ae936461f44b29b692850b69760d125442ea
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/3835ae936461f44b29b692850b69760d125442ea
+    name: cohere/cleanup-free-tenants-logs
+    protected: false
+  - commit_sha: a84437b245b2411f2c8ea120aa10de712c948edf
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/a84437b245b2411f2c8ea120aa10de712c948edf
+    name: config-tool-file-size
+    protected: false
+  - commit_sha: 4e036dd0457553985c5ff36ae8e83539e987c598
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/4e036dd0457553985c5ff36ae8e83539e987c598
+    name: contextmanager
+    protected: false
+  - commit_sha: 82fcf1da6451f365bcc4f3f125b52cf857e10d50
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/82fcf1da6451f365bcc4f3f125b52cf857e10d50
+    name: deploy/dev
+    protected: false
+  - commit_sha: f2fd4ec447a923c0cc7965795d2ea467b5066b26
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/f2fd4ec447a923c0cc7965795d2ea467b5066b26
+    name: deploy/enterprise
+    protected: false
+  - commit_sha: b55c35413909f7ace0eedc24bbd4f75b488cfdff
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/b55c35413909f7ace0eedc24bbd4f75b488cfdff
+    name: deploy/rag-dev
+    protected: false
+  - commit_sha: 086aeea18181ff8c0d58016814e6672042698b03
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/086aeea18181ff8c0d58016814e6672042698b03
+    name: dev/plugin-deploy
+    protected: false
+  - commit_sha: 4cc1bdb58ba6af15661f2677e14ce56954f9a502
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/4cc1bdb58ba6af15661f2677e14ce56954f9a502
+    name: docker-env
+    protected: false
+  - commit_sha: 1e32749aa88968beed101d234b22a1bb6a23dcb5
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/1e32749aa88968beed101d234b22a1bb6a23dcb5
+    name: chore/remove-expired-token-file
+    protected: false
+  - commit_sha: b44fb1e4d2d4379f31f7fc65a4199f23303e8590
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/b44fb1e4d2d4379f31f7fc65a4199f23303e8590
+    name: build/fix-1.9.0
+    protected: false
+  - commit_sha: ac77b9b735feed36fd12010b55ce7b1b4b58be4e
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/ac77b9b735feed36fd12010b55ce7b1b4b58be4e
+    name: build/trigger
+    protected: false
+  - commit_sha: bf20f3aa8bab81f221126dfc624c8a67108cf0bd
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/bf20f3aa8bab81f221126dfc624c8a67108cf0bd
+    name: chore/workflow-performance
+    protected: false
+  - commit_sha: 41c4d0bff09c9d0b553c967f71bbc8951da34a57
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/41c4d0bff09c9d0b553c967f71bbc8951da34a57
+    name: copilot/fix-ce7a9189-f70c-4ea9-81ba-3f49303104d6
+    protected: false
+  - commit_sha: b7bfa0ca6e2617f30c6b2db54ce4a6ae544b5047
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/b7bfa0ca6e2617f30c6b2db54ce4a6ae544b5047
+    name: copilot/fix-d8c5989d-5a30-418f-8dc4-099cf1f37218
+    protected: false
+  - commit_sha: 4df2d70d6541b434bbfa774605f398ee10960914
+    commit_url: https://api.github.com/repos/langgenius/dify/commits/4df2d70d6541b434bbfa774605f398ee10960914
+    name: copilot/fix-fc039c44-aa24-4844-82b2-e9ac237a13e9
+    protected: false
+- dify-official-plugins:
+  - commit_sha: ee4c5d4de5cf4d14f55c743fa403227ce08fd73c
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/ee4c5d4de5cf4d14f55c743fa403227ce08fd73c
+    name: 975-openrouter-plugin-failed-add-with-error-403
+    protected: false
+  - commit_sha: 377ce9fabddf509ffd151947f69a67487c78762e
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/377ce9fabddf509ffd151947f69a67487c78762e
+    name: 1520-openai-o1-prevew-should-be-removed
+    protected: false
+  - commit_sha: 691731e4a9722958c0bc2347ef0114926899b685
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/691731e4a9722958c0bc2347ef0114926899b685
+    name: LICENSE
+    protected: false
+  - commit_sha: c614064a744457bf52d9d95aa04a142cfcc3acc4
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/c614064a744457bf52d9d95aa04a142cfcc3acc4
+    name: Yeuoly-patch-1
+    protected: false
+  - commit_sha: 2d6b0caa872859443059a1b2398ad50b2d2fcbaf
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/2d6b0caa872859443059a1b2398ad50b2d2fcbaf
+    name: bump/anthropic-0.0.3
+    protected: false
+  - commit_sha: 6447bc9ff95944bb0fb970cd4e1dd55cedbae773
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/6447bc9ff95944bb0fb970cd4e1dd55cedbae773
+    name: bump/azure-openai-0.0.2
+    protected: false
+  - commit_sha: a932a54e0c706fb6ac6b4eb185970cd038771e32
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/a932a54e0c706fb6ac6b4eb185970cd038771e32
+    name: bump/bedrock-0.0.3
+    protected: false
+  - commit_sha: 7c5d24a5f4e13179cc237d20f9a24decb1b9684f
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/7c5d24a5f4e13179cc237d20f9a24decb1b9684f
+    name: bump/bing-0.0.2
+    protected: false
+  - commit_sha: 1002c62d29ea7e7a2ad68111a2d0f0202318c944
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/1002c62d29ea7e7a2ad68111a2d0f0202318c944
+    name: bump/cohere-0.0.2
+    protected: false
+  - commit_sha: 51baf619a8005184de7059dd37cfa5c05b4ae588
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/51baf619a8005184de7059dd37cfa5c05b4ae588
+    name: bump/comfyui-0.0.7
+    protected: false
+  - commit_sha: 76e847c3c97546641b24b96388a7ab1994728298
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/76e847c3c97546641b24b96388a7ab1994728298
+    name: bump/dalle-0.0.3
+    protected: false
+  - commit_sha: 01775bebbce631231177c1303e59e839ad038b63
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/01775bebbce631231177c1303e59e839ad038b63
+    name: bump/deepseek-0.0.3
+    protected: false
+  - commit_sha: dc85c01276f1b3fe3da178f6b524f09ad9d10568
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/dc85c01276f1b3fe3da178f6b524f09ad9d10568
+    name: bump/duckduckgo-0.0.3
+    protected: false
+  - commit_sha: 2111ec6a710b0058b96d944945e9066437aea118
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/2111ec6a710b0058b96d944945e9066437aea118
+    name: bump/firecrawl-0.0.2
+    protected: false
+  - commit_sha: 2cf74e02517d92a804e2e37ca3a6c0dd1a670672
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/2cf74e02517d92a804e2e37ca3a6c0dd1a670672
+    name: bump/gemini-0.0.2
+    protected: false
+  - commit_sha: 59a41da6ce3973e328abdea96db79d6a18437f29
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/59a41da6ce3973e328abdea96db79d6a18437f29
+    name: bump/google-0.0.7
+    protected: false
+  - commit_sha: 3a5eb21a073c73d63eedb392a957b76b28131d5e
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/3a5eb21a073c73d63eedb392a957b76b28131d5e
+    name: bump/jina-0.0.3
+    protected: false
+  - commit_sha: 67e4a1b4e84cb129a6fe8855dde7ce960ac9169b
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/67e4a1b4e84cb129a6fe8855dde7ce960ac9169b
+    name: bump/jina-tool-0.0.2
+    protected: false
+  - commit_sha: 1b41639ebf1e7ad7893416be6b7511b0ce6e0305
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/1b41639ebf1e7ad7893416be6b7511b0ce6e0305
+    name: bump/oai-app-0.0.3
+    protected: false
+  - commit_sha: 81e0dfc12287a82f716b004363818fdb0aad0105
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/81e0dfc12287a82f716b004363818fdb0aad0105
+    name: bump/oai-compat-0.0.3
+    protected: false
+  - commit_sha: 15b4906788e12e7fc51dc23bf16b9965be54b81c
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/15b4906788e12e7fc51dc23bf16b9965be54b81c
+    name: bump/ollama-0.0.2
+    protected: false
+  - commit_sha: febdfac1c0c9406610c5fb3dc295d6f772bf521f
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/febdfac1c0c9406610c5fb3dc295d6f772bf521f
+    name: bump/siliconflow
+    protected: false
+  - commit_sha: e87f5a17493c00fa2ddffe0d47e709135cf4ac74
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/e87f5a17493c00fa2ddffe0d47e709135cf4ac74
+    name: bump/siliconflow-0.0.2
+    protected: false
+  - commit_sha: cf8dea4bc8a40b2f19a435244424b20c0c229a26
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/cf8dea4bc8a40b2f19a435244424b20c0c229a26
+    name: bump/siliconflow-tool
+    protected: false
+  - commit_sha: ed4fc5e628adc54e05404e359a8203ae6912fee1
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/ed4fc5e628adc54e05404e359a8203ae6912fee1
+    name: bump/slack-0.0.2
+    protected: false
+  - commit_sha: 4686700f787fff240aa7ee45beeba94155bac2ff
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/4686700f787fff240aa7ee45beeba94155bac2ff
+    name: bump/slack-bot-0.0.2
+    protected: false
+  - commit_sha: 88863fc77bf7305e13db1d4549bae5b3edda0564
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/88863fc77bf7305e13db1d4549bae5b3edda0564
+    name: bump/tongyi-0.0.2
+    protected: false
+  - commit_sha: 13db6989e5638491eef4360a3725b56e9fb88f49
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/13db6989e5638491eef4360a3725b56e9fb88f49
+    name: bump/wikipedia-0.0.2
+    protected: false
+  - commit_sha: 93982ff74ac2aed4e3d8c07361e77651280bab4b
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/93982ff74ac2aed4e3d8c07361e77651280bab4b
+    name: bump/zhipuai-0.0.2
+    protected: false
+  - commit_sha: 13d8323f406e056622faf997932abcf3c07d7694
+    commit_url: https://api.github.com/repos/langgenius/dify-official-plugins/commits/13d8323f406e056622faf997932abcf3c07d7694
+    name: bumpversion/openllm
+    protected: false
+- dify-plugins:
+  - commit_sha: fca6b9dbccaeb823ab2f0cb52356b851509d2b48
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/fca6b9dbccaeb823ab2f0cb52356b851509d2b48
+    name: Yeuoly-Patch-2
+    protected: false
+  - commit_sha: 073a6fbf3ad6b21253453cda37fd65ad390e8150
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/073a6fbf3ad6b21253453cda37fd65ad390e8150
+    name: Yeuoly-patch-1
+    protected: false
+  - commit_sha: 813822e0b1e0273beabce9260bd8a48d9d820269
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/813822e0b1e0273beabce9260bd8a48d9d820269
+    name: Yeuoly-patch-2
+    protected: false
+  - commit_sha: 9c47c99656e22de15a4996fe91644557205a371f
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/9c47c99656e22de15a4996fe91644557205a371f
+    name: chore/add-v1-pr-template
+    protected: false
+  - commit_sha: d3e1d9825ad150041cfac89a18484d2952373488
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/d3e1d9825ad150041cfac89a18484d2952373488
+    name: chore/change-cover-image
+    protected: false
+  - commit_sha: 59217d67c48c3d3bd490223879806d2f3d7ba979
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/59217d67c48c3d3bd490223879806d2f3d7ba979
+    name: ci/privacy-sync
+    protected: false
+  - commit_sha: b4cf29524060e2a766e273bf8b7ac55cd79b263f
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/b4cf29524060e2a766e273bf8b7ac55cd79b263f
+    name: crazywoola-patch-1
+    protected: false
+  - commit_sha: 2d3285bc29acbb424fe77c937bfec0640dce6462
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/2d3285bc29acbb424fe77c937bfec0640dce6462
+    name: crazywoola-patch-2
+    protected: false
+  - commit_sha: 95795bd6e24a67aeff5d3949d84c98afde8b8d2e
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/95795bd6e24a67aeff5d3949d84c98afde8b8d2e
+    name: crazywoola-patch-3
+    protected: false
+  - commit_sha: e2c15f5655fadd17f7a0696a5b99f8620973c942
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/e2c15f5655fadd17f7a0696a5b99f8620973c942
+    name: crazywoola-patch-4
+    protected: false
+  - commit_sha: b7d24e386261155dc1b851ea533d8337bb4661f1
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/b7d24e386261155dc1b851ea533d8337bb4661f1
+    name: dev
+    protected: false
+  - commit_sha: ed8377c841b4f813597e1db72669458def1d46fb
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/ed8377c841b4f813597e1db72669458def1d46fb
+    name: feat/add-fabricatedspeech-tool
+    protected: false
+  - commit_sha: 21e669581ba46b4695548f8b01d6060c910f0dc9
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/21e669581ba46b4695548f8b01d6060c910f0dc9
+    name: feat/add-telegraph-tool
+    protected: false
+  - commit_sha: 75b744c650d9aa8009c2f844b7fb1cd32d33c835
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/75b744c650d9aa8009c2f844b7fb1cd32d33c835
+    name: feat/readme
+    protected: false
+  - commit_sha: 5669bfb349490a246251689f4c0ca8e3d65f9fcf
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/5669bfb349490a246251689f4c0ca8e3d65f9fcf
+    name: feat-gpg-text
+    protected: false
+  - commit_sha: 3c1bc7d82a6553aad55c18aca87a72187aba9614
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/3c1bc7d82a6553aad55c18aca87a72187aba9614
+    name: fix/missing-deps-packaging
+    protected: false
+  - commit_sha: f86efb313a3f30d162da8c401765c379d7f7e797
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/f86efb313a3f30d162da8c401765c379d7f7e797
+    name: fix-refresh-gpg
+    protected: false
+  - commit_sha: 0c9a82fa9d339314d0bfff747e20ddbe2fe483bd
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/0c9a82fa9d339314d0bfff747e20ddbe2fe483bd
+    name: main
+    protected: true
+  - commit_sha: d574641c66ecfee9936ed92a706a60c8436cf69c
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/d574641c66ecfee9936ed92a706a60c8436cf69c
+    name: plugin/onebot_test
+    protected: false
+  - commit_sha: f3ef5495faa6ddcf8b214c5f259905bd36cb3ac3
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/f3ef5495faa6ddcf8b214c5f259905bd36cb3ac3
+    name: refactor/replace-with-author/plugin-name/plugin-name-version.difypkg
+    protected: false
+  - commit_sha: 577ab45d2a56f5ce89fea9911172c3b5540349b2
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/577ab45d2a56f5ce89fea9911172c3b5540349b2
+    name: revert-103-main
+    protected: false
+  - commit_sha: 8836848220e1aad719c694eda2b58559d527aa65
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/8836848220e1aad719c694eda2b58559d527aa65
+    name: update-conv-mem
+    protected: false
+  - commit_sha: 95be1b6400677e1ab2a31abff1596a664d36eadd
+    commit_url: https://api.github.com/repos/langgenius/dify-plugins/commits/95be1b6400677e1ab2a31abff1596a664d36eadd
+    name: waifu
+    protected: false
+- webapp-text-generator:
+  - commit_sha: 2cc97a08ac12c5ca1bf3a199e0ed8bea16aaad8a
+    commit_url: https://api.github.com/repos/langgenius/webapp-text-generator/commits/2cc97a08ac12c5ca1bf3a199e0ed8bea16aaad8a
+    name: chore/not-show-workflow-detail
+    protected: false
+  - commit_sha: 35840a039e34c167cc182db7dca026bd32aa3ee1
+    commit_url: https://api.github.com/repos/langgenius/webapp-text-generator/commits/35840a039e34c167cc182db7dca026bd32aa3ee1
+    name: feat/generation-support-optional-query-content
+    protected: false
+  - commit_sha: 9b2d75239a717c2dd67b6dbdbcf3fd65c6ca174f
+    commit_url: https://api.github.com/repos/langgenius/webapp-text-generator/commits/9b2d75239a717c2dd67b6dbdbcf3fd65c6ca174f
+    name: feat/support-number-field
+    protected: false
+  - commit_sha: daee3bca9739c488389b84d6a009ffd8d8e7a734
+    commit_url: https://api.github.com/repos/langgenius/webapp-text-generator/commits/daee3bca9739c488389b84d6a009ffd8d8e7a734
+    name: feat/support-upload-image
+    protected: false
+  - commit_sha: db445fe3d3622b0c7537cf6e0003fe43d4b4d170
+    commit_url: https://api.github.com/repos/langgenius/webapp-text-generator/commits/db445fe3d3622b0c7537cf6e0003fe43d4b4d170
+    name: feat/support-workflow
+    protected: false
+  - commit_sha: ffc025c1ae905fc3566f25cdfd4ba34b0af54f41
+    commit_url: https://api.github.com/repos/langgenius/webapp-text-generator/commits/ffc025c1ae905fc3566f25cdfd4ba34b0af54f41
+    name: main
+    protected: false
+- dify-sandbox:
+  - commit_sha: cb02043d3b6664fc1b8858dac0ee2eba2c22277c
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/cb02043d3b6664fc1b8858dac0ee2eba2c22277c
+    name: Theysua-patch-1
+    protected: false
+  - commit_sha: 5c7c71e80be2f5ccbb55e6a7725634a205363b7a
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/5c7c71e80be2f5ccbb55e6a7725634a205363b7a
+    name: Theysua-patch-2
+    protected: false
+  - commit_sha: 0c72788e509547a61125d69751f84a93b3d2e1b4
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/0c72788e509547a61125d69751f84a93b3d2e1b4
+    name: Theysua-patch-3
+    protected: false
+  - commit_sha: 7cf1086d1ee271a4b94f9a2a0d0abd87c882247e
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/7cf1086d1ee271a4b94f9a2a0d0abd87c882247e
+    name: Yeuoly-patch-1
+    protected: false
+  - commit_sha: db3bf609afd1c99cdf2115ec608caa2363f84e02
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/db3bf609afd1c99cdf2115ec608caa2363f84e02
+    name: chore/add-nodejs-tests
+    protected: false
+  - commit_sha: 75be3ce2d9d2a55848ba64af3be92b3a53416eab
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/75be3ce2d9d2a55848ba64af3be92b3a53416eab
+    name: chore/bump-versions
+    protected: false
+  - commit_sha: b701987ef06577cc82ad691485f886277b7d306d
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/b701987ef06577cc82ad691485f886277b7d306d
+    name: chore/upgrade-to-latest-golang
+    protected: false
+  - commit_sha: f5df2d88df262d1be4534ca9e816a1293cb1ee3c
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/f5df2d88df262d1be4534ca9e816a1293cb1ee3c
+    name: feat/add-arm64-ci
+    protected: false
+  - commit_sha: 4587d04d76ab60626879877bdd6b4cd632179b7f
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/4587d04d76ab60626879877bdd6b4cd632179b7f
+    name: feat/0.2.2
+    protected: false
+  - commit_sha: 79cec7979a1b094cc7284394e901dd34970e5ae2
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/79cec7979a1b094cc7284394e901dd34970e5ae2
+    name: fix/amd64-operation-not-permitted
+    protected: false
+  - commit_sha: b86b734aba8da9d8e82f2e09790fd3241c2940d0
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/b86b734aba8da9d8e82f2e09790fd3241c2940d0
+    name: fix/cleanup-running-path
+    protected: false
+  - commit_sha: b5adf95c474f96949dfa8fc7039828ade5b968dd
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/b5adf95c474f96949dfa8fc7039828ade5b968dd
+    name: fix/container-base
+    protected: false
+  - commit_sha: d54c5603b6cd7fbc8cd0091a666c522b2d170423
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/d54c5603b6cd7fbc8cd0091a666c522b2d170423
+    name: fix/expat
+    protected: false
+  - commit_sha: c760f32aabb0ccecbf826d6cbb3c67dffc0bdb32
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/c760f32aabb0ccecbf826d6cbb3c67dffc0bdb32
+    name: fix/github_workflows_missing_python
+    protected: false
+  - commit_sha: 6f1dcf9f74a7eec5f71bf88d849c4f506dffeaf6
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/6f1dcf9f74a7eec5f71bf88d849c4f506dffeaf6
+    name: fix/httpx
+    protected: false
+  - commit_sha: fe376b7e7e278b9ef78535eebcd321003809c995
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/fe376b7e7e278b9ef78535eebcd321003809c995
+    name: fix/init-python-env
+    protected: false
+  - commit_sha: f3199ac4e33601db9c428bff0c22c68b241bffb8
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/f3199ac4e33601db9c428bff0c22c68b241bffb8
+    name: fix/memory-leak
+    protected: false
+  - commit_sha: 09502f95a10c9f093ff83f6d2535fee4188662f1
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/09502f95a10c9f093ff83f6d2535fee4188662f1
+    name: fix/missing-native-deps
+    protected: false
+  - commit_sha: a2d1a1fa7d4e3f6e8b98fe102c3bfc0feb25cf3a
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/a2d1a1fa7d4e3f6e8b98fe102c3bfc0feb25cf3a
+    name: fix/missing-timezone
+    protected: false
+  - commit_sha: bd3fd35e0d16a1fd0edac12a828ab11a5b943988
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/bd3fd35e0d16a1fd0edac12a828ab11a5b943988
+    name: fix/nodejs-code-injection
+    protected: false
+  - commit_sha: 898c47aaccc7afefb5f8b43a6d202e47843d1a78
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/898c47aaccc7afefb5f8b43a6d202e47843d1a78
+    name: fix/parse-result
+    protected: false
+  - commit_sha: adb7d7ff5a8d1ee8ea46b8de88f91e095daa957b
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/adb7d7ff5a8d1ee8ea46b8de88f91e095daa957b
+    name: fix/python-env-race-condition
+    protected: false
+  - commit_sha: 9c299bd779602aeea5d6e59922b10fb5dd2140f8
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/9c299bd779602aeea5d6e59922b10fb5dd2140f8
+    name: fix/requests-operation-not-permitted
+    protected: false
+  - commit_sha: eee7d4b32cf460091c39c90a25662f713961d00d
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/eee7d4b32cf460091c39c90a25662f713961d00d
+    name: fix/requests-operation-not-permitted-amd64
+    protected: false
+  - commit_sha: de1c24a9973b9d4dd2be9530361e80955a445be6
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/de1c24a9973b9d4dd2be9530361e80955a445be6
+    name: fix/vulns
+    protected: false
+  - commit_sha: 8ca597eb5c1b58fa0632b102f4698d4a116cf844
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/8ca597eb5c1b58fa0632b102f4698d4a116cf844
+    name: license
+    protected: false
+  - commit_sha: 9681882da3809d21a02baebd73bc0b6408563f7b
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/9681882da3809d21a02baebd73bc0b6408563f7b
+    name: main
+    protected: true
+  - commit_sha: a28840570042b0824fc2f3b418aff207da34bd9c
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/a28840570042b0824fc2f3b418aff207da34bd9c
+    name: refactor/dockerfile
+    protected: false
+  - commit_sha: 01e634e4b55ae31aab448f2a364f530dfd4cfc7d
+    commit_url: https://api.github.com/repos/langgenius/dify-sandbox/commits/01e634e4b55ae31aab448f2a364f530dfd4cfc7d
+    name: security/bump-dependencies
+    protected: false
+- dify-plugin-daemon:
+  - commit_sha: 71cef04bfa090c0e5400b1adec2cdb61ecca8c93
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/71cef04bfa090c0e5400b1adec2cdb61ecca8c93
+    name: 71cef04
+    protected: false
+  - commit_sha: 9320db08d671b639f0609856cb9e80669e04b925
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/9320db08d671b639f0609856cb9e80669e04b925
+    name: LICENSE
+    protected: false
+  - commit_sha: 13da5c6e3e3d55c98be69fdc0e39650d7aa217c4
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/13da5c6e3e3d55c98be69fdc0e39650d7aa217c4
+    name: add-claude-github-actions-1756274550417
+    protected: false
+  - commit_sha: de16f7dd74f65f6b26a137cb8d2a98c6ea53571b
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/de16f7dd74f65f6b26a137cb8d2a98c6ea53571b
+    name: benchmark/local-runtime
+    protected: false
+  - commit_sha: 2856d565139d63c509bdcbeab763187de04878ec
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/2856d565139d63c509bdcbeab763187de04878ec
+    name: build/datasource
+    protected: false
+  - commit_sha: ecc068c32bedb37f77ac58120a5742f590b97a51
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/ecc068c32bedb37f77ac58120a5742f590b97a51
+    name: build/oauth
+    protected: false
+  - commit_sha: f62b0a46b5d07fc1fccd115a1e8438950c4aeb2e
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/f62b0a46b5d07fc1fccd115a1e8438950c4aeb2e
+    name: build/plugin-oauth
+    protected: false
+  - commit_sha: e9ffb30b6570242b14e5c36866d98cc2ac685ef1
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/e9ffb30b6570242b14e5c36866d98cc2ac685ef1
+    name: bump/go-git
+    protected: false
+  - commit_sha: c41d1e9443ad5aecf250712167009af64fbe7715
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/c41d1e9443ad5aecf250712167009af64fbe7715
+    name: bump-cloud-kit
+    protected: false
+  - commit_sha: a9ca59fcc82ec456a32f476d83d31ccef87ae316
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/a9ca59fcc82ec456a32f476d83d31ccef87ae316
+    name: chore/add-warning-messages-to-installed-bucket
+    protected: false
+  - commit_sha: e07d93ae7383feaccd74d9f3e090318069ea1be5
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/e07d93ae7383feaccd74d9f3e090318069ea1be5
+    name: chore/env.example
+    protected: false
+  - commit_sha: 12c81a6a41724f645284d0e8c538ebfae8ac3d17
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/12c81a6a41724f645284d0e8c538ebfae8ac3d17
+    name: chore/remove-json-schema-validation-error
+    protected: false
+  - commit_sha: fb3aec626b8cb696a60170bdb3e960ca0e647ae1
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/fb3aec626b8cb696a60170bdb3e960ca0e647ae1
+    name: chore/remove-useless-benchmark
+    protected: false
+  - commit_sha: b9ce8a9508ac0b3dd45bee10d016ba3a36e552e2
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/b9ce8a9508ac0b3dd45bee10d016ba3a36e552e2
+    name: chore/style
+    protected: false
+  - commit_sha: 62073a355a833461321dd44102871aee4bb1cd8a
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/62073a355a833461321dd44102871aee4bb1cd8a
+    name: chore/unify-configurations
+    protected: false
+  - commit_sha: 85d07771b04fc64bfe2bd1aa5126a42c5e410de2
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/85d07771b04fc64bfe2bd1aa5126a42c5e410de2
+    name: chore/update-docs-and-refine-wording
+    protected: false
+  - commit_sha: 204b50801227a4f98f6cf06ad08a13a0d9bf978c
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/204b50801227a4f98f6cf06ad08a13a0d9bf978c
+    name: chore/upgrade-ants
+    protected: false
+  - commit_sha: f46872048d831e56014786760b52629ef23deec7
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/f46872048d831e56014786760b52629ef23deec7
+    name: cohre/update-readme
+    protected: false
+  - commit_sha: 2e468b9cb5c46cd89a8a22dc795a02a58c5a5048
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/2e468b9cb5c46cd89a8a22dc795a02a58c5a5048
+    name: deploy/dev
+    protected: false
+  - commit_sha: 2208ee9c2ee4ff10bc8e4450836d3ec4fc69a7b4
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/2208ee9c2ee4ff10bc8e4450836d3ec4fc69a7b4
+    name: docs/comprehensive-development-documentation
+    protected: false
+  - commit_sha: 79f087c926cbce950e39995f664e5b445dad4648
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/79f087c926cbce950e39995f664e5b445dad4648
+    name: enhance/increase-installing-process
+    protected: false
+  - commit_sha: 62138b03887d6c2ca0a9249f17ca58a5daa73f8d
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/62138b03887d6c2ca0a9249f17ca58a5daa73f8d
+    name: enhance/introduce-uv
+    protected: false
+  - commit_sha: 6d039da4b9f61a1b0e809468b50a9c0faf028cf8
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/6d039da4b9f61a1b0e809468b50a9c0faf028cf8
+    name: enhance/reduce-ci-tests
+    protected: false
+  - commit_sha: a7bd32bfa656c58cd558d8fe26e4aa254b48a487
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/a7bd32bfa656c58cd558d8fe26e4aa254b48a487
+    name: enhance/removes-llm-result-prompt-messages
+    protected: false
+  - commit_sha: b485c678402a5d6930aa155f8f15a63c4c4d7baf
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/b485c678402a5d6930aa155f8f15a63c4c4d7baf
+    name: enhance/serverless-connector
+    protected: false
+  - commit_sha: 864640b9351c254bbbb1250c77abdc6a869b79a6
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/864640b9351c254bbbb1250c77abdc6a869b79a6
+    name: enhance/stdio
+    protected: false
+  - commit_sha: 8a07dcbb1f6bfaf817c1e1c327bb9e7a97c02e48
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/8a07dcbb1f6bfaf817c1e1c327bb9e7a97c02e48
+    name: enhance/tiktoken
+    protected: false
+  - commit_sha: e18a6b54d59e9f48eb011290ef44226aca1743d5
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/e18a6b54d59e9f48eb011290ef44226aca1743d5
+    name: enhance/version-compare
+    protected: false
+  - commit_sha: f399bdb1cb4902aa5846dd712e7c1027ccb519f7
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/f399bdb1cb4902aa5846dd712e7c1027ccb519f7
+    name: f399bdb
+    protected: false
+  - commit_sha: daa46ff0f03a67270dd9869ca2ee69cd3ef08dc8
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-daemon/commits/daa46ff0f03a67270dd9869ca2ee69cd3ef08dc8
+    name: feat/add-action-in-url
+    protected: false
+- dify-plugin-sdks:
+  - commit_sha: 2cf82334912b0cbfb51c28edf21c90be6ec946c5
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/2cf82334912b0cbfb51c28edf21c90be6ec946c5
+    name: chore/add-tests-for-http-parser
+    protected: false
+  - commit_sha: d73de5206a278180e68258ef83d14913af1d267b
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/d73de5206a278180e68258ef83d14913af1d267b
+    name: chore/bump-0.2.0
+    protected: false
+  - commit_sha: 06435627408205cbc37bbf10537d6c208ff2b4e0
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/06435627408205cbc37bbf10537d6c208ff2b4e0
+    name: chore/bump-0.2.1
+    protected: false
+  - commit_sha: e2447622a8ffc3968f8ad588b2a7d8deb6bda1c0
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/e2447622a8ffc3968f8ad588b2a7d8deb6bda1c0
+    name: feat/add-structured-output-feature
+    protected: false
+  - commit_sha: d972c3d0e62d394195b2ab50aa33c1816a17c47d
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/d972c3d0e62d394195b2ab50aa33c1816a17c47d
+    name: feat/datasource
+    protected: false
+  - commit_sha: 5f5ec0e424bb97ad3b9a8c5d03d54f493d3a2e9d
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/5f5ec0e424bb97ad3b9a8c5d03d54f493d3a2e9d
+    name: feat/docs
+    protected: false
+  - commit_sha: a98bb5289cd76f450237a8409f982037bd9b9dbc
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/a98bb5289cd76f450237a8409f982037bd9b9dbc
+    name: feat/fetch-app-info
+    protected: false
+  - commit_sha: 0597d07012f86f04cb92c4e2ff9c45f9ee487295
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/0597d07012f86f04cb92c4e2ff9c45f9ee487295
+    name: feat/gevent-switch
+    protected: false
+  - commit_sha: 4a35f08344fdc49c89ae0a77ad546a341c928c53
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/4a35f08344fdc49c89ae0a77ad546a341c928c53
+    name: feat/support-setup-endpoint
+    protected: false
+  - commit_sha: 736d17848582079f442e21130c33577ba2b06b4b
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/736d17848582079f442e21130c33577ba2b06b4b
+    name: feat/trigger
+    protected: false
+  - commit_sha: 9cc8f27102df0600708a8e8371f2b1d5e8dfcca7
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/9cc8f27102df0600708a8e8371f2b1d5e8dfcca7
+    name: fix/agent-handle-select
+    protected: false
+  - commit_sha: ec4ba8861ab841e4dad01c4205adefa665bd86d2
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/ec4ba8861ab841e4dad01c4205adefa665bd86d2
+    name: fix/convert-prompt-message-content
+    protected: false
+  - commit_sha: f31e72231ab8db03dfe84f4db6bf314a7d4e1a57
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/f31e72231ab8db03dfe84f4db6bf314a7d4e1a57
+    name: fix/deduplicate-linter
+    protected: false
+  - commit_sha: 6a60ab6a5c549fd59230507937dca3e590bbd509
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/6a60ab6a5c549fd59230507937dca3e590bbd509
+    name: fix/minimum-dify-required
+    protected: false
+  - commit_sha: 572aa1b26a2edc7f009a480ddb929ea5670bbf15
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/572aa1b26a2edc7f009a480ddb929ea5670bbf15
+    name: fix/mkdocs
+    protected: false
+  - commit_sha: da52d073ce1a3bc588879dd7205729e18ca8258d
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/da52d073ce1a3bc588879dd7205729e18ca8258d
+    name: fix/pycharm-adaptation
+    protected: false
+  - commit_sha: 53eea26a63097b1b9b055a9530bb29a2cef1e67e
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/53eea26a63097b1b9b055a9530bb29a2cef1e67e
+    name: fix/storage-optional
+    protected: false
+  - commit_sha: 025df9eb358811f900486f4d51b7fe6830525be8
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/025df9eb358811f900486f4d51b7fe6830525be8
+    name: gh-pages
+    protected: false
+  - commit_sha: 9f4ec08d6206217d70ee6b2661c4a8f1b2c67796
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/9f4ec08d6206217d70ee6b2661c4a8f1b2c67796
+    name: main
+    protected: false
+  - commit_sha: bf5b33998b2b33644cfe254b3fe0406d78794feb
+    commit_url: https://api.github.com/repos/langgenius/dify-plugin-sdks/commits/bf5b33998b2b33644cfe254b3fe0406d78794feb
+    name: optimize/enhance-json-loads
+    protected: false
+- webapp-conversation:
+  - commit_sha: 9c0ea560585c0ec0cc209562283b9fad0a3bb2c3
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/9c0ea560585c0ec0cc209562283b9fad0a3bb2c3
+    name: chore/add-dot-env
+    protected: false
+  - commit_sha: 25ef02d2aa4435dd1ec4ff2de4abab9a72b8b76b
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/25ef02d2aa4435dd1ec4ff2de4abab9a72b8b76b
+    name: chore/add-show-error-msg
+    protected: false
+  - commit_sha: 5a85f0d427537e552d3471aeaf5adcd4bd8c37ba
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/5a85f0d427537e552d3471aeaf5adcd4bd8c37ba
+    name: chore/hide-workflow-run-detail
+    protected: false
+  - commit_sha: 4a75e3774aa34fb417003dd6b33888ace3a4fdaa
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/4a75e3774aa34fb417003dd6b33888ace3a4fdaa
+    name: chore/split-question-answer-comp
+    protected: false
+  - commit_sha: 1df62f49f100c7afbb43451c30fbf131aa4e75d4
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/1df62f49f100c7afbb43451c30fbf131aa4e75d4
+    name: chore/update-nextjs
+    protected: false
+  - commit_sha: dd1c540a61d4ddf7d896b7c3584775edec9184fd
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/dd1c540a61d4ddf7d896b7c3584775edec9184fd
+    name: crazywoola-patch-1
+    protected: false
+  - commit_sha: 8c6302d1fcb34f0584c192b30b9a2988b45ea051
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/8c6302d1fcb34f0584c192b30b9a2988b45ea051
+    name: docs/env-description
+    protected: false
+  - commit_sha: 25ba4ac4766c1f2d90cf0660781adc959a2ad879
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/25ba4ac4766c1f2d90cf0660781adc959a2ad879
+    name: feat/support-agent
+    protected: false
+  - commit_sha: bf49c3c15d939e49ec3de47d7a483a3fb71fc6aa
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/bf49c3c15d939e49ec3de47d7a483a3fb71fc6aa
+    name: feat/support-jwt
+    protected: false
+  - commit_sha: 5dc3658e19d911215fd587457cecd8b4a0f3af22
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/5dc3658e19d911215fd587457cecd8b4a0f3af22
+    name: feat/support-upload-image
+    protected: false
+  - commit_sha: 6933b5923b5bb27e54682f94447a8e86501a5a50
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/6933b5923b5bb27e54682f94447a8e86501a5a50
+    name: feat/support-workflow
+    protected: false
+  - commit_sha: 20760df54ebd95e29c6f4fe20cb2cdd72a128d8d
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/20760df54ebd95e29c6f4fe20cb2cdd72a128d8d
+    name: feature/dockerfile
+    protected: false
+  - commit_sha: 4867d52b8f34c0f5d5da8d45534ccb0cef127781
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/4867d52b8f34c0f5d5da8d45534ccb0cef127781
+    name: fix/conversations-cache
+    protected: false
+  - commit_sha: d3482db74de0be7f00bdeb320dc5003e3f3633fe
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/d3482db74de0be7f00bdeb320dc5003e3f3633fe
+    name: fix/file-input-caused-page-crash
+    protected: false
+  - commit_sha: e8294d2e38c1344b65a8b9f41352ffe357f84dea
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/e8294d2e38c1344b65a8b9f41352ffe357f84dea
+    name: fix/fix-parse-conversation-error
+    protected: false
+  - commit_sha: f9bd745bb069a2509fe493a46d92468e1e9ae38a
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/f9bd745bb069a2509fe493a46d92468e1e9ae38a
+    name: fix/i18n-files-problem
+    protected: false
+  - commit_sha: cafd643c00cd292df7d1af883980168396c6f0c6
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/cafd643c00cd292df7d1af883980168396c6f0c6
+    name: fix/not-show-opening-statement
+    protected: false
+  - commit_sha: ac0e3e807d09fa6c40c68905e9d198d66091df87
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/ac0e3e807d09fa6c40c68905e9d198d66091df87
+    name: fix/not-support-num-input
+    protected: false
+  - commit_sha: fcd6a0215d212fefcae8c2bc2d803219edeecd39
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/fcd6a0215d212fefcae8c2bc2d803219edeecd39
+    name: fix/optional-i18n
+    protected: false
+  - commit_sha: 754b77657b029df078658ff60af2b90e71f5a14c
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/754b77657b029df078658ff60af2b90e71f5a14c
+    name: fix/the-2th-not-set-inputs
+    protected: false
+  - commit_sha: 55a77ea86d9faea36254feb00048abb0b62c886f
+    commit_url: https://api.github.com/repos/langgenius/webapp-conversation/commits/55a77ea86d9faea36254feb00048abb0b62c886f
+    name: main
+    protected: true
+- dify-docs:
+  - commit_sha: 52ad5105c3e1661a8c521c71ac10f4b0f30831ec
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/52ad5105c3e1661a8c521c71ac10f4b0f30831ec
+    name: a-t-test2
+    protected: false
+  - commit_sha: a4948c974b8b48e22f34160e8e13ac69f1f5ab32
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/a4948c974b8b48e22f34160e8e13ac69f1f5ab32
+    name: alterxyz-patch-1
+    protected: false
+  - commit_sha: 070b7751c0200dacc39fea8b82437a38cedd3ce0
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/070b7751c0200dacc39fea8b82437a38cedd3ce0
+    name: alterxyz-patch-2
+    protected: false
+  - commit_sha: 75d98695e70e48156d5709292c08112875c69530
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/75d98695e70e48156d5709292c08112875c69530
+    name: api-access
+    protected: false
+  - commit_sha: b87a4f0abeeb70bd2b10a41e9bc504267deaaa2b
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/b87a4f0abeeb70bd2b10a41e9bc504267deaaa2b
+    name: auto-translate
+    protected: false
+  - commit_sha: 5b4f88147e49766d04b4c0befd31d700a72ff743
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/5b4f88147e49766d04b4c0befd31d700a72ff743
+    name: auto-translate-core
+    protected: false
+  - commit_sha: bb2c40353f738ae1b763ab3574e63e5a70a0d10a
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/bb2c40353f738ae1b763ab3574e63e5a70a0d10a
+    name: chore/update-issue-template
+    protected: false
+  - commit_sha: 45b4fa12212d03812dffc95d013d09b986c24750
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/45b4fa12212d03812dffc95d013d09b986c24750
+    name: code-fix-prompt-opt
+    protected: false
+  - commit_sha: 856db68be5c12168118a9e2eeef877ec10b20544
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/856db68be5c12168118a9e2eeef877ec10b20544
+    name: code-fix-prompt-opt-new
+    protected: false
+  - commit_sha: 3c3ae5dfb1e62d9252b2f4431122ccbc424558f8
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/3c3ae5dfb1e62d9252b2f4431122ccbc424558f8
+    name: code-fix-prompt-optimize-new
+    protected: false
+  - commit_sha: 9d75b9df208b5107f0c9a66c2ca125c2fc8f6b52
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/9d75b9df208b5107f0c9a66c2ca125c2fc8f6b52
+    name: codex/update-documentation-for-boolean-and-object-types
+    protected: false
+  - commit_sha: e093723ab33c6abf9f1f19bd7f6b46fc73574ca7
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/e093723ab33c6abf9f1f19bd7f6b46fc73574ca7
+    name: codex/write-documentation-for-dify-docs
+    protected: false
+  - commit_sha: b364830067a31e081fcf13e65def94527a3373aa
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/b364830067a31e081fcf13e65def94527a3373aa
+    name: credential-deselect
+    protected: false
+  - commit_sha: bf0e88f9e8e5608c265cbe3f0cafc5b21d029cf0
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/bf0e88f9e8e5608c265cbe3f0cafc5b21d029cf0
+    name: devin/1754492172-boolean-object-input-docs
+    protected: false
+  - commit_sha: c133d581a7e156230be4ac1088f46b941a03a0fd
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/c133d581a7e156230be4ac1088f46b941a03a0fd
+    name: doc-dify-brand
+    protected: false
+  - commit_sha: be72b798e15faa6ae45325a7fc0c95e0f0fd8ac0
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/be72b798e15faa6ae45325a7fc0c95e0f0fd8ac0
+    name: doc-metadata-api
+    protected: false
+  - commit_sha: 4de052bd5ed6540f2dbc0472a763f902bf28fc79
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/4de052bd5ed6540f2dbc0472a763f902bf28fc79
+    name: doc-remove
+    protected: false
+  - commit_sha: bf37508a49b35f4a4a0bf3d60a5119840e693f62
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/bf37508a49b35f4a4a0bf3d60a5119840e693f62
+    name: docs/boolean-object-input-support
+    protected: false
+  - commit_sha: d5cf617d38e7419d25e93e63315ca9238c2f9c6f
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/d5cf617d38e7419d25e93e63315ca9238c2f9c6f
+    name: docs/fix-plugin-docs
+    protected: false
+  - commit_sha: 0ece62d9a4d78f9b3aabde3f9f6a306ddd36e02a
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/0ece62d9a4d78f9b3aabde3f9f6a306ddd36e02a
+    name: docs/kr
+    protected: false
+  - commit_sha: d736d4e69f3ee403081c11ccb2357a1d12de3a6b
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/d736d4e69f3ee403081c11ccb2357a1d12de3a6b
+    name: docs/modify-admin-permission
+    protected: false
+  - commit_sha: 687dc396b47e6d4adb9c26caf88c0a02f0c2dc6f
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/687dc396b47e6d4adb9c26caf88c0a02f0c2dc6f
+    name: docs/modify-brand-email
+    protected: false
+  - commit_sha: 378a0a716d9d8d0cebcbc04be90f96aa82cf40e6
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/378a0a716d9d8d0cebcbc04be90f96aa82cf40e6
+    name: docs/rag
+    protected: false
+  - commit_sha: 7940791cbe2557eb5407bec36be685ac2a9f5d37
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/7940791cbe2557eb5407bec36be685ac2a9f5d37
+    name: docs/revert-datasets-readme
+    protected: false
+  - commit_sha: 570e7251c2a08d1f18e61f609f193042959738e2
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/570e7251c2a08d1f18e61f609f193042959738e2
+    name: docs/temporarily-remove-api-documentation
+    protected: false
+  - commit_sha: f1545f51019af51e9d045a5d6f00dbbd3869ce17
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/f1545f51019af51e9d045a5d6f00dbbd3869ce17
+    name: feat/add-commit-feature
+    protected: false
+  - commit_sha: 82bc793ba6603e6c065b9058be9e4da3e497a444
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/82bc793ba6603e6c065b9058be9e4da3e497a444
+    name: feat/brand
+    protected: false
+  - commit_sha: ace494b8d0a22e5829456d2643b638802d2e5b62
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/ace494b8d0a22e5829456d2643b638802d2e5b62
+    name: feat/dify-docs-mcp
+    protected: false
+  - commit_sha: d79f9d23faf082215d5d5bdc3d23a9f31907d771
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/d79f9d23faf082215d5d5bdc3d23a9f31907d771
+    name: feat/google-web-console
+    protected: false
+  - commit_sha: 2b130706020adc571ce536e4f833c8149aa1415c
+    commit_url: https://api.github.com/repos/langgenius/dify-docs/commits/2b130706020adc571ce536e4f833c8149aa1415c
+    name: fix/api-doc
+    protected: false
+- ruby-sdk:
+  - commit_sha: 7cf3b285ee7421243776ade9824643b3ff2e0acd
+    commit_url: https://api.github.com/repos/langgenius/ruby-sdk/commits/7cf3b285ee7421243776ade9824643b3ff2e0acd
+    name: main
+    protected: false
+- dify-docs-archived:
+  - commit_sha: c3eb9df0e96a1f588e0e1b07147dfd9ab86dae2d
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/c3eb9df0e96a1f588e0e1b07147dfd9ab86dae2d
+    name: VincePotato-patch-1-testdoc
+    protected: false
+  - commit_sha: 41c9f7f4f6a14dab815a0dcd4ed9446a0a547167
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/41c9f7f4f6a14dab815a0dcd4ed9446a0a547167
+    name: Yeuoly-patch-1
+    protected: false
+  - commit_sha: a939cb9f5896bcde42771944d219fefd32611f1a
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/a939cb9f5896bcde42771944d219fefd32611f1a
+    name: dev/mintlify
+    protected: false
+  - commit_sha: 5d8bf409f89f73fc1d784238ae9246d030509739
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/5d8bf409f89f73fc1d784238ae9246d030509739
+    name: doc/add-cloud-faq
+    protected: false
+  - commit_sha: 6cc7c81f88b25bc771ee9fd6ca65d4b2b8919413
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/6cc7c81f88b25bc771ee9fd6ca65d4b2b8919413
+    name: doc/add-env-file-directions
+    protected: false
+  - commit_sha: 08fc1257bcfb40536cbd2a481e29fa8a83f328e9
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/08fc1257bcfb40536cbd2a481e29fa8a83f328e9
+    name: doc/file-upload
+    protected: false
+  - commit_sha: 8be2d14ee6816959af7dda276130d5a20d4c73ce
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/8be2d14ee6816959af7dda276130d5a20d4c73ce
+    name: doc/fix-link
+    protected: false
+  - commit_sha: edbc2bf678c9979a0703e11765cc29c551dc6d1f
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/edbc2bf678c9979a0703e11765cc29c551dc6d1f
+    name: doc/fix-link-en
+    protected: false
+  - commit_sha: 936587628f241baf13084c61717d89c07b19f2df
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/936587628f241baf13084c61717d89c07b19f2df
+    name: doc/modify-jp-ver
+    protected: false
+  - commit_sha: 7614ef84143ea684f84f2d8be7b7f3234bc42dc8
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/7614ef84143ea684f84f2d8be7b7f3234bc42dc8
+    name: doc/ollama
+    protected: false
+  - commit_sha: d18a00302693fc7b1643a5fc56c7f9f847109505
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/d18a00302693fc7b1643a5fc56c7f9f847109505
+    name: doc/update-install
+    protected: false
+  - commit_sha: 1d409362cb4269a788d108ec8bb276f794f357dd
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/1d409362cb4269a788d108ec8bb276f794f357dd
+    name: doc/update-nodes-doc
+    protected: false
+  - commit_sha: a838003013793d43ed37bd82db30b8d4c5f3abc3
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/a838003013793d43ed37bd82db30b8d4c5f3abc3
+    name: doc/update-ollama-cn
+    protected: false
+  - commit_sha: 82e253c6f80eabe3ae6f95bec05fc31dc16164ae
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/82e253c6f80eabe3ae6f95bec05fc31dc16164ae
+    name: doc-dify-education
+    protected: false
+  - commit_sha: d43c1f015db39eaa73496d830c9a7ada76eaf919
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/d43c1f015db39eaa73496d830c9a7ada76eaf919
+    name: doc-fix-poetry-run
+    protected: false
+  - commit_sha: 78f46a8a47e4c963ae960f8b7115671cf0666452
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/78f46a8a47e4c963ae960f8b7115671cf0666452
+    name: doc-knowledge-request
+    protected: false
+  - commit_sha: 862f1486697d1f2628d701feca429a2e93de27c4
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/862f1486697d1f2628d701feca429a2e93de27c4
+    name: doc-loop
+    protected: false
+  - commit_sha: d39963eb77f2101c897bb7c4a00e362b0b2719ef
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/d39963eb77f2101c897bb7c4a00e362b0b2719ef
+    name: doc-loop-updated
+    protected: false
+  - commit_sha: c9aa186ed4019938e51ce871d249545d1302d8aa
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/c9aa186ed4019938e51ce871d249545d1302d8aa
+    name: doc-plugin-auto-pr
+    protected: false
+  - commit_sha: 042b42ea8ef658ec9bd4595dccc48e06947ac62b
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/042b42ea8ef658ec9bd4595dccc48e06947ac62b
+    name: doc-structured-output
+    protected: false
+  - commit_sha: 57c05e755cdc614b80894b5a2061f5286fd4f98a
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/57c05e755cdc614b80894b5a2061f5286fd4f98a
+    name: doc-version-history
+    protected: false
+  - commit_sha: 57c05e755cdc614b80894b5a2061f5286fd4f98a
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/57c05e755cdc614b80894b5a2061f5286fd4f98a
+    name: doc-version-history-fixed
+    protected: false
+  - commit_sha: 0cd8749bc99f6651440142836a8a0ee444383d84
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/0cd8749bc99f6651440142836a8a0ee444383d84
+    name: doc-video-upload
+    protected: false
+  - commit_sha: 0098fdeda63179b356d3708d473775a9c23fee11
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/0098fdeda63179b356d3708d473775a9c23fee11
+    name: docs/add-external-knowledge-video
+    protected: false
+  - commit_sha: bfc00a18fb01b63eb639760102d1d57486f0592c
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/bfc00a18fb01b63eb639760102d1d57486f0592c
+    name: docs/additional-features
+    protected: false
+  - commit_sha: d6b6cf024500b99f1dd0a999b04f683965e6287e
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/d6b6cf024500b99f1dd0a999b04f683965e6287e
+    name: docs/app-id
+    protected: false
+  - commit_sha: 03616524af037d6abf2d1ddd2322c1ec050d5b28
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/03616524af037d6abf2d1ddd2322c1ec050d5b28
+    name: docs/auto-delete-account-12.26
+    protected: false
+  - commit_sha: 71c3d8cd526bbf3d663fb12a754901c18435d824
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/71c3d8cd526bbf3d663fb12a754901c18435d824
+    name: docs/aws-migration
+    protected: false
+  - commit_sha: c7839b6c99275dc84f088c4f0c2b6ea0cb69c4db
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/c7839b6c99275dc84f088c4f0c2b6ea0cb69c4db
+    name: docs/citation
+    protected: false
+  - commit_sha: 0b675580ca7a53bb4d74aa22fcd590b0bac309da
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-archived/commits/0b675580ca7a53bb4d74aa22fcd590b0bac309da
+    name: docs/cloud-sync
+    protected: false
+- dify-marketplace-toolkit:
+  - commit_sha: c0e63b06d5cef0a2805e8ec1e09ff6796280ccd0
+    commit_url: https://api.github.com/repos/langgenius/dify-marketplace-toolkit/commits/c0e63b06d5cef0a2805e8ec1e09ff6796280ccd0
+    name: main
+    protected: true
+- aws-cdk-for-dify:
+  - commit_sha: d7e4420624e05c547d0cb178993ec85ccf09b183
+    commit_url: https://api.github.com/repos/langgenius/aws-cdk-for-dify/commits/d7e4420624e05c547d0cb178993ec85ccf09b183
+    name: fix/AWS_EKS_RDS_version
+    protected: false
+  - commit_sha: 69984b5f4e82a44c43e827cb4ec6adceec731ac0
+    commit_url: https://api.github.com/repos/langgenius/aws-cdk-for-dify/commits/69984b5f4e82a44c43e827cb4ec6adceec731ac0
+    name: fix/IRSA
+    protected: false
+  - commit_sha: abd09b1c6634b9b2f35ac10dbd8362fb9f6cadd2
+    commit_url: https://api.github.com/repos/langgenius/aws-cdk-for-dify/commits/abd09b1c6634b9b2f35ac10dbd8362fb9f6cadd2
+    name: main
+    protected: true
+  - commit_sha: 8340fc0377e2d9d0f0241abcd9931f60a1c805da
+    commit_url: https://api.github.com/repos/langgenius/aws-cdk-for-dify/commits/8340fc0377e2d9d0f0241abcd9931f60a1c805da
+    name: test_config
+    protected: false
+- dify-cloud-kit:
+  - commit_sha: 639facabba140511c1c89ecd35142f6cf6ff0dd3
+    commit_url: https://api.github.com/repos/langgenius/dify-cloud-kit/commits/639facabba140511c1c89ecd35142f6cf6ff0dd3
+    name: dev
+    protected: false
+  - commit_sha: 0a0e117e58e3f2d6082035e6f5dd660671f7e8df
+    commit_url: https://api.github.com/repos/langgenius/dify-cloud-kit/commits/0a0e117e58e3f2d6082035e6f5dd660671f7e8df
+    name: main
+    protected: false
+- dify-conversation:
+  - commit_sha: d47ee7178c5c55d23ad92a4a951f968fac25db4a
+    commit_url: https://api.github.com/repos/langgenius/dify-conversation/commits/d47ee7178c5c55d23ad92a4a951f968fac25db4a
+    name: main
+    protected: false
+- .github:
+  - commit_sha: 6eb90ce78be883c1aa62c3e55df1672fa308a2e6
+    commit_url: https://api.github.com/repos/langgenius/.github/commits/6eb90ce78be883c1aa62c3e55df1672fa308a2e6
+    name: main
+    protected: false
+- chatbot-chrome-extension:
+  - commit_sha: c49f51fea22c23750b19e713e1db3d3b90c5b720
+    commit_url: https://api.github.com/repos/langgenius/chatbot-chrome-extension/commits/c49f51fea22c23750b19e713e1db3d3b90c5b720
+    name: main
+    protected: false
+- dify-docs-mcp-server:
+  - commit_sha: 47398016ad1b5651324beb84077c7f5907c2b04d
+    commit_url: https://api.github.com/repos/langgenius/dify-docs-mcp-server/commits/47398016ad1b5651324beb84077c7f5907c2b04d
+    name: main
+    protected: false
+- homebrew-dify:
+  - commit_sha: 19c2c40f585cc1a08b016798035699696fd651d7
+    commit_url: https://api.github.com/repos/langgenius/homebrew-dify/commits/19c2c40f585cc1a08b016798035699696fd651d7
+    name: main
+    protected: false
+- dify-user-case:
+  - commit_sha: eae76cc830332e7a6a8d85bc878bb820e997bd2b
+    commit_url: https://api.github.com/repos/langgenius/dify-user-case/commits/eae76cc830332e7a6a8d85bc878bb820e997bd2b
+    name: Panmuse-patch-1
+    protected: false
+  - commit_sha: 718f00134a032aed4a9f897c22289675e5f35cff
+    commit_url: https://api.github.com/repos/langgenius/dify-user-case/commits/718f00134a032aed4a9f897c22289675e5f35cff
+    name: main
+    protected: false
+- langgenius.github.io:
+  - commit_sha: 6cea74ed6438cf2b078f779276487ff0d0f012ad
+    commit_url: https://api.github.com/repos/langgenius/langgenius.github.io/commits/6cea74ed6438cf2b078f779276487ff0d0f012ad
+    name: feature/get-updates
+    protected: false
+  - commit_sha: 5fdf8bf313fe4613f2bb13344437d47a08cdcf7a
+    commit_url: https://api.github.com/repos/langgenius/langgenius.github.io/commits/5fdf8bf313fe4613f2bb13344437d47a08cdcf7a
+    name: main
+    protected: false
+- deepwiki-open:
+  - commit_sha: 3a55dd3c719cb789b79e36f10e6b24757e8f7a79
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/3a55dd3c719cb789b79e36f10e6b24757e8f7a79
+    name: actually-awesome-wiki
+    protected: false
+  - commit_sha: c21937a4875ee349a1ab836637d4b4cced4f4229
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/c21937a4875ee349a1ab836637d4b4cced4f4229
+    name: challenge/best-wiki-prompt
+    protected: false
+  - commit_sha: c4c2c7e62e2490f988245ae030ff323e9f892ce9
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/c4c2c7e62e2490f988245ae030ff323e9f892ce9
+    name: chore/docker-build-improvements
+    protected: false
+  - commit_sha: 476e0bd4cd935f8fa4cbe20d841614500a4b3a06
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/476e0bd4cd935f8fa4cbe20d841614500a4b3a06
+    name: feat/local-repo-retriever
+    protected: false
+  - commit_sha: 0d85a84ba34867808371be38774e6dbe105077e0
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/0d85a84ba34867808371be38774e6dbe105077e0
+    name: feature/aws-bedrock-support
+    protected: false
+  - commit_sha: abbe48bba85e7a017e388b65183a0646e42e6262
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/abbe48bba85e7a017e388b65183a0646e42e6262
+    name: feature/configurable-ollama-embedder
+    protected: false
+  - commit_sha: dd415986ad92dff7b66fe2d32b76e2b403de3e4a
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/dd415986ad92dff7b66fe2d32b76e2b403de3e4a
+    name: feature/existing-project-listview
+    protected: false
+  - commit_sha: c024a6f33ce3b015dd453eba160a1da4e19edc54
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/c024a6f33ce3b015dd453eba160a1da4e19edc54
+    name: feature/modular-model-config
+    protected: false
+  - commit_sha: dcc2602d8483eee0f0214b009131c9fe352aa546
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/dcc2602d8483eee0f0214b009131c9fe352aa546
+    name: feature/tree-view
+    protected: false
+  - commit_sha: 4b3d7f45879ee2c63b89667f75c202da33ccad0c
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/4b3d7f45879ee2c63b89667f75c202da33ccad0c
+    name: feature/websocket
+    protected: false
+  - commit_sha: a19f44faa51986ab7a2627ff012c146ab56266fc
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/a19f44faa51986ab7a2627ff012c146ab56266fc
+    name: feature/xai-client-support
+    protected: false
+  - commit_sha: a857b19eeb0287b7adaff60696efde9fbc2b01de
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/a857b19eeb0287b7adaff60696efde9fbc2b01de
+    name: fix/gitlab-bitbucket-public-path
+    protected: false
+  - commit_sha: 3444d0b5eb348143b2df5663cebfe17b440db4df
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/3444d0b5eb348143b2df5663cebfe17b440db4df
+    name: main
+    protected: false
+  - commit_sha: db2af9bfd2479dd5d1d4ddb73c21d741b52d84ce
+    commit_url: https://api.github.com/repos/AsyncFuncAI/deepwiki-open/commits/db2af9bfd2479dd5d1d4ddb73c21d741b52d84ce
+    name: refactor/modular-page-component
+    protected: false
+- alphaxiv-open:
+  - commit_sha: 8a07794824fb07370deaeb0179b4738425458d83
+    commit_url: https://api.github.com/repos/AsyncFuncAI/alphaxiv-open/commits/8a07794824fb07370deaeb0179b4738425458d83
+    name: devin/1747972689-dockerize-for-railway
+    protected: false
+  - commit_sha: 5a9f61911e241f7a095a02d702bb7077b388c843
+    commit_url: https://api.github.com/repos/AsyncFuncAI/alphaxiv-open/commits/5a9f61911e241f7a095a02d702bb7077b388c843
+    name: devin/1748091126-optimize-openai-embeddings
+    protected: false
+  - commit_sha: f3494fc857162a9c6788db3fcac0993cb9cfa093
+    commit_url: https://api.github.com/repos/AsyncFuncAI/alphaxiv-open/commits/f3494fc857162a9c6788db3fcac0993cb9cfa093
+    name: main
+    protected: false
+- rabbitholes:
+  - commit_sha: 5dc3f3acc20a84037885180dfd3762a880d8d3a8
+    commit_url: https://api.github.com/repos/AsyncFuncAI/rabbitholes/commits/5dc3f3acc20a84037885180dfd3762a880d8d3a8
+    name: feat/add-mongo-initial
+    protected: false
+  - commit_sha: cf687a0107fc8e9c3c1f08b27e3119dcb8f86da3
+    commit_url: https://api.github.com/repos/AsyncFuncAI/rabbitholes/commits/cf687a0107fc8e9c3c1f08b27e3119dcb8f86da3
+    name: hotfix/dagre-and-typing-error
+    protected: false
+  - commit_sha: c14021795221497be7fec5e56b542166cf90c2dc
+    commit_url: https://api.github.com/repos/AsyncFuncAI/rabbitholes/commits/c14021795221497be7fec5e56b542166cf90c2dc
+    name: main
+    protected: false
+- github-chat-mcp:
+  - commit_sha: 8c1a390f10ab295ea7ce61c32461bbee06d2c654
+    commit_url: https://api.github.com/repos/AsyncFuncAI/github-chat-mcp/commits/8c1a390f10ab295ea7ce61c32461bbee06d2c654
+    name: main
+    protected: false
+- dynamic-orchestrator-agent:
+  - commit_sha: a445059ecd738a1b0e73cdc2f2258f7dbfd0c4c7
+    commit_url: https://api.github.com/repos/AsyncFuncAI/dynamic-orchestrator-agent/commits/a445059ecd738a1b0e73cdc2f2258f7dbfd0c4c7
+    name: feature/doa-framework-implementation
+    protected: false
+  - commit_sha: 87c4549d0a657071e7593c873b017ace1163cb87
+    commit_url: https://api.github.com/repos/AsyncFuncAI/dynamic-orchestrator-agent/commits/87c4549d0a657071e7593c873b017ace1163cb87
+    name: main
+    protected: false
+- whisper-notes:
+  - commit_sha: e4377e9b4c2710ea6da78c915fabc1f58a2ce2b9
+    commit_url: https://api.github.com/repos/AsyncFuncAI/whisper-notes/commits/e4377e9b4c2710ea6da78c915fabc1f58a2ce2b9
+    name: main
+    protected: false
+- doc-dojoma:
+  - commit_sha: 8c4adbd50c9942fd01f4bc86551c4bfedb6db5d3
+    commit_url: https://api.github.com/repos/AsyncFuncAI/doc-dojoma/commits/8c4adbd50c9942fd01f4bc86551c4bfedb6db5d3
+    name: main
+    protected: false

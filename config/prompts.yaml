@@ -49,6 +49,7 @@ code_review_prompt: |
       }}
     ],
     "summary": "整体代码质量评估，考虑语言特性和生态系统最佳实践",
+    "business_logic": "代码业务逻辑整理，描述代码的业务逻辑和功能",
     "language_detected": "检测到的主要编程语言"
   }}
   ```

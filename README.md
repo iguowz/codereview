@@ -7,7 +7,9 @@
 - 🔍 **智能代码审查**：分析代码变更，识别潜在问题
 - 🧪 **自动生成测试用例**：根据代码变更自动生成单元测试和场景测试
 - 🌐 **支持多种Git平台**：GitHub、GitLab等
-- ⚙️ **可配置Redis**：支持Redis和内存模式
+- ⚙️ **内存任务队列**：使用MockCelery模式
+- 📧 **多种通知方式**：支持邮件、企业微信群机器人通知
+- 🚀 **性能优化**：异步处理、连接池、内存缓存优化
 - 🎯 **跨平台支持**：Windows、Linux、macOS一键启动
 
 ## 📁 项目结构
@@ -41,8 +43,6 @@ codeReview/
 ├── scripts/               # 启动脚本
 │   ├── start.py           # 跨平台Python启动脚本
 │   └── start.sh           # Linux/Mac Shell启动脚本
-├── docs/                  # 文档目录
-│   └── 项目使用指南.md     # 详细使用指南
 ├── main.py                # 主程序
 ├── requirements.txt       # Python依赖
 └── README.md              # 项目说明
@@ -90,10 +90,38 @@ python main.py
 
 ### 环境变量
 - `DEEPSEEK_API_KEY`: DeepSeek API密钥（必需）
-- `USE_REDIS`: 是否使用Redis（可选，默认false）
 - `PORT`: 服务器端口（可选，默认5001）
 - `HOST`: 服务器主机（可选，默认0.0.0.0）
 - `SECRET_KEY`: Flask密钥（可选，默认dev-secret-key）
+
+### 通知配置（可选）
+支持邮件和企业微信群机器人通知。通知系统采用前后端分离的配置方式：
+- 私密信息（如密码、Webhook URL）通过环境变量配置
+- 公开配置（如收件人列表、开关状态）通过前端界面管理
+
+#### 邮件通知环境变量
+```bash
+export NOTIFICATION_EMAIL_SMTP_SERVER=smtp.gmail.com
+export NOTIFICATION_EMAIL_SMTP_PORT=587
+export NOTIFICATION_EMAIL_USERNAME=your-email@gmail.com
+export NOTIFICATION_EMAIL_PASSWORD=your-app-password
+export NOTIFICATION_EMAIL_USE_SSL=true
+export NOTIFICATION_EMAIL_FROM_NAME="Code Review System"
+```
+
+#### 企业微信群机器人环境变量
+```bash
+export NOTIFICATION_WECHAT_WEBHOOK_URL=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=your-key
+```
+
+#### 前端界面配置
+启动应用后，点击右上角的"通知配置"按钮可以：
+- 启用/禁用邮件和企业微信通知
+- 管理邮件收件人列表（添加/删除/展示）
+- 设置企业微信@提醒用户
+- 测试通知发送功能
+
+**注意**：环境变量配置完成后需要重启应用才能生效。
 
 ### 配置文件
 1. 编辑 `config/systems.yaml`，配置你的Git系统信息：
@@ -111,32 +139,16 @@ python main.py
 
 ## 🔧 任务队列配置
 
-### MockCelery模式（推荐用于开发）
+### MockCelery模式（默认）
 ```bash
-export USE_REDIS=false
 python scripts/start.py
 ```
 
 **特点**：
-- ✅ 无需安装Redis
+- ✅ 无需安装额外依赖
 - ✅ 任务在后台线程中执行
 - ✅ 支持任务状态查询
 - ✅ 完全兼容Celery API
-
-### 真实Celery模式（推荐用于生产）
-```bash
-# 1. 启动Redis
-redis-server
-
-# 2. 设置环境变量
-export USE_REDIS=true
-
-# 3. 启动Celery Worker
-python celery_worker.py
-
-# 4. 启动应用
-python scripts/start.py
-```
 
 ## 📝 日志系统
 
@@ -167,6 +179,18 @@ python scripts/start.py
 - 分支管理
 - 提交历史分析
 
+### 4. 通知系统
+- 任务完成/失败自动通知
+- 支持邮件和企业微信群机器人
+- 灵活的收件人配置
+- 美观的HTML邮件模板
+
+### 5. 性能优化
+- HTTP连接池和重试机制
+- 异步处理和并发控制
+- 内存缓存和LRU缓存
+- 优化的超时和连接配置
+
 ## 🚨 故障排除
 
 ### 常见问题
@@ -191,10 +215,6 @@ python scripts/start.py
    - 使用 `export PORT=8080` 指定其他端口
    - 检查端口是否被其他服务占用
 
-## 📚 详细文档
-
-更多详细信息请参考：
-- [项目使用指南](docs/项目使用指南.md) - 完整的使用说明和配置指南
 
 ## 🔄 更新日志
 

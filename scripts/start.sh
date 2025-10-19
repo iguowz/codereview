@@ -65,31 +65,13 @@ echo "🚀 启动系统..."
 echo "💡 提示："
 echo "   1. 设置环境变量：export DEEPSEEK_API_KEY='your-api-key'"
 echo "   2. 编辑配置文件：config/systems.yaml"
-echo "   3. 任务队列模式：export USE_REDIS=false（MockCelery，默认）"
-echo "   4. 生产模式：export USE_REDIS=true（需要Redis和Worker）"
-echo "   5. 自定义端口：export PORT=8080（默认5001）"
-echo "   6. 自定义主机：export HOST=127.0.0.1（默认0.0.0.0）"
+echo "   3. 任务队列模式：MockCelery（轻量级，默认）"
+echo "   4. 自定义端口：export PORT=8080（默认5001）"
+echo "   5. 自定义主机：export HOST=127.0.0.1（默认0.0.0.0）"
 echo
 
 # 检查任务队列配置
-use_redis=${USE_REDIS:-false}
-if [ "$use_redis" = "true" ]; then
-    echo "🔍 检查Redis连接..."
-    if command -v redis-cli &> /dev/null; then
-        if redis-cli ping &> /dev/null; then
-            echo "✅ Redis连接正常"
-        else
-            echo "❌ Redis连接失败，请启动Redis服务"
-            echo "💡 启动Redis：redis-server"
-            echo "💡 或切换到MockCelery：export USE_REDIS=false"
-        fi
-    else
-        echo "⚠️  未安装redis-cli，无法测试连接"
-    fi
-    echo "💡 记得启动Celery Worker：python celery_worker.py"
-else
-    echo "ℹ️  使用MockCelery模式（开发环境）"
-fi
+echo "ℹ️  使用MockCelery轻量级任务队列模式"
 echo
 
 # 启动应用

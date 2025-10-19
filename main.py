@@ -19,7 +19,7 @@ def print_banner():
     print("  - Intelligent code review")
     print("  - Auto test case generation")
     print("  - Multi Git providers")
-    print("  - Optional Redis (disabled by default)")
+    print("  - MockCelery Task Queue")
     print("=" * 60)
 
 def check_requirements():
@@ -67,53 +67,16 @@ def setup_environment():
     
     return True
 
-def check_redis_status():
-    """检查Redis状态"""
-    use_redis = os.environ.get('USE_REDIS', 'false').lower() == 'true'
-    
-    if use_redis:
-        print("Checking Redis...")
-        try:
-            result = subprocess.run(['redis-cli', 'ping'], 
-                                  capture_output=True, text=True, timeout=5)
-            if result.returncode == 0:
-                print("[OK] Redis running")
-                return True
-            else:
-                print("[WARN] Redis not running. Start redis-server or set USE_REDIS=false")
-                return False
-        except (FileNotFoundError, subprocess.TimeoutExpired):
-            print("[WARN] redis-cli not found or timeout")
-            print("[HINT] Install Redis or set USE_REDIS=false")
-            return False
-    else:
-        print("[OK] Redis disabled (memory mode)")
-        return True
+def check_task_queue():
+    """检查任务队列状态"""
+    print("[OK] Using MockCelery task queue mode")
+    return True
 
 def start_services():
     """启动服务"""
     print("Starting services...")
     
-    use_redis = os.environ.get('USE_REDIS', 'false').lower() == 'true'
-    celery_process = None
-    
-    # 启动Celery Worker（如果启用Redis）
-    if use_redis:
-        print("Starting Celery worker...")
-        try:
-            celery_process = subprocess.Popen([
-                sys.executable, '-m', 'celery', '-A', 'app.tasks', 
-                'worker', '--loglevel=info'
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            time.sleep(3)
-            if celery_process.poll() is None:
-                print("[OK] Celery worker started")
-            else:
-                print("[WARN] Celery worker failed to start")
-                celery_process = None
-        except Exception as e:
-            print(f"[WARN] Celery worker start failed: {e}")
-            celery_process = None
+    print("[INFO] Using MockCelery lightweight task queue mode")
     
     # 启动Flask应用
     print("Starting web server...")
@@ -136,13 +99,9 @@ def start_services():
         app.run(debug=True, host=host, port=port)
     except KeyboardInterrupt:
         print("Stopping...")
-        if celery_process:
-            celery_process.terminate()
         print("Stopped.")
     except Exception as e:
         print(f"[ERROR] Web start failed: {e}")
-        if celery_process:
-            celery_process.terminate()
         return False
     
     return True
@@ -161,9 +120,9 @@ def main():
     if not setup_environment():
         sys.exit(1)
     
-    # 检查Redis状态
-    if not check_redis_status():
-        print("Hints:\n 1) setx DEEPSEEK_API_KEY your-api-key\n 2) edit config/systems.yaml\n 3) setx USE_REDIS true (optional)\n 4) default USE_REDIS=false")
+    # 检查任务队列状态
+    if not check_task_queue():
+        print("Hints:\n 1) setx DEEPSEEK_API_KEY your-api-key\n 2) edit config/systems.yaml")
         sys.exit(1)
     
     # 启动服务

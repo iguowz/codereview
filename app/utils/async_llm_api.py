@@ -23,18 +23,31 @@ class AsyncDeepSeekAPI:
         self.config = config_manager.get_llm_config()
         self.api_key = self.config.get('deepseek_api_key')
         self.base_url = self.config.get('base_url', 'https://api.deepseek.com/v1/chat/completions')
-        self.timeout = aiohttp.ClientTimeout(total=300)  # 5分钟超时
-        self.semaphore = asyncio.Semaphore(5)  # 限制并发数为5
+        self.timeout = aiohttp.ClientTimeout(total=180, connect=30)  # 优化超时配置
+        self.semaphore = asyncio.Semaphore(10)  # 增加并发数到10
+        self.connector = aiohttp.TCPConnector(
+            limit=20,  # 最大连接池大小
+            limit_per_host=10,  # 每个主机最大连接数
+            ttl_dns_cache=300,  # DNS缓存5分钟
+            use_dns_cache=True,
+            keepalive_timeout=60  # 保持连接60秒
+        )
     
     async def __aenter__(self):
         """异步上下文管理器入口"""
-        self.session = aiohttp.ClientSession(timeout=self.timeout)
+        self.session = aiohttp.ClientSession(
+            timeout=self.timeout,
+            connector=self.connector,
+            headers={'User-Agent': 'CodeReview-AsyncClient/1.0'}
+        )
         return self
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """异步上下文管理器出口"""
         if hasattr(self, 'session'):
             await self.session.close()
+        if hasattr(self, 'connector'):
+            await self.connector.close()
     
     async def call_api_async(self, prompt: str, max_retries: int = 3) -> Dict[str, Any]:
         """
@@ -230,6 +243,7 @@ class AsyncTaskProcessor:
         """
         filename = file_data.get('filename', '')
         diff_content = file_data.get('diff_content', '')
+        filestatus = file_data.get('filestatus', {})
         
         if not diff_content:
             return {}
@@ -244,7 +258,7 @@ class AsyncTaskProcessor:
             self.state_manager.initialize_file(filename, file_data.get('project_name', ''))
         
         # 创建三个异步任务：代码审查、单元测试、场景测试
-        review_task = self._generate_code_review_async(api_client, filename, diff_content)
+        review_task = self._generate_code_review_async(api_client, filename, diff_content, filestatus)
         unit_test_task = self._generate_unit_test_async(api_client, filename, diff_content)
         scenario_test_task = self._generate_scenario_tests_async(api_client, filename, diff_content)
         
@@ -264,6 +278,11 @@ class AsyncTaskProcessor:
                 result['review_result'] = {
                     'project_name': file_data.get('project_name', ''),
                     'filename': filename,
+                    'filestatus': review_result.get('filestatus', ''),
+                    'diff_content': diff_content,
+                    "summary": review_result.get('summary', ''),
+                    "business_logic": review_result.get('business_logic', ''),
+                    "language_detected": review_result.get('language_detected', ''),
                     'issues': review_result.get('issues', [])
                 }
                 # 更新审查状态
@@ -320,7 +339,7 @@ class AsyncTaskProcessor:
             return {}
     
     async def _generate_code_review_async(self, api_client: AsyncDeepSeekAPI, 
-                                         filename: str, diff_content: str) -> Dict[str, Any]:
+                                         filename: str, diff_content: str, filestatus: Dict[str, Any]) -> Dict[str, Any]:
         """异步生成代码审查"""
         # 检查任务是否被中止
         if self.task_id:
@@ -338,10 +357,13 @@ class AsyncTaskProcessor:
             json_match = re.search(r'```json\s*(\{.*?\})\s*```', content, re.DOTALL)
             if json_match:
                 result = json.loads(json_match.group(1))
-                return result
             else:
                 # 尝试直接解析
-                return json.loads(content)
+                result = json.loads(content)
+
+            # 补充项目名
+            result['filestatus'] = filestatus
+            return result
                 
         except Exception as e:
             error(f"AsyncProcessor 代码审查生成失败: {filename} - {e}")

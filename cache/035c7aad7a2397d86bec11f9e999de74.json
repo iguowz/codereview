@@ -1,0 +1,244 @@
+{
+  "data": {
+    "systems": [
+      {
+        "avatar_url": "https://avatars.githubusercontent.com/u/127165244?v=4",
+        "description": "Dify is an LLMOps platform that helps you build GPT-based applications easily and intuitively.",
+        "git_provider": "github",
+        "git_provider_url": "https://github.com/langgenius",
+        "id": "langgenius",
+        "name": "langgenius",
+        "projects": [
+          {
+            "description": "Production-ready platform for agentic workflow development.",
+            "forks": 17665,
+            "language": "TypeScript",
+            "name": "dify",
+            "owner": "langgenius",
+            "repo": "dify",
+            "repo_url": "https://github.com/langgenius/dify",
+            "stars": 114838
+          },
+          {
+            "description": "A lightweight, fast, and secure code execution environment that supports multiple programming languages",
+            "forks": 251,
+            "language": "Go",
+            "name": "dify-sandbox",
+            "owner": "langgenius",
+            "repo": "dify-sandbox",
+            "repo_url": "https://github.com/langgenius/dify-sandbox",
+            "stars": 990
+          },
+          {
+            "description": null,
+            "forks": 1729,
+            "language": "TypeScript",
+            "name": "webapp-conversation",
+            "owner": "langgenius",
+            "repo": "webapp-conversation",
+            "repo_url": "https://github.com/langgenius/webapp-conversation",
+            "stars": 965
+          },
+          {
+            "description": null,
+            "forks": 225,
+            "language": "Go",
+            "name": "dify-plugin-daemon",
+            "owner": "langgenius",
+            "repo": "dify-plugin-daemon",
+            "repo_url": "https://github.com/langgenius/dify-plugin-daemon",
+            "stars": 327
+          },
+          {
+            "description": "All Dify Plugins listed in Dify Marketplace, plus illustrated plugin examples.",
+            "forks": 456,
+            "language": null,
+            "name": "dify-plugins",
+            "owner": "langgenius",
+            "repo": "dify-plugins",
+            "repo_url": "https://github.com/langgenius/dify-plugins",
+            "stars": 340
+          },
+          {
+            "description": "SDK for Dify plugins",
+            "forks": 95,
+            "language": "Python",
+            "name": "dify-plugin-sdks",
+            "owner": "langgenius",
+            "repo": "dify-plugin-sdks",
+            "repo_url": "https://github.com/langgenius/dify-plugin-sdks",
+            "stars": 93
+          },
+          {
+            "description": null,
+            "forks": 546,
+            "language": "Python",
+            "name": "dify-official-plugins",
+            "owner": "langgenius",
+            "repo": "dify-official-plugins",
+            "repo_url": "https://github.com/langgenius/dify-official-plugins",
+            "stars": 402
+          },
+          {
+            "description": null,
+            "forks": 288,
+            "language": "MDX",
+            "name": "dify-docs",
+            "owner": "langgenius",
+            "repo": "dify-docs",
+            "repo_url": "https://github.com/langgenius/dify-docs",
+            "stars": 92
+          },
+          {
+            "description": null,
+            "forks": 3,
+            "language": "Python",
+            "name": "homebrew-dify",
+            "owner": "langgenius",
+            "repo": "homebrew-dify",
+            "repo_url": "https://github.com/langgenius/homebrew-dify",
+            "stars": 8
+          },
+          {
+            "description": null,
+            "forks": 702,
+            "language": "TypeScript",
+            "name": "webapp-text-generator",
+            "owner": "langgenius",
+            "repo": "webapp-text-generator",
+            "repo_url": "https://github.com/langgenius/webapp-text-generator",
+            "stars": 250
+          },
+          {
+            "description": null,
+            "forks": 10,
+            "language": "Ruby",
+            "name": "ruby-sdk",
+            "owner": "langgenius",
+            "repo": "ruby-sdk",
+            "repo_url": "https://github.com/langgenius/ruby-sdk",
+            "stars": 6
+          },
+          {
+            "description": "The open-source repo for docs.dify.ai",
+            "forks": 338,
+            "language": "Shell",
+            "name": "dify-docs-archived",
+            "owner": "langgenius",
+            "repo": "dify-docs-archived",
+            "repo_url": "https://github.com/langgenius/dify-docs-archived",
+            "stars": 531
+          },
+          {
+            "description": "Toolkit for CI to upload plugins to marketplace",
+            "forks": 5,
+            "language": "Python",
+            "name": "dify-marketplace-toolkit",
+            "owner": "langgenius",
+            "repo": "dify-marketplace-toolkit",
+            "repo_url": "https://github.com/langgenius/dify-marketplace-toolkit",
+            "stars": 4
+          },
+          {
+            "description": "AWS CDK for Dify",
+            "forks": 11,
+            "language": "TypeScript",
+            "name": "aws-cdk-for-dify",
+            "owner": "langgenius",
+            "repo": "aws-cdk-for-dify",
+            "repo_url": "https://github.com/langgenius/aws-cdk-for-dify",
+            "stars": 45
+          },
+          {
+            "description": "A library and tools for open cloud development in Go.",
+            "forks": 9,
+            "language": "Go",
+            "name": "dify-cloud-kit",
+            "owner": "langgenius",
+            "repo": "dify-cloud-kit",
+            "repo_url": "https://github.com/langgenius/dify-cloud-kit",
+            "stars": 10
+          },
+          {
+            "description": "[🚧🚧🚧WIP🚧🚧 🚧]Rework of webapp-conversation",
+            "forks": 20,
+            "language": "TypeScript",
+            "name": "dify-conversation",
+            "owner": "langgenius",
+            "repo": "dify-conversation",
+            "repo_url": "https://github.com/langgenius/dify-conversation",
+            "stars": 9
+          },
+          {
+            "description": null,
+            "forks": 3,
+            "language": null,
+            "name": ".github",
+            "owner": "langgenius",
+            "repo": ".github",
+            "repo_url": "https://github.com/langgenius/.github",
+            "stars": 4
+          },
+          {
+            "description": null,
+            "forks": 25,
+            "language": "CSS",
+            "name": "chatbot-chrome-extension",
+            "owner": "langgenius",
+            "repo": "chatbot-chrome-extension",
+            "repo_url": "https://github.com/langgenius/chatbot-chrome-extension",
+            "stars": 52
+          },
+          {
+            "description": null,
+            "forks": 3,
+            "language": "JavaScript",
+            "name": "dify-docs-mcp-server",
+            "owner": "langgenius",
+            "repo": "dify-docs-mcp-server",
+            "repo_url": "https://github.com/langgenius/dify-docs-mcp-server",
+            "stars": 4
+          },
+          {
+            "description": null,
+            "forks": 5,
+            "language": null,
+            "name": "dify-user-case",
+            "owner": "langgenius",
+            "repo": "dify-user-case",
+            "repo_url": "https://github.com/langgenius/dify-user-case",
+            "stars": 1
+          },
+          {
+            "description": null,
+            "forks": 7,
+            "language": "TypeScript",
+            "name": "langgenius.github.io",
+            "owner": "langgenius",
+            "repo": "langgenius.github.io",
+            "repo_url": "https://github.com/langgenius/langgenius.github.io",
+            "stars": 7
+          }
+        ]
+      },
+      {
+        "description": "用于测试的示例仓库",
+        "git_provider": "github",
+        "git_provider_url": "https://api.github.com",
+        "id": "test-repo",
+        "name": "测试仓库",
+        "projects": [
+          {
+            "description": "测试项目",
+            "name": "test-project",
+            "owner": "test",
+            "repo": "test",
+            "repo_url": "https://github.com/test/test"
+          }
+        ]
+      }
+    ]
+  },
+  "created_at": "2025-10-18T02:18:31.935378",
+  "ttl": 600
+}

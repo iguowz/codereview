@@ -266,23 +266,3 @@ class TaskStateManager:
         except Exception as e:
             warning(f"TaskState清理状态文件失败: {e}")
 
-# 使用示例
-if __name__ == "__main__":
-    # 创建任务状态管理器
-    manager = TaskStateManager("test-task-123")
-    
-    # 初始化文件
-    manager.initialize_file("app/models.py", "TestProject")
-    manager.initialize_file("app/views.py", "TestProject")
-    
-    # 更新状态
-    manager.update_review_status("app/models.py", "completed", {"issues": []})
-    manager.update_unit_test_status("app/models.py", "completed", {"unit_test_code": "test code"})
-    
-    # 检查进度
-    progress = manager.get_progress_summary()
-    info(f"进度摘要: {progress}")
-    
-    # 获取需要处理的文件
-    to_process = manager.get_files_to_process(["app/models.py", "app/views.py"])
-    info(f"需要处理的文件: {to_process}")
