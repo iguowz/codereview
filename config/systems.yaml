@@ -1,0 +1,184 @@
+backup_info:
+  backup_type: auto_backup
+  source: dynamic
+  timestamp: '2025-09-21T16:07:42.780771'
+  total_systems: 1
+systems:
+- avatar_url: https://avatars.githubusercontent.com/u/127165244?v=4
+  description: Dify is an LLMOps platform that helps you build GPT-based applications
+    easily and intuitively.
+  git_provider: github
+  git_provider_url: https://github.com/langgenius
+  id: dify
+  name: dify
+  projects:
+  - description: Production-ready platform for agentic workflow development.
+    forks: 17607
+    language: TypeScript
+    name: dify
+    owner: langgenius
+    repo: dify
+    repo_url: https://github.com/langgenius/dify
+    stars: 114532
+  - description: null
+    forks: 1727
+    language: TypeScript
+    name: webapp-conversation
+    owner: langgenius
+    repo: webapp-conversation
+    repo_url: https://github.com/langgenius/webapp-conversation
+    stars: 959
+  - description: null
+    forks: 704
+    language: TypeScript
+    name: webapp-text-generator
+    owner: langgenius
+    repo: webapp-text-generator
+    repo_url: https://github.com/langgenius/webapp-text-generator
+    stars: 250
+  - description: null
+    forks: 283
+    language: MDX
+    name: dify-docs
+    owner: langgenius
+    repo: dify-docs
+    repo_url: https://github.com/langgenius/dify-docs
+    stars: 89
+  - description: A lightweight, fast, and secure code execution environment that supports
+      multiple programming languages
+    forks: 252
+    language: Go
+    name: dify-sandbox
+    owner: langgenius
+    repo: dify-sandbox
+    repo_url: https://github.com/langgenius/dify-sandbox
+    stars: 989
+  - description: null
+    forks: 544
+    language: Python
+    name: dify-official-plugins
+    owner: langgenius
+    repo: dify-official-plugins
+    repo_url: https://github.com/langgenius/dify-official-plugins
+    stars: 395
+  - description: All Dify Plugins listed in Dify Marketplace, plus illustrated plugin
+      examples.
+    forks: 451
+    language: null
+    name: dify-plugins
+    owner: langgenius
+    repo: dify-plugins
+    repo_url: https://github.com/langgenius/dify-plugins
+    stars: 336
+  - description: null
+    forks: 223
+    language: Go
+    name: dify-plugin-daemon
+    owner: langgenius
+    repo: dify-plugin-daemon
+    repo_url: https://github.com/langgenius/dify-plugin-daemon
+    stars: 322
+  - description: SDK for Dify plugins
+    forks: 92
+    language: Python
+    name: dify-plugin-sdks
+    owner: langgenius
+    repo: dify-plugin-sdks
+    repo_url: https://github.com/langgenius/dify-plugin-sdks
+    stars: 92
+  - description: null
+    forks: 10
+    language: Ruby
+    name: ruby-sdk
+    owner: langgenius
+    repo: ruby-sdk
+    repo_url: https://github.com/langgenius/ruby-sdk
+    stars: 6
+  - description: The open-source repo for docs.dify.ai
+    forks: 338
+    language: Shell
+    name: dify-docs-archived
+    owner: langgenius
+    repo: dify-docs-archived
+    repo_url: https://github.com/langgenius/dify-docs-archived
+    stars: 531
+  - description: Toolkit for CI to upload plugins to marketplace
+    forks: 5
+    language: Python
+    name: dify-marketplace-toolkit
+    owner: langgenius
+    repo: dify-marketplace-toolkit
+    repo_url: https://github.com/langgenius/dify-marketplace-toolkit
+    stars: 4
+  - description: AWS CDK for Dify
+    forks: 11
+    language: TypeScript
+    name: aws-cdk-for-dify
+    owner: langgenius
+    repo: aws-cdk-for-dify
+    repo_url: https://github.com/langgenius/aws-cdk-for-dify
+    stars: 45
+  - description: A library and tools for open cloud development in Go.
+    forks: 9
+    language: Go
+    name: dify-cloud-kit
+    owner: langgenius
+    repo: dify-cloud-kit
+    repo_url: https://github.com/langgenius/dify-cloud-kit
+    stars: 10
+  - description: '[🚧🚧🚧WIP🚧🚧 🚧]Rework of webapp-conversation'
+    forks: 20
+    language: TypeScript
+    name: dify-conversation
+    owner: langgenius
+    repo: dify-conversation
+    repo_url: https://github.com/langgenius/dify-conversation
+    stars: 9
+  - description: null
+    forks: 3
+    language: null
+    name: .github
+    owner: langgenius
+    repo: .github
+    repo_url: https://github.com/langgenius/.github
+    stars: 4
+  - description: null
+    forks: 25
+    language: CSS
+    name: chatbot-chrome-extension
+    owner: langgenius
+    repo: chatbot-chrome-extension
+    repo_url: https://github.com/langgenius/chatbot-chrome-extension
+    stars: 52
+  - description: null
+    forks: 3
+    language: JavaScript
+    name: dify-docs-mcp-server
+    owner: langgenius
+    repo: dify-docs-mcp-server
+    repo_url: https://github.com/langgenius/dify-docs-mcp-server
+    stars: 4
+  - description: null
+    forks: 3
+    language: Python
+    name: homebrew-dify
+    owner: langgenius
+    repo: homebrew-dify
+    repo_url: https://github.com/langgenius/homebrew-dify
+    stars: 8
+  - description: null
+    forks: 5
+    language: null
+    name: dify-user-case
+    owner: langgenius
+    repo: dify-user-case
+    repo_url: https://github.com/langgenius/dify-user-case
+    stars: 1
+  - description: null
+    forks: 7
+    language: TypeScript
+    name: langgenius.github.io
+    owner: langgenius
+    repo: langgenius.github.io
+    repo_url: https://github.com/langgenius/langgenius.github.io
+    stars: 7
