@@ -1771,6 +1771,27 @@
         .virtual-scroll-container::-webkit-scrollbar-thumb:hover {
             background: var(--color-gray-400);
         }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 92vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .footer {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            font-size: 80%;
+            padding: 5px 0;
+            margin-top: auto;
+            bottom: 0;
+            text-align: center;
+        }
         
     </style>
 </head>
@@ -2753,6 +2774,14 @@
             </div>
         </el-drawer>
     </div>
+
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <span class="text-muted"><a href="https://github.com/iguowz/codereview" target="_blank">CodeReview</a> Copyright © 2025 iguo</span>
+            <div class="text-muted">Licensed under the Apache License, Version 2.0</div>
+        </div>
+    </footer>
 
     <script>
         const { createApp, ref, onMounted, computed } = Vue;
