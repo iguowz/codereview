@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 # Git增量代码智能审查与测试用例生成系统
 
 ## 🚀 项目简介
@@ -237,6 +239,6 @@ python scripts/start.py
 
 欢迎提交Issue和Pull Request来改进项目！
 
-## �� 许可证
+## 许可证
 
-本项目采用MIT许可证。
+本项目采用Apache 2.0 许可证。
