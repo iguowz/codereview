@@ -14,6 +14,22 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 from app.utils.git_api import GitAPIClient
 git_client = GitAPIClient()
 
+@bp.route('/health', methods=['GET'])
+def health_check():
+    """健康检查端点"""
+    try:
+        return jsonify({
+            'status': 'healthy',
+            'timestamp': datetime.now().isoformat(),
+            'version': '1.0.0'
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'status': 'unhealthy',
+            'error': str(e),
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
 @bp.route('/branches/<system_name>', methods=['GET'])
 def get_branches(system_name):
     """获取指定系统的可用分支列表"""

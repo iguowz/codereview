@@ -1,0 +1,82 @@
+# Git相关
+.git
+.gitignore
+.gitattributes
+
+# Python相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 虚拟环境
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE相关
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统相关
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# 数据文件
+data/
+cache/
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# Docker相关
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# 文档
+README.md
+*.md
+docs/
+
+# 测试文件
+tests/
+test_*
+*_test.py
+
+# 临时文件
+*.tmp
+*.temp

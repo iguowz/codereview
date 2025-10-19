@@ -1,0 +1,71 @@
+services:
+  codereview:
+    build: .
+    container_name: codereview
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      # 从.env文件加载环境变量
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - HOST=0.0.0.0
+      - PORT=5001
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - TZ=Asia/Shanghai
+      
+      # 通知配置
+      - NOTIFICATION_EMAIL_ENABLED=${NOTIFICATION_EMAIL_ENABLED:-false}
+      - NOTIFICATION_EMAIL_SMTP_SERVER=${NOTIFICATION_EMAIL_SMTP_SERVER}
+      - NOTIFICATION_EMAIL_SMTP_PORT=${NOTIFICATION_EMAIL_SMTP_PORT:-587}
+      - NOTIFICATION_EMAIL_USERNAME=${NOTIFICATION_EMAIL_USERNAME}
+      - NOTIFICATION_EMAIL_PASSWORD=${NOTIFICATION_EMAIL_PASSWORD}
+      - NOTIFICATION_EMAIL_USE_SSL=${NOTIFICATION_EMAIL_USE_SSL:-true}
+      - NOTIFICATION_EMAIL_FROM_NAME=${NOTIFICATION_EMAIL_FROM_NAME:-Code Review System}
+      
+      - NOTIFICATION_WECHAT_ENABLED=${NOTIFICATION_WECHAT_ENABLED:-false}
+      - NOTIFICATION_WECHAT_WEBHOOK_URL=${NOTIFICATION_WECHAT_WEBHOOK_URL}
+      - NOTIFICATION_WECHAT_MENTIONED_LIST=${NOTIFICATION_WECHAT_MENTIONED_LIST:-@all}
+      - NOTIFICATION_WECHAT_MENTIONED_MOBILE_LIST=${NOTIFICATION_WECHAT_MENTIONED_MOBILE_LIST}
+      
+      - NOTIFICATION_DEFAULT_EMAIL_RECIPIENTS=${NOTIFICATION_DEFAULT_EMAIL_RECIPIENTS}
+      - NOTIFICATION_ADMIN_EMAIL=${NOTIFICATION_ADMIN_EMAIL}
+    
+    volumes:
+      # 配置文件挂载
+      - ./config:/app/config:ro
+      
+      # 数据目录挂载（持久化存储）
+      - ./data:/app/data
+      
+      # 日志目录挂载（持久化存储）
+      - ./logs:/app/logs
+      
+      # 缓存目录挂载（持久化存储）
+      - ./cache:/app/cache
+      
+      # 环境变量文件挂载
+      - ./.env:/app/.env:ro
+    
+    networks:
+      - codereview-network
+    
+    # 资源限制
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+networks:
+  codereview-network:
+    driver: bridge
+
+volumes:
+  # 命名卷（可选，用于数据持久化）
+  codereview-data:
+  codereview-logs:
+  codereview-cache:

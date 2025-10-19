@@ -52,7 +52,27 @@ codeReview/
 
 ## 🚀 快速启动
 
-### 方法1：使用Python启动脚本（推荐）
+### 方法1：使用Docker部署（推荐）
+```bash
+# 1. 复制环境变量模板
+cp env.docker.example .env
+
+# 2. 编辑.env文件，设置必要的环境变量
+# 特别是DEEPSEEK_API_KEY
+
+# 3. 运行Docker部署脚本
+chmod +x docker-deploy.sh
+./docker-deploy.sh
+```
+
+**Docker部署特点：**
+- ✅ 一键部署，无需手动安装依赖
+- ✅ 自动挂载配置文件、数据目录、日志目录
+- ✅ 支持环境变量配置
+- ✅ 包含健康检查和资源限制
+- ✅ 支持数据持久化存储
+
+### 方法2：使用Python启动脚本
 ```bash
 # 安装依赖
 pip install -r requirements.txt
@@ -64,7 +84,7 @@ export DEEPSEEK_API_KEY='your-api-key'
 python scripts/start.py
 ```
 
-### 方法2：使用Shell脚本（Linux/Mac）
+### 方法3：使用Shell脚本（Linux/Mac）
 ```bash
 # 给脚本执行权限
 chmod +x scripts/start.sh
@@ -73,7 +93,7 @@ chmod +x scripts/start.sh
 ./scripts/start.sh
 ```
 
-### 方法3：手动启动
+### 方法4：手动启动
 ```bash
 # 1. 安装依赖
 pip install -r requirements.txt
@@ -87,6 +107,113 @@ export PORT=8080
 # 4. 启动应用
 python main.py
 ```
+
+## 🐳 Docker部署详细说明
+
+### Docker部署优势
+- **环境一致性**：确保在不同环境下运行一致
+- **快速部署**：无需安装Python依赖，一键启动
+- **数据持久化**：配置文件、数据、日志自动挂载到宿主机
+- **资源管理**：内置资源限制和健康检查
+- **易于维护**：支持容器重启、更新等操作
+
+### Docker部署步骤
+
+#### 1. 环境准备
+```bash
+# 确保已安装Docker和Docker Compose
+docker --version
+docker-compose --version
+```
+
+#### 2. 配置环境变量
+```bash
+# 复制环境变量模板
+cp env.docker.example .env
+
+# 编辑.env文件，设置必要的环境变量
+nano .env  # 或使用其他编辑器
+```
+
+#### 3. 一键部署
+```bash
+# 运行部署脚本
+./docker-deploy.sh
+```
+
+#### 4. 手动部署（可选）
+```bash
+# 构建镜像
+docker-compose build
+
+# 启动服务
+docker-compose up -d
+
+# 查看状态
+docker-compose ps
+```
+
+### Docker目录挂载说明
+
+| 宿主机目录 | 容器目录 | 说明 |
+|-----------|---------|------|
+| `./config` | `/app/config` | 配置文件目录（只读） |
+| `./data` | `/app/data` | 数据存储目录 |
+| `./logs` | `/app/logs` | 日志文件目录 |
+| `./cache` | `/app/cache` | 缓存文件目录 |
+| `./.env` | `/app/.env` | 环境变量文件（只读） |
+
+### Docker常用命令
+
+```bash
+# 查看服务状态
+docker-compose ps
+
+# 查看日志
+docker-compose logs -f
+
+# 重启服务
+docker-compose restart
+
+# 停止服务
+docker-compose down
+
+# 更新并重启服务
+docker-compose pull && docker-compose up -d
+
+# 进入容器
+docker-compose exec codereview bash
+
+# 查看资源使用情况
+docker stats codereview-app
+```
+
+### Docker故障排除
+
+1. **容器启动失败**
+   ```bash
+   # 查看详细日志
+   docker-compose logs
+   
+   # 检查配置文件
+   docker-compose exec codereview ls -la /app/config/
+   ```
+
+2. **端口冲突**
+   ```bash
+   # 修改docker-compose.yml中的端口映射
+   ports:
+     - "8080:5001"  # 改为其他端口
+   ```
+
+3. **权限问题**
+   ```bash
+   # 检查目录权限
+   ls -la config/ data/ logs/ cache/
+   
+   # 修复权限
+   chmod -R 755 config/ data/ logs/ cache/
+   ```
 
 ## ⚙️ 配置说明
 
