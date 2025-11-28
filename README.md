@@ -1,3 +1,4 @@
+<img width="1417" height="640" alt="image" src="https://github.com/user-attachments/assets/1fd5e515-b7f8-48ad-a767-abe072a9d5ea" />
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 # Git增量代码智能审查与测试用例生成系统
@@ -369,3 +370,4 @@ python scripts/start.py
 ## 许可证
 
 本项目采用Apache 2.0 许可证。
+
